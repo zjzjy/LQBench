@@ -81,7 +81,7 @@ LQBench通过以下创新点解决现有研究的局限性：
 ```
 @article{lqbench2024,
   title={LQBench: A Framework for Evaluating Large Language Models' Emotional Intelligence in Intimate Relationships},
-  author={[Authors]},
+  author={[Junyin Zheng, Minzhi Lai, Yixin Zhou]},
   journal={[Journal/Conference]},
   year={2024}
 }
