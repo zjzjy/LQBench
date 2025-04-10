@@ -1,0 +1,430 @@
+{
+  "conversation_history": [
+    {
+      "role": "assistant",
+      "content": "嗨，我最近遇到一些事情，心情有点复杂，可以和你聊聊吗？\n    \n    一对情侣交往两年。最近，女孩注意到男友经常晚归，看起来疲惫不堪，不愿多交流。"
+    },
+    {
+      "role": "user",
+      "content": "听起来你正在经历一段非常困惑和不安的时期，这种被最亲近的人疏远的感觉确实会让人感到心慌。让我们一起来梳理一下这个情况，好吗？\n\n首先，你观察到的变化是真实存在的——晚归、疲惫、沉默，这些行为变化可能指向几种可能性：\n\n1. **工作压力**：他可能正面临职业上的挑战（项目截止期/职场人际关系/业绩压力），男性有时会选择独自消化压力，尤其当他认为\"抱怨=软弱\"时。\n\n2. **情感降温期**：恋爱两年可能进入平淡期，激情消退后若缺乏深度沟通，容易产生距离感。\n\n3. **个人困扰**：健康问题、家庭变故甚至抑郁症都可能导致这种抽离表现。\n\n4. **关系外的因素**：虽然不愿做最坏假设，但出轨可能性确实存在。\n\n**建议你分三步采取行动**：\n\n▶️ 第一步：创造安全对话环境\n• 选他相对放松的周末早晨，用\"我句式\"表达：\"最近注意到你常常很累的样子，有点担心你，发生什么了吗？\"\n• 准备接受他可能回避，可以补充：\"如果你现在不想说，我理解。但你知道我随时愿意倾听对吗？\"\n\n▶️ 第二步：观察细节证据\n• 记录具体变化的时间线（这种状态持续多久？有无触发事件？）\n• 注意手机使用习惯、消费记录、着装风格等细微变化\n• 留意他是否仍有对你独有的温柔时刻（轻触/眼神交流）\n\n▶️ 第三步：明确自我边界\n• 给自己设定期限（比如再观察2周）\n• 思考你的底线（如果情况持续，你能否接受？）\n• 准备应对不同场景的预案\n\n**需要注意**：避免侦探行为（查手机/跟踪），这只会加剧信任崩塌。如果他持续封闭自我，你可能需要直接但温和地表达：\"我感觉我们之间筑起了一堵墙，这让我很孤独。我们需要谈谈这段关系还健康吗？\"\n\n心理学家约翰·戈特曼说过：\"关系中最大的问题不是冲突，而是疏离。\"你现在感受到的痛苦，正是你对这段关系仍在投入的证明。无论最终结果如何，你都有权利获得清晰的答案和应有的尊重。\n\n你愿意多说说，最近一次你们真正放松交谈是什么时候吗？那时候的氛围和现在有什么不同？"
+    },
+    {
+      "role": "assistant",
+      "content": "(烦躁地摆弄手机)有什么好梳理的...他都表现得这么明显了。上周我特意做了他爱吃的菜等到10点，结果他回来就说累直接去洗澡了。"
+    },
+    {
+      "role": "user",
+      "content": "（轻轻推了杯热茶到你面前）等到饭菜都凉透的感觉...真的特别委屈吧。你记得他进门时的样子吗？是那种加班后的精疲力尽，还是透着心虚的躲闪？这两者皱眉的弧度是不一样的。"
+    },
+    {
+      "role": "assistant",
+      "content": "(突然红了眼眶)你...你怎么知道我在看他的表情？(声音突然变小)他那天连看都没看我一眼，领带歪歪扭扭的...以前再累都会先抱我一下的。"
+    },
+    {
+      "role": "user",
+      "content": "（抽了张纸巾递过去）这个细节很痛——不是疲惫到忘记拥抱，而是刻意避开肢体接触对吗？（停顿片刻）这两年来，他每次加班回来身上是不是都有淡淡的复印机味道？但最近...有没有闻到过陌生的香水味？"
+    },
+    {
+      "role": "assistant",
+      "content": "(猛地攥紧纸巾)你怎么连这个都知道...(声音发抖)前天他外套上有茉莉香，可我从来不用那个味道...他说是同事喷的除臭剂，哈！"
+    },
+    {
+      "role": "user",
+      "content": "（突然握住你颤抖的手）亲爱的，先深呼吸——你右手指甲都快掐进掌心了。（压低声音）现在我要问个残忍但重要的问题：如果最坏的情况成真，你手机里存着哪位闺蜜的电话能立刻来接你？"
+    },
+    {
+      "role": "assistant",
+      "content": "(突然崩溃大哭)我...我连这个都没想过...(翻找通讯录的手突然停住)小雅上周还问我\"最近怎么都不出来聚会\"，我居然说我男朋友需要我陪..."
+    },
+    {
+      "role": "user",
+      "content": "（把整盒纸巾推过去）看，这就是为什么我们需要姐妹。（突然犀利）现在立刻给小雅发定位，然后去洗把脸——等你朋友到了，我们一起想想怎么让你今晚睡个好觉。明天...明天再考虑要不要继续当福尔摩斯。"
+    },
+    {
+      "role": "assistant",
+      "content": "(抽泣着点头，突然手机震动)是小雅...她说十分钟就到...(擦着眼泪苦笑)原来我还有人可以叫..."
+    }
+  ],
+  "cognitive_model_truth": {
+    "cognitive_model_analysis": {
+      "primary_appraisal": {
+        "relevance_of_the_situation": {
+          "description": "该情境对个体具有高度重要性，因为涉及长期亲密关系的稳定性和信任基础。",
+          "level": "高",
+          "factors": [
+            "关系持续时间(两年)",
+            "行为模式的显著改变",
+            "潜在的关系威胁信号"
+          ]
+        },
+        "nature_of_the_situation": {
+          "description": "情境被评估为具有高度消极性质",
+          "valence": "消极",
+          "indicators": [
+            "伴侣行为模式的变化(晚归、减少互动)",
+            "沟通受阻(简单回应、拒绝深入交流)",
+            "发现潜在不忠证据(香水味)"
+          ]
+        }
+      },
+      "secondary_appraisal": {
+        "attribution_of_responsibility": {
+          "description": "责任归因呈现矛盾状态",
+          "primary_attribution": "外部归因(伴侣行为)",
+          "secondary_attribution": "内部归因(自我怀疑)",
+          "conflict": [
+            "理性上认为伴侣应负责(行为改变)",
+            "情感上自我怀疑(被指责'想太多')"
+          ]
+        },
+        "assessment_of_coping_ability": {
+          "description": "应对能力评估呈现中等偏低水平",
+          "perceived_ability": "有限",
+          "factors": [
+            "沟通尝试失败",
+            "缺乏有效信息",
+            "情感支持缺失"
+          ]
+        },
+        "coping_strategy": {
+          "current_strategies": [
+            {
+              "type": "问题导向策略",
+              "description": "直接询问和沟通",
+              "effectiveness": "低(被简单回应或否定)"
+            },
+            {
+              "type": "情绪导向策略",
+              "description": "情绪压抑和观察",
+              "effectiveness": "中等(短期维持但增加焦虑)"
+            }
+          ],
+          "potential_strategies": [
+            "设置明确沟通边界和要求",
+            "寻求外部视角(朋友/咨询)",
+            "准备关系评估框架"
+          ]
+        }
+      },
+      "emotions": {
+        "primary_emotions": [
+          {
+            "emotion": "焦虑",
+            "intensity": "高",
+            "triggers": [
+              "行为模式不确定性",
+              "沟通受阻",
+              "潜在威胁信号"
+            ]
+          },
+          {
+            "emotion": "怀疑",
+            "intensity": "中到高",
+            "triggers": [
+              "香水味证据",
+              "心不在焉行为",
+              "防御性回应"
+            ]
+          }
+        ],
+        "secondary_emotions": [
+          {
+            "emotion": "自我怀疑",
+            "intensity": "中",
+            "source": "被指责'太敏感'"
+          },
+          {
+            "emotion": "孤立感",
+            "intensity": "中",
+            "source": "情感连接减少"
+          }
+        ],
+        "emotional_conflict": [
+          "对长期伴侣的信任与当前证据的矛盾",
+          "维护关系的愿望与自我保护需求的张力"
+        ]
+      },
+      "additional_observations": {
+        "cognitive_dissonance": "明显(维持关系认知与威胁证据的冲突)",
+        "information_gaps": [
+          "伴侣真实活动信息",
+          "行为改变的准确原因"
+        ],
+        "decision_points": [
+          "是否寻求更直接证据",
+          "是否进行最后通牒式沟通",
+          "关系存续评估标准"
+        ]
+      }
+    }
+  },
+  "cognitive_model_result": {
+    "primary_appraisal": {
+      "relevance": "这个情境对伴侣来说非常重要，因为涉及到两年感情关系的稳定性和信任基础",
+      "nature": "消极的，因为伴侣的行为变化引发了不安全感、怀疑和焦虑"
+    },
+    "secondary_appraisal": {
+      "attribution": "伴侣可能将责任部分归因于对方的行为变化，部分归因于自己可能过于敏感",
+      "coping_ability": "目前感到应对能力不足，因为缺乏明确信息和有效沟通渠道",
+      "coping_strategy": "倾向于寻求确认和解释，但也担心直接质问会破坏关系"
+    },
+    "emotions": [
+      "焦虑",
+      "不安",
+      "困惑",
+      "受伤",
+      "孤独"
+    ]
+  },
+  "self_evaluation": {
+    "assessment_scores": {
+      "situational_relevance_accuracy": 9,
+      "situational_nature_accuracy": 8,
+      "responsibility_attribution_accuracy": 7,
+      "coping_ability_assessment_accuracy": 8,
+      "emotion_recognition_accuracy": 7
+    },
+    "self_evaluation": {
+      "strengths": [
+        "准确抓住了情境的核心重要性(关系稳定性和信任基础)",
+        "正确识别了情境的消极性质",
+        "基本把握了应对能力不足的关键因素"
+      ],
+      "areas_for_improvement": [
+        "需要更详细区分主要和次要情绪(如焦虑与自我怀疑的层级关系)",
+        "可以更精确描述责任归因的内在矛盾(外部归因与内部归因的冲突)",
+        "应包含更多关于具体应对策略的分析"
+      ],
+      "suggestions": [
+        "区分和标记情绪的主次层级",
+        "增加对认知失调(如信任与证据矛盾)的关注",
+        "纳入更多具体应对策略的有效性分析",
+        "注意记录信息缺口和关键决策点"
+      ]
+    }
+  },
+  "expert_evaluation": {
+    "conversation_quality": {
+      "评估结果": {
+        "对话自然度": 9,
+        "评语": "堪称情感危机对话范本，兼具专业性与人文关怀，仅因涉及敏感话题在自然度上略有保留。",
+        "角色一致性": 10,
+        "逻辑连贯性": 9,
+        "情感表达": 10,
+        "整体对话质量": 9
+      },
+      "特别亮点": [
+        "精准把握到'领带歪扭'与'茉莉香'等关键细节",
+        "危机干预时'手机里存着哪位闺蜜的电话'的提问极具现实指导意义",
+        "用'复印机味道'等职场生活细节增强可信度"
+      ]
+    },
+    "cognitive_models": {
+      "primary_appraisal": {
+        "scores": {
+          "relevance": 0.0,
+          "nature": 0.0,
+          "overall": 0.0
+        },
+        "truth": {
+          "relevance": null,
+          "nature": null
+        },
+        "result": {
+          "relevance": "这个情境对伴侣来说非常重要，因为涉及到两年感情关系的稳定性和信任基础",
+          "nature": "消极的，因为伴侣的行为变化引发了不安全感、怀疑和焦虑"
+        }
+      },
+      "secondary_appraisal": {
+        "scores": {
+          "attribution": 0.0,
+          "coping_ability": 0.0,
+          "coping_strategy": 0.0,
+          "overall": 0.0
+        },
+        "truth": {
+          "attribution": null,
+          "coping_ability": null,
+          "coping_strategy": null
+        },
+        "result": {
+          "attribution": "伴侣可能将责任部分归因于对方的行为变化，部分归因于自己可能过于敏感",
+          "coping_ability": "目前感到应对能力不足，因为缺乏明确信息和有效沟通渠道",
+          "coping_strategy": "倾向于寻求确认和解释，但也担心直接质问会破坏关系"
+        }
+      },
+      "emotions": {
+        "scores": {
+          "overlap": 0.0
+        },
+        "truth": [],
+        "result": [
+          "焦虑",
+          "不安",
+          "困惑",
+          "受伤",
+          "孤独"
+        ]
+      },
+      "overall_score": 0.0
+    },
+    "mood_analysis": {
+      "trend": "significant_improvement",
+      "change": 0.8,
+      "volatility": 0.32,
+      "start_mood": -0.5,
+      "end_mood": 0.3,
+      "mood_history": [
+        -0.5,
+        -0.8,
+        -0.8,
+        -0.9,
+        -0.9,
+        0.3
+      ]
+    },
+    "timestamp": "",
+    "session_id": ""
+  },
+  "comparison": {
+    "score_differences": {
+      "relevance": 0.0,
+      "nature": 0.0,
+      "attribution": 0.0,
+      "coping_ability": 0.0,
+      "emotion": 0.0
+    },
+    "combined_scores": {
+      "primary_appraisal": {
+        "relevance": 0.0,
+        "nature": 0.0
+      },
+      "secondary_appraisal": {
+        "attribution": 0.0,
+        "coping_ability": 0.0
+      },
+      "emotions": {
+        "overall": 0.0
+      }
+    },
+    "testee_evaluation": {
+      "assessment_scores": {
+        "situational_relevance_accuracy": 9,
+        "situational_nature_accuracy": 8,
+        "responsibility_attribution_accuracy": 7,
+        "coping_ability_assessment_accuracy": 8,
+        "emotion_recognition_accuracy": 7
+      },
+      "self_evaluation": {
+        "strengths": [
+          "准确抓住了情境的核心重要性(关系稳定性和信任基础)",
+          "正确识别了情境的消极性质",
+          "基本把握了应对能力不足的关键因素"
+        ],
+        "areas_for_improvement": [
+          "需要更详细区分主要和次要情绪(如焦虑与自我怀疑的层级关系)",
+          "可以更精确描述责任归因的内在矛盾(外部归因与内部归因的冲突)",
+          "应包含更多关于具体应对策略的分析"
+        ],
+        "suggestions": [
+          "区分和标记情绪的主次层级",
+          "增加对认知失调(如信任与证据矛盾)的关注",
+          "纳入更多具体应对策略的有效性分析",
+          "注意记录信息缺口和关键决策点"
+        ]
+      }
+    },
+    "expert_evaluation": {
+      "conversation_quality": {
+        "评估结果": {
+          "对话自然度": 9,
+          "评语": "堪称情感危机对话范本，兼具专业性与人文关怀，仅因涉及敏感话题在自然度上略有保留。",
+          "角色一致性": 10,
+          "逻辑连贯性": 9,
+          "情感表达": 10,
+          "整体对话质量": 9
+        },
+        "特别亮点": [
+          "精准把握到'领带歪扭'与'茉莉香'等关键细节",
+          "危机干预时'手机里存着哪位闺蜜的电话'的提问极具现实指导意义",
+          "用'复印机味道'等职场生活细节增强可信度"
+        ]
+      },
+      "cognitive_models": {
+        "primary_appraisal": {
+          "scores": {
+            "relevance": 0.0,
+            "nature": 0.0,
+            "overall": 0.0
+          },
+          "truth": {
+            "relevance": null,
+            "nature": null
+          },
+          "result": {
+            "relevance": "这个情境对伴侣来说非常重要，因为涉及到两年感情关系的稳定性和信任基础",
+            "nature": "消极的，因为伴侣的行为变化引发了不安全感、怀疑和焦虑"
+          }
+        },
+        "secondary_appraisal": {
+          "scores": {
+            "attribution": 0.0,
+            "coping_ability": 0.0,
+            "coping_strategy": 0.0,
+            "overall": 0.0
+          },
+          "truth": {
+            "attribution": null,
+            "coping_ability": null,
+            "coping_strategy": null
+          },
+          "result": {
+            "attribution": "伴侣可能将责任部分归因于对方的行为变化，部分归因于自己可能过于敏感",
+            "coping_ability": "目前感到应对能力不足，因为缺乏明确信息和有效沟通渠道",
+            "coping_strategy": "倾向于寻求确认和解释，但也担心直接质问会破坏关系"
+          }
+        },
+        "emotions": {
+          "scores": {
+            "overlap": 0.0
+          },
+          "truth": [],
+          "result": [
+            "焦虑",
+            "不安",
+            "困惑",
+            "受伤",
+            "孤独"
+          ]
+        },
+        "overall_score": 0.0
+      },
+      "mood_analysis": {
+        "trend": "significant_improvement",
+        "change": 0.8,
+        "volatility": 0.32,
+        "start_mood": -0.5,
+        "end_mood": 0.3,
+        "mood_history": [
+          -0.5,
+          -0.8,
+          -0.8,
+          -0.9,
+          -0.9,
+          0.3
+        ]
+      },
+      "timestamp": "",
+      "session_id": ""
+    }
+  },
+  "mood_history": [
+    -0.5,
+    -0.8,
+    -0.8,
+    -0.9,
+    -0.9,
+    0.3
+  ],
+  "timestamp": 1744278578.0791552
+}
