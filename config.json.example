@@ -1,0 +1,11 @@
+{
+    "DEEPSEEK_API_KEY": "sk-1bc0ea02705c4237a63340c3e821709b",
+    "OPENROUTER_API_KEY": "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",
+    "DEFAULT_CHARACTER_API": "deepseek",
+    "DEFAULT_PARTNER_API": "openrouter",
+    "MAX_TURNS": 10,
+    "LOG_DIR": "logs",
+    "OUTPUT_DIR": "benchmark_results",
+    "PARALLEL_EXECUTION": false,
+    "MAX_WORKERS": 4
+} 
