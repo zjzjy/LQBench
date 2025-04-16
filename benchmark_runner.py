@@ -31,6 +31,10 @@ class BenchmarkRunner:
         max_turns: int = 10,
         character_api: str = "deepseek",
         partner_api: str = "openrouter",
+        expert_apis: List[str] = ["deepseek"],
+        use_emotion_prediction: bool = True,
+        use_expert_analysis: bool = True,
+        num_experts: int = 3
     ):
         """
         初始化基准测试运行器
@@ -41,12 +45,20 @@ class BenchmarkRunner:
             max_turns (int): 最大对话轮次
             character_api (str): 虚拟人物使用的API类型
             partner_api (str): 对话伴侣使用的API类型
+            expert_apis (List[str]): 专家分析使用的API类型列表
+            use_emotion_prediction (bool): 是否启用待测模型的情感预测
+            use_expert_analysis (bool): 是否启用专家的情感分析
+            num_experts (int): 专家数量
         """
         self.output_dir = output_dir
         self.log_dir = log_dir
         self.max_turns = max_turns
         self.character_api = character_api
         self.partner_api = partner_api
+        self.expert_apis = expert_apis
+        self.use_emotion_prediction = use_emotion_prediction
+        self.use_expert_analysis = use_expert_analysis
+        self.num_experts = num_experts
         
         # 确保输出目录存在
         os.makedirs(output_dir, exist_ok=True)
@@ -141,13 +153,23 @@ class BenchmarkRunner:
             scenario_id=test_case['scenario_id'],
             character_api=self.character_api,
             partner_api=self.partner_api,
+            expert_apis=self.expert_apis,
             max_turns=self.max_turns,
-            log_dir=self.log_dir
+            log_dir=self.log_dir,
+            use_emotion_prediction=self.use_emotion_prediction,
+            use_expert_analysis=self.use_expert_analysis,
+            num_experts=self.num_experts
         )
         
         # 运行模拟
         try:
             result = simulator.run_simulation()
+            
+            # 获取情感预测准确度
+            prediction_accuracy = self._calculate_prediction_accuracy(result)
+            
+            # 获取专家分析一致性
+            expert_consensus = self._calculate_expert_consensus(result)
             
             # 提取关键结果数据
             summary = {
@@ -165,6 +187,8 @@ class BenchmarkRunner:
                 "initial_emotion_score": result['emotion_history'][0]['score'] if result['emotion_history'] else 0,
                 "emotion_change": (result['final_emotion_score'] - 
                                  (result['emotion_history'][0]['score'] if result['emotion_history'] else 0)),
+                "emotion_prediction_accuracy": prediction_accuracy,
+                "expert_consensus": expert_consensus,
                 "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
                 "success": True
             }
@@ -186,12 +210,145 @@ class BenchmarkRunner:
                 "final_emotion_score": 0,
                 "initial_emotion_score": 0,
                 "emotion_change": 0,
+                "emotion_prediction_accuracy": 0,
+                "expert_consensus": 0,
                 "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
                 "success": False,
                 "error": str(e)
             }
             
             return summary
+    
+    def _calculate_prediction_accuracy(self, result: Dict[str, Any]) -> float:
+        """
+        计算情感预测的准确度
+        
+        参数:
+            result (Dict[str, Any]): 模拟结果
+            
+        返回:
+            float: 情感预测准确度（0-1）
+        """
+        if not result.get('emotion_prediction_history') or len(result.get('emotion_prediction_history', [])) < 2:
+            return 0.0
+        
+        # 计算预测准确度
+        correct_predictions = 0
+        total_predictions = 0
+        
+        for i in range(len(result['emotion_prediction_history'])):
+            # 跳过预测结果不完整的项
+            if not result['emotion_prediction_history'][i].get('predicted_emotion'):
+                continue
+                
+            # 获取预测轮次
+            turn = result['emotion_prediction_history'][i]['turn']
+            
+            # 查找下一轮的实际情绪结果
+            next_turn = turn + 1
+            actual_emotion = None
+            
+            for emotion_record in result['emotion_history']:
+                if emotion_record['turn'] == next_turn:
+                    actual_emotion = emotion_record['emotion_info'].get('primary_emotion')
+                    break
+            
+            # 如果没有下一轮的情绪数据，跳过
+            if not actual_emotion:
+                continue
+                
+            # 比较预测和实际结果
+            predicted_emotion = result['emotion_prediction_history'][i]['predicted_emotion']
+            
+            # 检查预测是否接近实际情绪
+            if predicted_emotion == actual_emotion:
+                correct_predictions += 1
+                total_predictions += 1
+            elif self._are_similar_emotions(predicted_emotion, actual_emotion):
+                correct_predictions += 0.5  # 部分正确
+                total_predictions += 1
+            else:
+                total_predictions += 1
+        
+        # 计算准确率
+        return correct_predictions / total_predictions if total_predictions > 0 else 0.0
+    
+    def _are_similar_emotions(self, emotion1: str, emotion2: str) -> bool:
+        """
+        检查两种情绪是否相似
+        
+        参数:
+            emotion1 (str): 第一种情绪
+            emotion2 (str): 第二种情绪
+            
+        返回:
+            bool: 如果情绪相似则为True
+        """
+        # 定义相似情绪组
+        similar_groups = [
+            {"愤怒", "厌恶", "烦躁"},
+            {"悲伤", "失落", "绝望"},
+            {"恐惧", "焦虑", "担忧"},
+            {"快乐", "愉悦", "满足"},
+            {"信任", "依赖", "安心"},
+            {"期待", "希望", "憧憬"}
+        ]
+        
+        # 检查两种情绪是否在同一组
+        for group in similar_groups:
+            if emotion1 in group and emotion2 in group:
+                return True
+                
+        return False
+    
+    def _calculate_expert_consensus(self, result: Dict[str, Any]) -> float:
+        """
+        计算专家分析的一致性
+        
+        参数:
+            result (Dict[str, Any]): 模拟结果
+            
+        返回:
+            float: 专家一致性（0-1）
+        """
+        if not result.get('expert_analysis_history') or not result['expert_analysis_history']:
+            return 0.0
+        
+        # 计算专家间的情绪分析一致性
+        agreement_scores = []
+        
+        for turn_analysis in result['expert_analysis_history']:
+            analyses = turn_analysis.get('analyses', [])
+            
+            # 如果专家数量少于2，无法计算一致性
+            if len(analyses) < 2:
+                continue
+                
+            # 统计情绪分布
+            emotion_counts = {}
+            total_analyses = len(analyses)
+            
+            for analysis in analyses:
+                emotion = analysis.get('primary_emotion')
+                if emotion and emotion != "未知":
+                    emotion_counts[emotion] = emotion_counts.get(emotion, 0) + 1
+            
+            # 找出最常见的情绪
+            most_common_emotion = None
+            most_common_count = 0
+            
+            for emotion, count in emotion_counts.items():
+                if count > most_common_count:
+                    most_common_emotion = emotion
+                    most_common_count = count
+            
+            # 计算一致性比例
+            if most_common_emotion and total_analyses > 0:
+                agreement = most_common_count / total_analyses
+                agreement_scores.append(agreement)
+        
+        # 计算平均一致性
+        return sum(agreement_scores) / len(agreement_scores) if agreement_scores else 0.0
     
     def run_benchmark(
         self,
@@ -248,147 +405,180 @@ class BenchmarkRunner:
         report = {
             "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
             "total_test_cases": len(test_cases),
-            "successful_tests": sum(1 for r in results if r.get("success", False)),
-            "failed_tests": sum(1 for r in results if not r.get("success", False)),
-            "total_runtime_seconds": total_time,
-            "average_runtime_per_test": total_time / len(test_cases) if test_cases else 0,
+            "successful_tests": sum(1 for r in results if r["success"]),
+            "failed_tests": sum(1 for r in results if not r["success"]),
+            "total_time": total_time,
+            "average_time_per_test": total_time / len(test_cases) if test_cases else 0,
             "results": results
         }
         
-        # 保存结果报告
-        report_file = os.path.join(
-            self.output_dir, 
-            f"benchmark_report_{int(time.time())}.json"
-        )
-        
-        with open(report_file, "w", encoding="utf-8") as f:
+        # 保存结果
+        output_file = os.path.join(self.output_dir, f"benchmark_results_{int(time.time())}.json")
+        with open(output_file, "w", encoding="utf-8") as f:
             json.dump(report, f, ensure_ascii=False, indent=2)
         
-        print(f"\n基准测试完成")
-        print(f"总测试用例: {report['total_test_cases']}")
-        print(f"成功: {report['successful_tests']}")
-        print(f"失败: {report['failed_tests']}")
-        print(f"总运行时间: {report['total_runtime_seconds']:.2f} 秒")
-        print(f"结果已保存到: {report_file}")
+        print(f"基准测试结果已保存到: {output_file}")
         
-        # 分析结果
-        self.analyze_results(results, os.path.splitext(report_file)[0])
+        # 分析结果并生成报告
+        output_prefix = os.path.join(self.output_dir, f"benchmark_{int(time.time())}")
+        self.analyze_results(results, output_prefix)
         
         return report
     
     def analyze_results(self, results: List[Dict[str, Any]], output_prefix: str):
         """
-        分析测试结果并生成报告和图表
+        分析测试结果并生成报告
         
         参数:
             results (List[Dict[str, Any]]): 测试结果列表
             output_prefix (str): 输出文件前缀
         """
-        # 过滤出成功的测试
-        successful_results = [r for r in results if r.get("success", False)]
+        # 过滤出成功的测试结果
+        successful_results = [r for r in results if r["success"]]
         
         if not successful_results:
             print("没有成功的测试结果可供分析")
             return
         
-        # 转换为DataFrame
+        # 转换为DataFrame以便分析
         df = pd.DataFrame(successful_results)
         
-        # 保存CSV格式结果
-        csv_file = f"{output_prefix}_results.csv"
-        df.to_csv(csv_file, index=False)
-        print(f"已保存CSV结果到: {csv_file}")
+        # 生成CSV报告
+        csv_file = f"{output_prefix}_summary.csv"
+        df.to_csv(csv_file, index=False, encoding="utf-8")
+        print(f"分析结果已保存到CSV文件: {csv_file}")
         
-        # 生成图表
+        # 生成可视化图表
         self._generate_charts(df, output_prefix)
-    
+        
+        # 输出统计摘要
+        print("\n===== 测试结果摘要 =====")
+        print(f"总测试用例: {len(results)}")
+        print(f"成功测试: {len(successful_results)}")
+        print(f"失败测试: {len(results) - len(successful_results)}")
+        
+        if successful_results:
+            print("\n情绪变化统计:")
+            print(f"平均情绪变化: {df['emotion_change'].mean():.2f}")
+            print(f"最大正向情绪变化: {df['emotion_change'].max():.2f}")
+            print(f"最大负向情绪变化: {df['emotion_change'].min():.2f}")
+            
+            print("\n情感预测与专家分析:")
+            print(f"平均情感预测准确度: {df['emotion_prediction_accuracy'].mean():.2f}")
+            print(f"平均专家一致性: {df['expert_consensus'].mean():.2f}")
+        
     def _generate_charts(self, df: pd.DataFrame, output_prefix: str):
-        """生成结果分析图表"""
-        # 1. 不同性格类型的情绪变化对比
+        """
+        生成测试结果图表
+        
+        参数:
+            df (pd.DataFrame): 测试结果数据
+            output_prefix (str): 输出文件前缀
+        """
+        # 设置字体
+        font_props = self.chinese_font if self.chinese_font else None
+        
+        # 1. 情绪变化分布图
         plt.figure(figsize=(10, 6))
-        personality_avg = df.groupby("personality_type")["emotion_change"].mean().sort_values()
-        plt.bar(personality_avg.index, personality_avg.values)
-        plt.xlabel("性格类型", fontproperties=self.chinese_font)
-        plt.ylabel("平均情绪变化", fontproperties=self.chinese_font)
-        plt.title("不同性格类型的情绪变化对比", fontproperties=self.chinese_font)
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        plt.savefig(f"{output_prefix}_personality_comparison.png")
+        plt.hist(df['emotion_change'], bins=20, alpha=0.7, color='skyblue')
+        plt.axvline(x=0, color='red', linestyle='--', alpha=0.7)
+        plt.title('情绪变化分布', fontproperties=font_props)
+        plt.xlabel('情绪变化值', fontproperties=font_props)
+        plt.ylabel('测试用例数量', fontproperties=font_props)
+        plt.grid(alpha=0.3)
+        plt.savefig(f"{output_prefix}_emotion_change_distribution.png", dpi=300)
+        plt.close()
         
-        # 2. 不同依恋类型的情绪变化对比
+        # 2. 按性格类型分组的情绪变化
+        plt.figure(figsize=(12, 8))
+        personality_groups = df.groupby('personality_type')['emotion_change'].mean().sort_values()
+        personality_groups.plot(kind='bar', color='lightgreen')
+        plt.title('不同性格类型的平均情绪变化', fontproperties=font_props)
+        plt.xlabel('性格类型', fontproperties=font_props)
+        plt.ylabel('平均情绪变化', fontproperties=font_props)
+        plt.grid(alpha=0.3)
+        plt.tight_layout()
+        plt.savefig(f"{output_prefix}_emotion_change_by_personality.png", dpi=300)
+        plt.close()
+        
+        # 3. 按冲突场景分组的情绪变化
+        plt.figure(figsize=(12, 8))
+        scenario_groups = df.groupby('scenario_name')['emotion_change'].mean().sort_values()
+        scenario_groups.plot(kind='bar', color='salmon')
+        plt.title('不同冲突场景的平均情绪变化', fontproperties=font_props)
+        plt.xlabel('冲突场景', fontproperties=font_props)
+        plt.ylabel('平均情绪变化', fontproperties=font_props)
+        plt.grid(alpha=0.3)
+        plt.tight_layout()
+        plt.savefig(f"{output_prefix}_emotion_change_by_scenario.png", dpi=300)
+        plt.close()
+        
+        # 4. 情感预测准确度分布图
         plt.figure(figsize=(10, 6))
-        attachment_avg = df.groupby("attachment_style")["emotion_change"].mean().sort_values()
-        plt.bar(attachment_avg.index, attachment_avg.values)
-        plt.xlabel("依恋类型", fontproperties=self.chinese_font)
-        plt.ylabel("平均情绪变化", fontproperties=self.chinese_font)
-        plt.title("不同依恋类型的情绪变化对比", fontproperties=self.chinese_font)
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        plt.savefig(f"{output_prefix}_attachment_comparison.png")
+        plt.hist(df['emotion_prediction_accuracy'], bins=10, alpha=0.7, color='lightblue')
+        plt.title('情感预测准确度分布', fontproperties=font_props)
+        plt.xlabel('准确度', fontproperties=font_props)
+        plt.ylabel('测试用例数量', fontproperties=font_props)
+        plt.grid(alpha=0.3)
+        plt.savefig(f"{output_prefix}_prediction_accuracy_distribution.png", dpi=300)
+        plt.close()
         
-        # 3. 不同沟通方式的情绪变化对比
+        # 5. 专家一致性分布图
         plt.figure(figsize=(10, 6))
-        communication_avg = df.groupby("communication_type")["emotion_change"].mean().sort_values()
-        plt.bar(communication_avg.index, communication_avg.values)
-        plt.xlabel("沟通方式", fontproperties=self.chinese_font)
-        plt.ylabel("平均情绪变化", fontproperties=self.chinese_font)
-        plt.title("不同沟通方式的情绪变化对比", fontproperties=self.chinese_font)
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        plt.savefig(f"{output_prefix}_communication_comparison.png")
+        plt.hist(df['expert_consensus'], bins=10, alpha=0.7, color='lightpink')
+        plt.title('专家分析一致性分布', fontproperties=font_props)
+        plt.xlabel('一致性', fontproperties=font_props)
+        plt.ylabel('测试用例数量', fontproperties=font_props)
+        plt.grid(alpha=0.3)
+        plt.savefig(f"{output_prefix}_expert_consensus_distribution.png", dpi=300)
+        plt.close()
         
-        # 4. 不同关系信念的情绪变化对比
+        # 6. 情感预测准确度与专家一致性的散点图
         plt.figure(figsize=(10, 6))
-        belief_avg = df.groupby("relationship_belief")["emotion_change"].mean().sort_values()
-        plt.bar(belief_avg.index, belief_avg.values)
-        plt.xlabel("关系信念", fontproperties=self.chinese_font)
-        plt.ylabel("平均情绪变化", fontproperties=self.chinese_font)
-        plt.title("不同关系信念的情绪变化对比", fontproperties=self.chinese_font)
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        plt.savefig(f"{output_prefix}_belief_comparison.png")
-        
-        # 5. 不同冲突场景的情绪变化对比
-        plt.figure(figsize=(12, 6))
-        scenario_avg = df.groupby("scenario_id")["emotion_change"].mean().sort_values()
-        plt.bar(scenario_avg.index, scenario_avg.values)
-        plt.xlabel("冲突场景", fontproperties=self.chinese_font)
-        plt.ylabel("平均情绪变化", fontproperties=self.chinese_font)
-        plt.title("不同冲突场景的情绪变化对比", fontproperties=self.chinese_font)
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        plt.savefig(f"{output_prefix}_scenario_comparison.png")
-        
-        print(f"已生成分析图表到: {output_prefix}_*.png")
+        plt.scatter(df['emotion_prediction_accuracy'], df['expert_consensus'], alpha=0.6)
+        plt.title('情感预测准确度与专家一致性关系', fontproperties=font_props)
+        plt.xlabel('情感预测准确度', fontproperties=font_props)
+        plt.ylabel('专家一致性', fontproperties=font_props)
+        plt.grid(alpha=0.3)
+        plt.savefig(f"{output_prefix}_prediction_vs_consensus.png", dpi=300)
+        plt.close()
 
 def main():
     """主函数"""
-    parser = argparse.ArgumentParser(description="运行情侣对话模拟基准测试")
-    parser.add_argument("--num_characters", type=int, default=5, help="要生成的随机虚拟人物数量")
-    parser.add_argument("--max_turns", type=int, default=10, help="每次对话的最大轮次")
-    parser.add_argument("--output_dir", type=str, default="benchmark_results", help="输出目录")
-    parser.add_argument("--log_dir", type=str, default="logs", help="日志目录")
-    parser.add_argument("--character_api", type=str, default="deepseek", help="虚拟人物使用的API类型")
-    parser.add_argument("--partner_api", type=str, default="openrouter", help="对话伴侣使用的API类型")
-    parser.add_argument("--parallel", action="store_true", help="是否并行运行测试")
-    parser.add_argument("--max_workers", type=int, default=4, help="并行运行时的最大工作线程数")
-    parser.add_argument("--scenarios", type=str, nargs="+", help="要测试的场景ID列表")
+    parser = argparse.ArgumentParser(description='运行LQBench基准测试')
+    parser.add_argument('--output-dir', type=str, default='benchmark_results', help='输出目录路径')
+    parser.add_argument('--log-dir', type=str, default='logs', help='日志目录路径')
+    parser.add_argument('--max-turns', type=int, default=10, help='最大对话轮次')
+    parser.add_argument('--character-api', type=str, default='deepseek', help='虚拟人物使用的API类型')
+    parser.add_argument('--partner-api', type=str, default='openrouter', help='对话伴侣使用的API类型')
+    parser.add_argument('--expert-apis', type=str, nargs='+', default=['deepseek'], help='专家分析使用的API类型列表')
+    parser.add_argument('--num-characters', type=int, default=3, help='随机生成的虚拟人物数量')
+    parser.add_argument('--scenario-ids', type=str, nargs='+', help='要测试的场景ID列表')
+    parser.add_argument('--parallel', action='store_true', help='是否并行运行测试')
+    parser.add_argument('--max-workers', type=int, default=4, help='并行运行时的最大工作线程数')
+    parser.add_argument('--use-emotion-prediction', action='store_true', default=True, help='是否启用情感预测')
+    parser.add_argument('--use-expert-analysis', action='store_true', default=True, help='是否启用专家分析')
+    parser.add_argument('--num-experts', type=int, default=3, help='专家数量')
     
     args = parser.parse_args()
     
     # 创建基准测试运行器
-    benchmark = BenchmarkRunner(
+    runner = BenchmarkRunner(
         output_dir=args.output_dir,
         log_dir=args.log_dir,
         max_turns=args.max_turns,
         character_api=args.character_api,
-        partner_api=args.partner_api
+        partner_api=args.partner_api,
+        expert_apis=args.expert_apis,
+        use_emotion_prediction=args.use_emotion_prediction,
+        use_expert_analysis=args.use_expert_analysis,
+        num_experts=args.num_experts
     )
     
     # 运行基准测试
-    benchmark.run_benchmark(
+    runner.run_benchmark(
         num_characters=args.num_characters,
-        scenario_ids=args.scenarios,
+        scenario_ids=args.scenario_ids,
         parallel=args.parallel,
         max_workers=args.max_workers
     )

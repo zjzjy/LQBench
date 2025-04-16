@@ -218,14 +218,22 @@ class LLMClient:
 
 ```python
 class CharacterSimulator:
-    def __init__(self, character_config=None, scenario_id=None, character_api="deepseek", partner_api="openrouter", max_turns=10, log_dir="logs"):
-        # 初始化角色和场景
+    def __init__(self, character_config=None, scenario_id=None, character_api="deepseek", 
+                 partner_api="openrouter", expert_api="deepseek", max_turns=10, log_dir="logs",
+                 use_emotion_prediction=True, use_expert_analysis=True, num_experts=3):
+        # 初始化角色、场景和分析设置
         
     def _prepare_prompts(self):
         # 准备角色和伴侣的提示词
         
     def _parse_emotion(self, response):
         # 解析虚拟人物回复中的情绪评估
+        
+    def _predict_emotion(self):
+        # 使用待测模型预测虚拟人物的下一轮情绪状态
+        
+    def _analyze_with_experts(self):
+        # 使用多个专家模型分析虚拟人物的当前情绪状态
         
     def should_end_dialogue(self):
         # 判断对话是否应该结束
@@ -242,8 +250,10 @@ class CharacterSimulator:
 1. **初始化**：加载角色配置和冲突场景
 2. **准备提示词**：根据角色特质和场景组装LLM提示词
 3. **对话循环**：轮流让角色和伴侣发言，每轮解析情绪状态
-4. **结束判断**：根据轮次和情绪变化判断何时结束对话
-5. **返回结果**：包含完整对话历史和情绪变化曲线
+4. **情感预测**：在每轮对话后，待测模型预测虚拟人物下一轮的情感状态
+5. **专家分析**：多个专家模型实时分析虚拟人物的情感状态
+6. **结束判断**：根据轮次和情绪变化判断何时结束对话
+7. **返回结果**：包含完整对话历史、情绪变化曲线、情感预测和专家分析结果
 
 ### 4. 基准测试运行器 (benchmark_runner.py)
 
@@ -253,8 +263,10 @@ class CharacterSimulator:
 
 ```python
 class BenchmarkRunner:
-    def __init__(self, output_dir="benchmark_results", log_dir="logs", max_turns=10, character_api="deepseek", partner_api="openrouter"):
-        # 初始化测试环境
+    def __init__(self, output_dir="benchmark_results", log_dir="logs", max_turns=10,
+                 character_api="deepseek", partner_api="openrouter", expert_api="deepseek",
+                 use_emotion_prediction=True, use_expert_analysis=True, num_experts=3):
+        # 初始化基准测试配置
         
     def generate_test_cases(self, num_characters=5, scenario_ids=None):
         # 生成测试用例
@@ -262,91 +274,137 @@ class BenchmarkRunner:
     def run_single_test(self, test_case):
         # 运行单个测试用例
         
+    def _calculate_prediction_accuracy(self, result):
+        # 计算情感预测的准确度
+        
+    def _calculate_expert_consensus(self, result):
+        # 计算专家分析的一致性
+        
     def run_benchmark(self, test_cases=None, num_characters=5, scenario_ids=None, parallel=False, max_workers=4):
-        # 运行基准测试
+        # 运行所有测试用例
         
     def analyze_results(self, results, output_prefix):
-        # 分析测试结果并生成报告和图表
+        # 分析测试结果
         
     def _generate_charts(self, df, output_prefix):
-        # 生成图表
+        # 生成结果图表
 ```
 
 #### 测试流程
 
-1. **生成测试用例**：创建多个不同特质组合的虚拟人物和场景配对
-2. **批量执行**：串行或并行执行多个测试用例
-3. **结果收集**：汇总每个测试的结果和情绪变化
-4. **数据分析**：生成CSV报告和多种对比图表
-5. **结果保存**：将报告保存到指定输出目录
+1. **生成测试用例**：根据指定参数生成多个角色和场景组合
+2. **并行/串行测试**：执行每个测试用例，记录结果
+3. **情感预测评估**：评估待测模型的情感预测准确度
+4. **专家一致性评估**：计算多专家分析的一致性
+5. **结果分析**：统计分析测试结果并生成报告
+6. **可视化**：生成多种图表展示测试结果
 
-## 使用方法
+## 新增功能详解
 
-### 基本用法
+### 1. 待测模型情感预测
 
-通过命令行运行基准测试：
+该功能允许待测模型在每轮对话后，基于历史对话预测虚拟人物在下一轮对话中可能的情感状态。
 
-```bash
-# 基本执行（生成5个随机角色测试所有场景）
-python -m LQBench.benchmark_runner --num_characters 5 --max_turns 10
+#### 核心实现
 
-# 指定特定场景
-python -m LQBench.benchmark_runner --scenarios communication_misunderstanding time_allocation
+- **预测时机**：每轮对话结束后、下一轮开始前
+- **预测内容**：情绪类型、强度、评分和解释
+- **评估方法**：将预测结果与实际情绪状态对比，计算准确度
 
-# 使用并行执行
-python -m LQBench.benchmark_runner --parallel --max_workers 4
-```
-
-### 配置文件
-
-在`LQBench/config.json`中设置API密钥和默认参数：
-
-```json
-{
-    "DEEPSEEK_API_KEY": "你的DeepSeek API密钥",
-    "OPENROUTER_API_KEY": "你的OpenRouter API密钥",
-    "DEFAULT_CHARACTER_API": "deepseek",
-    "DEFAULT_PARTNER_API": "openrouter",
-    "MAX_TURNS": 10,
-    "LOG_DIR": "logs",
-    "OUTPUT_DIR": "benchmark_results",
-    "PARALLEL_EXECUTION": false,
-    "MAX_WORKERS": 4
-}
-```
-
-### 自定义虚拟人物
-
-可以通过编程方式创建自定义虚拟人物：
+#### 使用示例
 
 ```python
-from LQBench.api.data.character_profiles import create_character_profile
-from LQBench.character_simulator import CharacterSimulator
-
-# 创建自定义角色
-my_character = create_character_profile(
-    id="custom_character",
-    name="张三",
-    gender="男",
-    age=28,
-    personality_type="conscientiousness_high",
-    relationship_belief="growth_belief_high",
-    communication_type="direct_cooperation",
-    attachment_style="secure",
-    background="软件工程师，工作认真负责，注重效率",
-    trigger_topics=["不守时", "工作干涉"],
-    coping_mechanisms=["理性分析", "沟通解决"]
-)
-
-# 创建模拟器
+# 启用情感预测功能
 simulator = CharacterSimulator(
-    character_config=my_character,
-    scenario_id="time_allocation",
-    max_turns=8
+    character_config=character,
+    scenario_id=scenario_id,
+    use_emotion_prediction=True,
+    partner_api="openrouter"  # 待测模型API
 )
 
 # 运行模拟
 result = simulator.run_simulation()
+
+# 查看情感预测历史
+prediction_history = result['emotion_prediction_history']
+for prediction in prediction_history:
+    print(f"轮次 {prediction['turn']}:")
+    print(f"预测情绪: {prediction['predicted_emotion']}")
+    print(f"情绪强度: {prediction['intensity']}")
+    print(f"情绪评分: {prediction['emotion_score']}")
+    print(f"预测解释: {prediction['explanation']}")
+    print("---")
+```
+
+### 2. 多专家实时情感分析
+
+该功能使用多个专家模型同时分析虚拟人物与待测模型的对话，实时评估虚拟人物的情感状态。
+
+#### 核心实现
+
+- **分析时机**：每轮对话结束后立即进行
+- **专家数量**：默认使用3个专家模型（可配置）
+- **分析内容**：主要情绪、强度、评分、关键触发点和简要分析
+- **一致性计算**：评估多个专家之间分析结果的一致程度
+
+#### 使用示例
+
+```python
+# 启用多专家分析功能
+simulator = CharacterSimulator(
+    character_config=character,
+    scenario_id=scenario_id,
+    use_expert_analysis=True,
+    num_experts=3,
+    expert_api="deepseek"  # 专家模型API
+)
+
+# 运行模拟
+result = simulator.run_simulation()
+
+# 查看专家分析历史
+expert_history = result['expert_analysis_history']
+for turn_analysis in expert_history:
+    print(f"轮次 {turn_analysis['turn']}:")
+    for analysis in turn_analysis['analyses']:
+        print(f"专家 {analysis['expert_id']}:")
+        print(f"主要情绪: {analysis['primary_emotion']}")
+        print(f"情绪强度: {analysis['intensity']}")
+        print(f"情绪评分: {analysis['emotion_score']}")
+        print(f"关键触发点: {', '.join(analysis['key_triggers'])}")
+        print(f"简要分析: {analysis['analysis']}")
+    print("---")
+```
+
+## 运行方法
+
+### 基本使用
+
+```python
+from LQBench.character_simulator import CharacterSimulator
+
+# 创建模拟器
+simulator = CharacterSimulator(
+    character_api="deepseek",
+    partner_api="openrouter",
+    expert_api="deepseek",
+    use_emotion_prediction=True,
+    use_expert_analysis=True,
+    num_experts=3
+)
+
+# 运行模拟
+result = simulator.run_simulation()
+
+# 打印结果
+print(f"对话轮次: {result['turns_completed']}")
+print(f"最终情绪分数: {result['final_emotion_score']}")
+```
+
+### 命令行运行
+
+```bash
+python -m LQBench.benchmark_runner --num-characters 3 --max-turns 8 --use-emotion-prediction --use-expert-analysis --num-experts 3
 ```
 
 ## 数据流向图

@@ -82,4 +82,67 @@ emotion_assessment_template = """
 3. 简短解释为什么你有这样的感受
 
 【内心】{emotion_assessment}【内心】
+"""
+
+# 待测模型情感预测提示词模板
+emotion_prediction_template = """
+请根据你与虚拟人物{character_name}的所有对话历史，分析并预测{character_name}在下一轮对话中可能的情绪状态。
+
+## 对话历史
+{dialogue_history}
+
+## 虚拟人物信息
+- 姓名：{character_name}
+- 性格特点：{personality_description}
+- 当前情境：{conflict_description}
+
+## 要求
+1. 分析{character_name}的性格特点和沟通模式
+2. 考虑你们的对话如何影响了{character_name}的情绪
+3. 预测{character_name}下一句话可能表现的主要情绪
+4. 评估情绪强度（1-5的尺度）
+5. 预测整体情绪分数（-10到+10的范围）
+6. 简要解释你的预测理由
+
+请以JSON格式返回你的分析结果：
+{{
+  "predicted_emotion": "情绪名称",
+  "intensity": 情绪强度,
+  "emotion_score": 情绪分数,
+  "explanation": "预测解释"
+}}
+"""
+
+# 专家情感分析提示词模板
+expert_emotion_analysis_template = """
+你是一位专业的心理分析专家，请对以下虚拟人物与测试对象之间的对话进行实时情感分析。
+
+## 虚拟人物信息
+- 姓名：{character_name}
+- 性格特点：{personality_description}
+- 关系观念：{relationship_belief_description}
+- 沟通方式：{communication_style_description}
+- 依恋类型：{attachment_style_description}
+
+## 当前情境
+{conflict_description}
+
+## 对话历史
+{dialogue_history}
+
+## 要求
+1. 分析虚拟人物{character_name}当前的情绪状态
+2. 评估测试对象的回应如何影响了虚拟人物的情绪
+3. 识别对话中的关键情绪触发点和转折点
+4. 提供{character_name}当前的主要情绪、情绪强度和情绪分数
+
+请以JSON格式返回你的分析结果：
+{{
+  "turn": {turn_number},
+  "primary_emotion": "情绪名称",
+  "intensity": 情绪强度,
+  "emotion_score": 情绪分数,
+  "key_triggers": ["触发点1", "触发点2"],
+  "analysis": "简要分析"
+}}
 """ 

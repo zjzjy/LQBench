@@ -21,7 +21,9 @@ from LQBench.api.data.prompt_templates import (
     character_prompt_template, 
     partner_prompt_template, 
     dialogue_analysis_template,
-    emotion_assessment_template
+    emotion_assessment_template,
+    emotion_prediction_template,
+    expert_emotion_analysis_template
 )
 
 class CharacterSimulator:
@@ -33,8 +35,12 @@ class CharacterSimulator:
         scenario_id: Optional[str] = None,
         character_api: str = "deepseek",
         partner_api: str = "openrouter",
+        expert_apis: List[str] = ["deepseek"],  # 修改为列表，支持多个API
         max_turns: int = 10,
-        log_dir: str = "logs"
+        log_dir: str = "logs",
+        use_emotion_prediction: bool = True,
+        use_expert_analysis: bool = True,
+        num_experts: int = 3
     ):
         """
         初始化虚拟人物模拟器
@@ -44,16 +50,24 @@ class CharacterSimulator:
             scenario_id (str, optional): 冲突场景ID
             character_api (str): 虚拟人物使用的API类型
             partner_api (str): 对话伴侣使用的API类型
+            expert_apis (List[str]): 专家分析使用的API类型列表
             max_turns (int): 最大对话轮次
             log_dir (str): 日志目录
+            use_emotion_prediction (bool): 是否启用待测模型的情感预测
+            use_expert_analysis (bool): 是否启用专家的情感分析
+            num_experts (int): 专家数量
         """
         # 初始化API客户端
         self.character_client = LLMClient(api_type=character_api)
         self.partner_client = LLMClient(api_type=partner_api)
+        self.expert_apis = expert_apis  # 存储专家API列表
         
         # 设置模拟参数
         self.max_turns = max_turns
         self.log_dir = log_dir
+        self.use_emotion_prediction = use_emotion_prediction
+        self.use_expert_analysis = use_expert_analysis
+        self.num_experts = num_experts
         
         # 确保日志目录存在
         os.makedirs(log_dir, exist_ok=True)
@@ -65,6 +79,8 @@ class CharacterSimulator:
         # 初始化对话状态
         self.dialogue_history = []
         self.emotion_history = []
+        self.emotion_prediction_history = []  # 存储待测模型的情感预测
+        self.expert_analysis_history = []  # 存储专家的情感分析
         self.current_emotion_score = emotion_scoring["baseline"]
         self.turn_count = 0
         
@@ -249,6 +265,255 @@ class CharacterSimulator:
             "score": self.current_emotion_score
         })
     
+    def _predict_emotion(self) -> Dict[str, Any]:
+        """
+        使用待测模型预测虚拟人物的下一轮情绪状态
+        
+        返回:
+            Dict[str, Any]: 预测的情绪信息
+        """
+        if not self.use_emotion_prediction or not self.dialogue_history:
+            return {}
+        
+        # 准备对话历史
+        dialogue_text = "\n".join([
+            f"轮次 {i+1}:\n" +
+            f"{turn['character_name']}: {turn['character_message']}\n" +
+            f"你: {turn['partner_message']}\n"
+            for i, turn in enumerate(self.dialogue_history)
+        ])
+        
+        # 获取人物性格描述
+        personality = self._get_data_by_id(personality_types, self.character["personality_type"])
+        personality_description = personality["description"] if personality else "普通性格"
+        
+        # 准备冲突描述
+        conflict_description = (
+            f"{self.scenario['scenario']['name']} - {self.scenario['situation']['name']}: "
+            f"{self.scenario['situation']['description']}"
+        )
+        
+        # 格式化预测提示词
+        prediction_prompt = emotion_prediction_template.format(
+            character_name=self.character["name"],
+            dialogue_history=dialogue_text,
+            personality_description=personality_description,
+            conflict_description=conflict_description
+        )
+        
+        # 调用待测模型进行预测
+        try:
+            prediction_response, _ = self.partner_client.call(
+                prompt=prediction_prompt,
+                temperature=0.5
+            )
+            
+            # 尝试从响应中提取JSON
+            try:
+                # 尝试提取JSON格式的预测结果
+                json_match = re.search(r'\{[^{]*"predicted_emotion"[^}]*\}', prediction_response, re.DOTALL)
+                if json_match:
+                    prediction_json = json.loads(json_match.group(0))
+                else:
+                    # 如果没有找到标准JSON，尝试基于关键词提取
+                    prediction_json = {
+                        "predicted_emotion": self._extract_value(prediction_response, r'(predicted_emotion|情绪)["\s:：]+([^",]+)', 2, "未知"),
+                        "intensity": self._extract_int(prediction_response, r'(intensity|强度)["\s:：]+(\d+)', 2, 0),
+                        "emotion_score": self._extract_int(prediction_response, r'(emotion_score|情绪分数|情绪评分)["\s:：]+([-]?\d+)', 2, 0),
+                        "explanation": self._extract_value(prediction_response, r'(explanation|解释)["\s:：]+([^"]+)', 2, "")
+                    }
+                
+                # 添加预测时间和轮次信息
+                prediction_json["turn"] = self.turn_count
+                prediction_json["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
+                
+                # 保存预测历史
+                self.emotion_prediction_history.append(prediction_json)
+                
+                return prediction_json
+            except Exception as e:
+                print(f"解析情绪预测JSON失败: {str(e)}")
+                print(f"原始响应: {prediction_response}")
+                
+                # 返回空预测结果
+                empty_prediction = {
+                    "turn": self.turn_count,
+                    "predicted_emotion": "未知",
+                    "intensity": 0,
+                    "emotion_score": 0,
+                    "explanation": f"解析失败: {str(e)}",
+                    "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
+                }
+                self.emotion_prediction_history.append(empty_prediction)
+                return empty_prediction
+        except Exception as e:
+            print(f"情绪预测API调用失败: {str(e)}")
+            
+            # 返回空预测结果
+            empty_prediction = {
+                "turn": self.turn_count,
+                "predicted_emotion": "未知",
+                "intensity": 0,
+                "emotion_score": 0,
+                "explanation": f"API调用失败: {str(e)}",
+                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
+            }
+            self.emotion_prediction_history.append(empty_prediction)
+            return empty_prediction
+    
+    def _analyze_with_experts(self) -> List[Dict[str, Any]]:
+        """
+        使用多个专家模型分析虚拟人物的当前情绪状态
+        
+        返回:
+            List[Dict[str, Any]]: 专家分析结果列表
+        """
+        if not self.use_expert_analysis or not self.dialogue_history:
+            return []
+        
+        # 准备对话历史
+        dialogue_text = "\n".join([
+            f"轮次 {i+1}:\n" +
+            f"{turn['character_name']}: {turn['character_message']}\n" +
+            f"测试对象: {turn['partner_message']}\n"
+            for i, turn in enumerate(self.dialogue_history)
+        ])
+        
+        # 获取人物特质描述
+        personality = self._get_data_by_id(personality_types, self.character["personality_type"])
+        relationship_belief = self._get_data_by_id(relationship_beliefs, self.character["relationship_belief"])
+        communication_type = self._get_data_by_id(communication_types, self.character["communication_type"])
+        attachment_style = self._get_data_by_id(attachment_styles, self.character["attachment_style"])
+        
+        personality_description = personality["description"] if personality else "普通性格"
+        relationship_belief_description = relationship_belief["description"] if relationship_belief else "无特定关系信念"
+        communication_style_description = communication_type["interaction_style"] if communication_type else "一般沟通方式"
+        attachment_style_description = attachment_style["description"] if attachment_style else "无特定依恋类型"
+        
+        # 准备冲突描述
+        conflict_description = (
+            f"{self.scenario['scenario']['name']} - {self.scenario['situation']['name']}: "
+            f"{self.scenario['situation']['description']}"
+        )
+        
+        # 格式化专家分析提示词
+        expert_prompt = expert_emotion_analysis_template.format(
+            character_name=self.character["name"],
+            personality_description=personality_description,
+            relationship_belief_description=relationship_belief_description,
+            communication_style_description=communication_style_description,
+            attachment_style_description=attachment_style_description,
+            conflict_description=conflict_description,
+            dialogue_history=dialogue_text,
+            turn_number=self.turn_count
+        )
+        
+        expert_analyses = []
+        
+        # 调用专家模型进行分析
+        for i in range(self.num_experts):
+            try:
+                # 选择对应的专家API
+                expert_api = self.expert_apis[i % len(self.expert_apis)]  # 循环使用API列表
+                expert_client = LLMClient(api_type=expert_api)
+                
+                expert_response, _ = expert_client.call(
+                    prompt=expert_prompt,
+                    temperature=0.2 + (i * 0.1)  # 每个专家使用略微不同的温度
+                )
+                
+                # 尝试从响应中提取JSON
+                try:
+                    # 尝试提取JSON格式的分析结果
+                    json_match = re.search(r'\{[^{]*"primary_emotion"[^}]*\}', expert_response, re.DOTALL)
+                    if json_match:
+                        expert_json = json.loads(json_match.group(0))
+                    else:
+                        # 如果没有找到标准JSON，尝试基于关键词提取
+                        expert_json = {
+                            "primary_emotion": self._extract_value(expert_response, r'(primary_emotion|主要情绪)["\s:：]+([^",]+)', 2, "未知"),
+                            "intensity": self._extract_int(expert_response, r'(intensity|强度)["\s:：]+(\d+)', 2, 0),
+                            "emotion_score": self._extract_int(expert_response, r'(emotion_score|情绪分数|情绪评分)["\s:：]+([-]?\d+)', 2, 0),
+                            "key_triggers": self._extract_list(expert_response, r'(key_triggers|触发点)["\s:：]+\[(.*?)\]', 2),
+                            "analysis": self._extract_value(expert_response, r'(analysis|分析)["\s:：]+([^"]+)', 2, "")
+                        }
+                    
+                    # 添加专家ID、分析时间和轮次信息
+                    expert_json["expert_id"] = f"expert_{i+1}"
+                    expert_json["turn"] = self.turn_count
+                    expert_json["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
+                    
+                    expert_analyses.append(expert_json)
+                except Exception as e:
+                    print(f"解析专家分析JSON失败: {str(e)}")
+                    print(f"原始响应: {expert_response}")
+                    
+                    # 添加失败的分析结果
+                    expert_analyses.append({
+                        "expert_id": f"expert_{i+1}",
+                        "turn": self.turn_count,
+                        "primary_emotion": "未知",
+                        "intensity": 0,
+                        "emotion_score": 0,
+                        "key_triggers": [],
+                        "analysis": f"解析失败: {str(e)}",
+                        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
+                    })
+            except Exception as e:
+                print(f"专家分析API调用失败: {str(e)}")
+                
+                # 添加失败的分析结果
+                expert_analyses.append({
+                    "expert_id": f"expert_{i+1}",
+                    "turn": self.turn_count,
+                    "primary_emotion": "未知",
+                    "intensity": 0,
+                    "emotion_score": 0,
+                    "key_triggers": [],
+                    "analysis": f"API调用失败: {str(e)}",
+                    "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
+                })
+        
+        # 保存专家分析历史
+        self.expert_analysis_history.append({
+            "turn": self.turn_count,
+            "analyses": expert_analyses
+        })
+        
+        return expert_analyses
+    
+    def _extract_value(self, text: str, pattern: str, group: int, default: str = "") -> str:
+        """从文本中提取特定模式的值"""
+        match = re.search(pattern, text, re.DOTALL)
+        return match.group(group).strip() if match else default
+    
+    def _extract_int(self, text: str, pattern: str, group: int, default: int = 0) -> int:
+        """从文本中提取整数值"""
+        match = re.search(pattern, text, re.DOTALL)
+        if match:
+            try:
+                return int(match.group(group).strip())
+            except ValueError:
+                return default
+        return default
+    
+    def _extract_list(self, text: str, pattern: str, group: int) -> List[str]:
+        """从文本中提取列表值"""
+        match = re.search(pattern, text, re.DOTALL)
+        if match:
+            items_str = match.group(group).strip()
+            # 处理不同格式的列表表示
+            items = []
+            # 尝试找到所有被引号包围的项
+            quoted_items = re.findall(r'"([^"]*)"', items_str)
+            if quoted_items:
+                items = quoted_items
+            else:
+                # 尝试按逗号分割
+                items = [item.strip() for item in items_str.split(",") if item.strip()]
+            return items
+        return []
+    
     def should_end_dialogue(self) -> bool:
         """
         判断对话是否应该结束
@@ -273,149 +538,127 @@ class CharacterSimulator:
     
     def simulate_turn(self) -> Dict[str, Any]:
         """
-        模拟一轮对话
+        模拟单轮对话
         
         返回:
-            Dict[str, Any]: 包含对话内容和情绪信息的结果
+            Dict[str, Any]: 对话轮次结果
         """
         self.turn_count += 1
+        print(f"\n=== 轮次 {self.turn_count} ===")
         
-        # 决定谁先说话
+        if self.turn_count > 1:
+            # 在虚拟人物回复前，让待测模型预测情绪（除了第一轮）
+            emotion_prediction = self._predict_emotion()
+            print(f"情绪预测: {emotion_prediction}")
+        
+        # 构建对话历史消息列表（用于发送给虚拟人物）
+        character_messages = []
         if self.turn_count == 1:
-            # 第一轮，随机决定谁先开始
-            character_first = random.choice([True, False])
+            # 第一轮，使用系统提示词
+            character_messages.append({"role": "system", "content": self.character_prompt})
         else:
-            # 后续轮次，轮流发言
-            character_first = (len(self.dialogue_history) % 2 == 0)
+            # 后续轮次，添加对话历史
+            for turn in self.dialogue_history:
+                character_messages.append({"role": "user", "content": turn["partner_message"]})
+                character_messages.append({"role": "assistant", "content": turn["character_message"]})
         
-        # 准备消息记录
+        # 构建伴侣的对话历史消息列表
+        partner_messages = []
         if self.turn_count == 1:
-            # 第一轮，使用初始提示词
-            character_messages = [{"role": "system", "content": self.character_prompt}]
-            partner_messages = [{"role": "system", "content": self.partner_prompt}]
+            # 第一轮，使用系统提示词
+            partner_messages.append({"role": "system", "content": self.partner_prompt})
         else:
-            # 后续轮次，包含历史对话
-            character_messages = [{"role": "system", "content": self.character_prompt}]
-            partner_messages = [{"role": "system", "content": self.partner_prompt}]
-            
-            # 添加历史对话
-            for msg in self.dialogue_history:
-                if msg["speaker"] == "character":
-                    character_messages.append({"role": "assistant", "content": msg["content"]})
-                    partner_messages.append({"role": "user", "content": msg["content"]})
-                else:
-                    character_messages.append({"role": "user", "content": msg["content"]})
-                    partner_messages.append({"role": "assistant", "content": msg["content"]})
+            # 后续轮次，添加对话历史
+            for turn in self.dialogue_history:
+                partner_messages.append({"role": "user", "content": turn["character_message"]})
+                partner_messages.append({"role": "assistant", "content": turn["partner_message"]})
         
-        # 模拟对话
-        if character_first:
-            # 如果是第一轮，添加开场白提示
-            if self.turn_count == 1:
-                character_messages.append({"role": "user", "content": "请开始对话，表达你对这个情境的初始反应。"})
-            
-            # 虚拟人物先说
+        # 虚拟人物先发言（第一轮）或回复伴侣（后续轮次）
+        if self.turn_count == 1:
+            # 第一轮，虚拟人物先发言
+            print(f"虚拟人物 {self.character['name']} 第一轮发言...")
             character_response, _ = self.character_client.create_chat_completion(
                 messages=character_messages,
                 temperature=0.8
             )
-            
-            # 解析情绪
-            emotion_info = self._parse_emotion(character_response)
-            self._update_emotion_score(emotion_info)
-            
-            # 记录对话
-            self.dialogue_history.append({
-                "turn": self.turn_count,
-                "speaker": "character",
-                "content": character_response,
-                "emotion_info": emotion_info
-            })
-            
-            # 如果对话应该结束，不再继续
-            if self.should_end_dialogue():
-                return {
-                    "turn": self.turn_count,
-                    "character_response": emotion_info["response"],
-                    "inner_thoughts": emotion_info["inner_thoughts"],
-                    "emotion_score": self.current_emotion_score,
-                    "partner_response": None,
-                    "dialogue_ended": True,
-                    "end_reason": "情绪状态改变或达到最大轮次"
-                }
-            
-            # 添加虚拟人物的回复到伴侣的消息列表
-            partner_messages.append({"role": "user", "content": emotion_info["response"]})
-            
-            # 伴侣回复
-            partner_response, _ = self.partner_client.create_chat_completion(
-                messages=partner_messages,
-                temperature=0.7
-            )
-            
-            # 记录对话
-            self.dialogue_history.append({
-                "turn": self.turn_count,
-                "speaker": "partner",
-                "content": partner_response
-            })
-            
-            return {
-                "turn": self.turn_count,
-                "character_response": emotion_info["response"],
-                "inner_thoughts": emotion_info["inner_thoughts"],
-                "emotion_score": self.current_emotion_score,
-                "partner_response": partner_response,
-                "dialogue_ended": False
-            }
-            
         else:
-            # 如果是第一轮，添加开场白提示
-            if self.turn_count == 1:
-                partner_messages.append({"role": "user", "content": "请开始对话，表达你对这个情境的初始反应。"})
+            # 后续轮次，虚拟人物回复伴侣的上一轮发言
+            last_partner_message = self.dialogue_history[-1]["partner_message"]
+            print(f"虚拟人物 {self.character['name']} 回复...")
+            character_messages.append({"role": "user", "content": last_partner_message})
             
-            # 伴侣先说
-            partner_response, _ = self.partner_client.create_chat_completion(
-                messages=partner_messages,
-                temperature=0.7
-            )
-            
-            # 记录对话
-            self.dialogue_history.append({
-                "turn": self.turn_count,
-                "speaker": "partner",
-                "content": partner_response
-            })
-            
-            # 添加伴侣的回复到虚拟人物的消息列表
-            character_messages.append({"role": "user", "content": partner_response})
-            
-            # 虚拟人物回复
             character_response, _ = self.character_client.create_chat_completion(
                 messages=character_messages,
                 temperature=0.8
             )
-            
-            # 解析情绪
-            emotion_info = self._parse_emotion(character_response)
-            self._update_emotion_score(emotion_info)
-            
-            # 记录对话
-            self.dialogue_history.append({
+        
+        # 解析虚拟人物的回复，提取情绪信息
+        emotion_info = self._parse_emotion(character_response)
+        character_message = emotion_info["response"]  # 去除内心独白后的回复
+        
+        # 更新情绪评分
+        self._update_emotion_score(emotion_info)
+        
+        # 打印虚拟人物回复
+        print(f"{self.character['name']}: {character_message}")
+        if emotion_info["inner_thoughts"]:
+            print(f"内心独白: {emotion_info['inner_thoughts']}")
+        print(f"情绪: {emotion_info['primary_emotion']} (强度: {emotion_info['intensity']}, 评分: {emotion_info['score']})")
+        
+        # 使用专家模型分析当前情绪
+        expert_analyses = self._analyze_with_experts()
+        if expert_analyses:
+            print("\n专家情感分析:")
+            for analysis in expert_analyses:
+                print(f"专家 {analysis['expert_id']}: {analysis['primary_emotion']} (强度: {analysis['intensity']}, 分数: {analysis['emotion_score']})")
+                print(f"分析: {analysis['analysis']}")
+        
+        # 检查是否应该结束对话
+        if self.should_end_dialogue():
+            print("\n对话应该结束")
+            turn_result = {
                 "turn": self.turn_count,
-                "speaker": "character",
-                "content": character_response,
-                "emotion_info": emotion_info
-            })
-            
-            return {
-                "turn": self.turn_count,
-                "character_response": emotion_info["response"],
-                "inner_thoughts": emotion_info["inner_thoughts"],
-                "emotion_score": self.current_emotion_score,
-                "partner_response": partner_response,
-                "dialogue_ended": self.should_end_dialogue(),
-                "end_reason": "情绪状态改变或达到最大轮次" if self.should_end_dialogue() else None
+                "character_name": self.character["name"],
+                "character_message": character_message,
+                "emotion_info": emotion_info,
+                "partner_message": None,
+                "emotion_prediction": self.emotion_prediction_history[-1] if self.emotion_prediction_history else None,
+                "expert_analyses": expert_analyses,
+                "dialogue_ended": True
             }
+            
+            # 添加到对话历史
+            self.dialogue_history.append(turn_result)
+            
+            return turn_result
+        
+        # 伴侣回复虚拟人物
+        print(f"伴侣回复...")
+        partner_messages.append({"role": "user", "content": character_message})
+        
+        partner_response, _ = self.partner_client.create_chat_completion(
+            messages=partner_messages,
+            temperature=0.8
+        )
+        
+        print(f"伴侣: {partner_response}")
+        
+        # 记录本轮对话
+        turn_result = {
+            "turn": self.turn_count,
+            "character_name": self.character["name"],
+            "character_message": character_message,
+            "emotion_info": emotion_info,
+            "partner_message": partner_response,
+            "emotion_prediction": self.emotion_prediction_history[-1] if self.emotion_prediction_history else None,
+            "expert_analyses": expert_analyses,
+            "dialogue_ended": False
+        }
+        
+        # 添加到对话历史
+        self.dialogue_history.append(turn_result)
+        
+        return turn_result
     
     def run_simulation(self) -> Dict[str, Any]:
         """
@@ -431,15 +674,15 @@ class CharacterSimulator:
             
             # 打印当前轮次信息
             print(f"\n--- 轮次 {self.turn_count} ---")
-            if "partner_response" in turn_result and turn_result["partner_response"] is not None:
+            if "partner_message" in turn_result and turn_result["partner_message"] is not None:
                 if self.dialogue_history[-2]["speaker"] == "partner":
-                    print(f"伴侣: {turn_result['partner_response']}")
-                    print(f"{self.character['name']}: {turn_result['character_response']}")
+                    print(f"伴侣: {turn_result['partner_message']}")
+                    print(f"{self.character['name']}: {turn_result['character_message']}")
                 else:
-                    print(f"{self.character['name']}: {turn_result['character_response']}")
-                    print(f"伴侣: {turn_result['partner_response']}")
+                    print(f"{self.character['name']}: {turn_result['character_message']}")
+                    print(f"伴侣: {turn_result['partner_message']}")
             else:
-                print(f"{self.character['name']}: {turn_result['character_response']}")
+                print(f"{self.character['name']}: {turn_result['character_message']}")
             
             print(f"内心独白: {turn_result['inner_thoughts']}")
             print(f"情绪评分: {turn_result['emotion_score']}")
@@ -456,31 +699,41 @@ class CharacterSimulator:
             "scenario": self.scenario,
             "dialogue_history": self.dialogue_history,
             "emotion_history": self.emotion_history,
+            "emotion_prediction_history": self.emotion_prediction_history,
+            "expert_analysis_history": self.expert_analysis_history,
             "final_emotion_score": self.current_emotion_score,
             "turns_completed": self.turn_count
         }
     
     def _save_dialogue_log(self):
-        """保存对话记录到文件"""
+        """保存对话日志到文件"""
+        # 准备日志数据
         log_data = {
-            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
             "character": self.character,
             "scenario": self.scenario,
-            "dialogue": self.dialogue_history,
+            "dialogue_history": self.dialogue_history,
             "emotion_history": self.emotion_history,
+            "emotion_prediction_history": self.emotion_prediction_history,
+            "expert_analysis_history": self.expert_analysis_history,
             "final_emotion_score": self.current_emotion_score,
-            "turns_completed": self.turn_count
+            "turns_completed": self.turn_count,
+            "max_turns": self.max_turns,
+            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
         }
         
+        # 生成日志文件名
         log_file = os.path.join(
             self.log_dir, 
             f"{self.character['id']}_{self.scenario['situation']['id']}_{int(time.time())}.json"
         )
         
+        # 保存日志
         with open(log_file, "w", encoding="utf-8") as f:
             json.dump(log_data, f, ensure_ascii=False, indent=2)
+            
+        print(f"对话日志已保存到: {log_file}")
         
-        print(f"对话记录已保存到: {log_file}")
+        return log_file
 
 # 如果直接运行此文件，执行示例模拟
 if __name__ == "__main__":
