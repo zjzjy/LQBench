@@ -12,14 +12,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
+from tqdm import tqdm
 
-from LQBench.api.data.character_profiles import sample_characters, create_character_profile
-from LQBench.api.data.personality_types import personality_types
-from LQBench.api.data.relationship_beliefs import relationship_beliefs
-from LQBench.api.data.communication_types import communication_types
-from LQBench.api.data.attachment_styles import attachment_styles
-from LQBench.api.data.conflict_scenarios import conflict_scenarios
-from LQBench.character_simulator import CharacterSimulator
+from api.data.character_profiles import character_profiles, get_character_by_scenario
+from api.data.conflict_scenarios import conflict_scenarios, get_scenario_by_id, get_situation_by_id
+from character_simulator import CharacterSimulator
 
 class BenchmarkRunner:
     """基准测试运行器类"""
@@ -31,10 +28,11 @@ class BenchmarkRunner:
         max_turns: int = 10,
         character_api: str = "deepseek",
         partner_api: str = "openrouter",
-        expert_apis: List[str] = ["deepseek"],
+        expert_apis: Optional[List[str]] = None,
         use_emotion_prediction: bool = True,
         use_expert_analysis: bool = True,
-        num_experts: int = 3
+        num_experts: int = 3,
+        chinese_font: Optional[FontProperties] = None
     ):
         """
         初始化基准测试运行器
@@ -45,10 +43,11 @@ class BenchmarkRunner:
             max_turns (int): 最大对话轮次
             character_api (str): 虚拟人物使用的API类型
             partner_api (str): 对话伴侣使用的API类型
-            expert_apis (List[str]): 专家分析使用的API类型列表
+            expert_apis (List[str], optional): 专家分析使用的API类型列表
             use_emotion_prediction (bool): 是否启用待测模型的情感预测
             use_expert_analysis (bool): 是否启用专家的情感分析
             num_experts (int): 专家数量
+            chinese_font (FontProperties, optional): 中文字体属性
         """
         self.output_dir = output_dir
         self.log_dir = log_dir
@@ -65,11 +64,11 @@ class BenchmarkRunner:
         os.makedirs(log_dir, exist_ok=True)
         
         # 加载中文字体（用于生成图表）
-        try:
+        if chinese_font is None:
             self.chinese_font = FontProperties(fname=r"C:\Windows\Fonts\simhei.ttf")
-        except:
-            self.chinese_font = None
-            print("警告：未能加载中文字体，图表中的中文可能显示不正常")
+        else:
+            self.chinese_font = chinese_font
+            print("警告：使用自定义中文字体，图表中的中文可能显示不正常")
     
     def generate_test_cases(
         self,
@@ -80,7 +79,7 @@ class BenchmarkRunner:
         生成测试用例
         
         参数:
-            num_characters (int): 要生成的虚拟人物数量
+            num_characters (int): 要生成的虚拟人物数量（在使用预定义角色时此参数无效）
             scenario_ids (List[str], optional): 要测试的场景ID列表，如不指定则使用所有场景
             
         返回:
@@ -92,47 +91,33 @@ class BenchmarkRunner:
         if not scenario_ids:
             scenario_ids = [scenario["id"] for scenario in conflict_scenarios]
         
-        # 生成随机虚拟人物配置
-        characters = []
-        for i in range(num_characters):
-            # 随机选择特质
-            personality_type = random.choice(personality_types)["id"]
-            relationship_belief = random.choice(relationship_beliefs)["id"]
-            communication_type = random.choice(communication_types)["id"]
-            attachment_style = random.choice(attachment_styles)["id"]
-            
-            # 创建虚拟人物
-            gender = random.choice(["男", "女"])
-            name = f"虚拟角色_{i+1}"
-            age = random.randint(22, 35)
-            
-            character = create_character_profile(
-                id=f"random_character_{i+1}",
-                name=name,
-                gender=gender,
-                age=age,
-                personality_type=personality_type,
-                relationship_belief=relationship_belief,
-                communication_type=communication_type,
-                attachment_style=attachment_style,
-                background=f"随机生成的测试角色，用于评估不同特质组合的表现",
-                trigger_topics=["忽视", "工作优先", "比较"],
-                coping_mechanisms=["沟通", "独处", "寻求支持"]
-            )
-            
-            characters.append(character)
+        print(f"可用场景: {scenario_ids}")
         
-        # 添加预定义的角色
-        characters.extend(sample_characters)
+        # 遍历每个场景
+        for scenario_id in scenario_ids:
+            scenario = get_scenario_by_id(scenario_id)
+            if not scenario:
+                print(f"警告: 未找到场景 {scenario_id}")
+                continue
+            
+            print(f"处理场景: {scenario_id}")
+            print(f"场景情境: {[s['id'] for s in scenario['situations']]}")
+            
+            # 遍历场景中的每个情境
+            for situation in scenario["situations"]:
+                # 获取对应的角色配置
+                character = get_character_by_scenario(scenario_id, situation["id"])
+                if character:
+                    print(f"找到角色配置: {character['name']} ({character['id']})")
+                    test_cases.append({
+                        "character": character,
+                        "scenario_id": scenario_id,
+                        "situation_id": situation["id"]
+                    })
+                else:
+                    print(f"警告: 未找到场景 {scenario_id} 情境 {situation['id']} 对应的角色配置")
         
-        # 生成测试用例
-        for character in characters:
-            for scenario_id in scenario_ids:
-                test_cases.append({
-                    "character": character,
-                    "scenario_id": scenario_id
-                })
-        
+        print(f"生成了 {len(test_cases)} 个测试用例")
         return test_cases
     
     def run_single_test(self, test_case: Dict[str, Any]) -> Dict[str, Any]:
@@ -375,6 +360,15 @@ class BenchmarkRunner:
         
         # 如果未提供测试用例，生成随机测试用例
         if not test_cases:
+            # 如果未指定场景ID，使用默认场景
+            if not scenario_ids:
+                scenario_ids = [
+                    "gaming_relationship_conflict",
+                    "emotional_exhaustion_and_miscommunication",
+                    "future_goal_mismatch",
+                    "unexpected_pregnancy_anxiety",
+                    "conditional_care_and_communication_barrier"
+                ]
             test_cases = self.generate_test_cases(num_characters, scenario_ids)
         
         print(f"开始运行基准测试: {len(test_cases)} 个测试用例")

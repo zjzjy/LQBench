@@ -1,6 +1,108 @@
 """
-定义虚拟人物配置模板和示例
+定义虚拟人物配置及相关函数
 """
+
+import os
+import json
+from typing import List, Dict, Any, Optional
+
+def load_character_profiles() -> List[Dict[str, Any]]:
+    """从配置文件加载角色配置"""
+    # 首先尝试从环境变量获取配置文件路径
+    config_paths = [
+        "config.json",
+        "LQBench/config.json",
+        os.path.join(os.path.dirname(__file__), "../../config.json"),
+        os.path.join(os.path.dirname(__file__), "../../LQBench/config.json")
+    ]
+    
+    config = None
+    config_path = None
+    for path in config_paths:
+        if os.path.exists(path):
+            with open(path, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+                config_path = path
+                break
+    
+    if not config:
+        raise FileNotFoundError("无法找到配置文件")
+    
+    profiles_file = config.get("CHARACTER_PROFILES_FILE")
+    if not profiles_file:
+        raise ValueError("配置文件中未指定 CHARACTER_PROFILES_FILE")
+    
+    # 解析相对路径
+    if not os.path.isabs(profiles_file):
+        # 获取配置文件所在的目录
+        config_dir = os.path.dirname(os.path.abspath(config_path))
+        # 如果配置文件在 LQBench 目录下，则使用该目录作为基准
+        if os.path.basename(config_dir) == "LQBench":
+            profiles_file = os.path.join(config_dir, profiles_file)
+        else:
+            # 否则使用当前工作目录
+            profiles_file = os.path.join(os.getcwd(), profiles_file)
+    
+    # 加载角色配置文件
+    if not os.path.exists(profiles_file):
+        raise FileNotFoundError(f"找不到角色配置文件: {profiles_file}")
+    
+    with open(profiles_file, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+        return data.get("character_profiles", [])
+
+def get_character_by_scenario(scenario_id: str, situation_id: str) -> Optional[Dict[str, Any]]:
+    """根据场景ID和情境ID获取对应的角色配置"""
+    # 构造完整的角色ID（场景ID_情境ID）
+    character_id = f"{scenario_id}_{situation_id}"
+    
+    # 在角色配置中查找匹配的ID
+    for character in character_profiles:
+        if character.get("id") == character_id:
+            return character
+    return None
+
+def create_character_profile(
+    id: str,
+    name: str,
+    gender: str,
+    age: int,
+    personality_type: str,
+    relationship_belief: str,
+    communication_type: str,
+    attachment_style: str,
+    background: str,
+    trigger_topics: List[str],
+    coping_mechanisms: List[str],
+    scenario_id: Optional[str] = None,
+    situation_id: Optional[str] = None
+) -> Dict[str, Any]:
+    """创建角色配置"""
+    return {
+        "id": id,
+        "name": name,
+        "gender": gender,
+        "age": age,
+        "personality_type": personality_type,
+        "relationship_belief": relationship_belief,
+        "communication_type": communication_type,
+        "attachment_style": attachment_style,
+        "background": background,
+        "trigger_topics": trigger_topics,
+        "coping_mechanisms": coping_mechanisms,
+        "scenario_id": scenario_id,
+        "situation_id": situation_id
+    }
+
+# 加载角色配置数据
+try:
+    character_profiles = load_character_profiles()
+except Exception as e:
+    print(f"加载角色配置数据失败: {str(e)}")
+    character_profiles = []
+
+# 导出示例角色供测试使用
+sample_characters = character_profiles[:3] if character_profiles else []
 
 # 虚拟人物配置模板
 character_template = {
@@ -16,49 +118,6 @@ character_template = {
     "trigger_topics": [],          # 容易引发情绪反应的话题
     "coping_mechanisms": []        # 应对压力的方式
 }
-
-# 示例虚拟人物配置
-sample_characters = [
-    {
-        "id": "anxious_destiny_believer",
-        "name": "林夏",
-        "gender": "女",
-        "age": 24,
-        "personality_type": "neuroticism_high",
-        "relationship_belief": "destiny_belief_high",
-        "communication_type": "indirect_opposition",
-        "attachment_style": "anxious",
-        "background": "大学毕业后在一家设计公司工作，对感情投入度高，容易因小事而焦虑不安，担心关系不稳定",
-        "trigger_topics": ["忽视", "工作优先", "对比其他情侣"],
-        "coping_mechanisms": ["寻求确认", "情绪爆发", "沉默抗议"]
-    },
-    {
-        "id": "avoidant_growth_believer",
-        "name": "张明",
-        "gender": "男",
-        "age": 26,
-        "personality_type": "openness_high",
-        "relationship_belief": "growth_belief_moderate",
-        "communication_type": "direct_cooperation",
-        "attachment_style": "avoidant",
-        "background": "创业公司技术负责人，工作压力大，注重个人空间，不习惯过于亲密的关系，但理性且愿意沟通解决问题",
-        "trigger_topics": ["控制", "期望过高", "隐私边界"],
-        "coping_mechanisms": ["理性分析", "暂时退避", "独处恢复"]
-    },
-    {
-        "id": "secure_balanced",
-        "name": "王悦",
-        "gender": "女",
-        "age": 25,
-        "personality_type": "agreeableness_high",
-        "relationship_belief": "growth_belief_high",
-        "communication_type": "direct_cooperation",
-        "attachment_style": "secure",
-        "background": "医院心理咨询师，善于表达和倾听，情绪稳定，相信关系需要双方共同经营",
-        "trigger_topics": ["不尊重", "不诚实", "情感冷漠"],
-        "coping_mechanisms": ["开放沟通", "设立边界", "寻求理解"]
-    }
-]
 
 def create_character_profile(
     id, 

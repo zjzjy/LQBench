@@ -1,5 +1,5 @@
 """
-虚拟人物模拟器，用于模拟情侣对话并评估情绪变化
+虚拟人物模拟器，用于模拟情侣对话场景中的角色行为
 """
 
 import os
@@ -8,16 +8,17 @@ import time
 import random
 import re  # 添加缺失的re模块导入
 from typing import Dict, List, Any, Optional, Tuple, Union
+from datetime import datetime
 
-from LQBench.api.llm import LLMClient
-from LQBench.api.data.personality_types import personality_types
-from LQBench.api.data.relationship_beliefs import relationship_beliefs
-from LQBench.api.data.communication_types import communication_types
-from LQBench.api.data.attachment_styles import attachment_styles
-from LQBench.api.data.emotions import emotions, emotion_scoring
-from LQBench.api.data.conflict_scenarios import conflict_scenarios
-from LQBench.api.data.character_profiles import character_template, sample_characters, create_character_profile
-from LQBench.api.data.prompt_templates import (
+from api.llm import LLMClient
+from api.data.personality_types import personality_types
+from api.data.relationship_beliefs import relationship_beliefs
+from api.data.communication_types import communication_types
+from api.data.attachment_styles import attachment_styles
+from api.data.emotions import emotions, emotion_scoring
+from api.data.conflict_scenarios import conflict_scenarios, get_scenario_by_id, get_situation_by_id
+from api.data.character_profiles import character_profiles, get_character_by_scenario
+from api.data.prompt_templates import (
     character_prompt_template, 
     partner_prompt_template, 
     dialogue_analysis_template,
@@ -33,6 +34,7 @@ class CharacterSimulator:
         self, 
         character_config: Optional[Dict[str, Any]] = None,
         scenario_id: Optional[str] = None,
+        situation_id: Optional[str] = None,
         character_api: str = "deepseek",
         partner_api: str = "openrouter",
         expert_apis: List[str] = ["deepseek"],  # 修改为列表，支持多个API
@@ -48,6 +50,7 @@ class CharacterSimulator:
         参数:
             character_config (Dict[str, Any], optional): 虚拟人物配置
             scenario_id (str, optional): 冲突场景ID
+            situation_id (str, optional): 具体情境ID
             character_api (str): 虚拟人物使用的API类型
             partner_api (str): 对话伴侣使用的API类型
             expert_apis (List[str]): 专家分析使用的API类型列表
@@ -73,8 +76,35 @@ class CharacterSimulator:
         os.makedirs(log_dir, exist_ok=True)
         
         # 初始化角色和场景
-        self.character = character_config or random.choice(sample_characters)
-        self.scenario = self._get_scenario(scenario_id)
+        if character_config and scenario_id:
+            self.character = character_config
+            scenario = get_scenario_by_id(scenario_id)
+            if not scenario:
+                raise ValueError(f"未找到场景: {scenario_id}")
+            
+            if situation_id:
+                situation = get_situation_by_id(scenario_id, situation_id)
+                if not situation:
+                    raise ValueError(f"未找到情境: {situation_id}")
+            else:
+                situation = random.choice(scenario["situations"])
+            
+            self.scenario = {
+                "scenario": scenario,
+                "situation": situation
+            }
+        else:
+            # 如果未提供配置，随机选择一个场景和对应的角色
+            scenario = random.choice(conflict_scenarios)
+            situation = random.choice(scenario["situations"])
+            self.character = get_character_by_scenario(scenario["id"], situation["id"])
+            if not self.character:
+                raise ValueError(f"未找到场景 {scenario['id']} 情境 {situation['id']} 对应的角色配置")
+            
+            self.scenario = {
+                "scenario": scenario,
+                "situation": situation
+            }
         
         # 初始化对话状态
         self.dialogue_history = []

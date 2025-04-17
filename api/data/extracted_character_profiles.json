@@ -1,0 +1,352 @@
+{
+  "character_profiles": [
+    {
+      "id": "gaming_relationship_conflict_partner_feeling_neglected",
+      "name": "小雨",
+      "gender": "女",
+      "age": 22,
+      "personality_type": "neuroticism_high",
+      "relationship_belief": "growth_belief_moderate",
+      "communication_type": "direct_cooperation",
+      "attachment_style": "anxious",
+      "background": "异地恋，对男友与异性互动敏感",
+      "trigger_topics": [
+        "男友与异性游戏互动",
+        "游戏时间分配"
+      ],
+      "coping_mechanisms": [
+        "情绪表达",
+        "寻求沟通",
+        "暂时回避"
+      ],
+      "suggested_primary_appraisal": {
+        "relevance": "威胁到感情安全感",
+        "nature": "评估为威胁，潜在情绪反应为焦虑和愤怒"
+      },
+      "suggested_secondary_appraisal": {
+        "attribution": "责怪他人",
+        "coping_ability": "感到无力",
+        "coping_strategy": "直接沟通和情绪表达"
+      },
+      "suggested_emotions": [
+        "焦虑",
+        "愤怒",
+        "委屈",
+        "渴望被理解"
+      ]
+    },
+    {
+      "id": "gaming_relationship_conflict_gamer_partner_defensive",
+      "name": "小杰",
+      "gender": "男",
+      "age": 24,
+      "personality_type": "openness_high",
+      "relationship_belief": "growth_belief_moderate",
+      "communication_type": "indirect_opposition",
+      "attachment_style": "anxious",
+      "background": "喜欢打游戏，尤其是CS和瓦",
+      "trigger_topics": [
+        "被限制游戏",
+        "被质疑与异性互动"
+      ],
+      "coping_mechanisms": [
+        "妥协",
+        "逃避",
+        "寻求和解"
+      ],
+      "suggested_primary_appraisal": {
+        "relevance": "影响个人自由和娱乐",
+        "nature": "评估为挑战，潜在情绪反应为防御和焦虑"
+      },
+      "suggested_secondary_appraisal": {
+        "attribution": "责怪自己",
+        "coping_ability": "有信心",
+        "coping_strategy": "妥协和寻求和解"
+      },
+      "suggested_emotions": [
+        "防御",
+        "焦虑",
+        "内疚",
+        "渴望和解"
+      ]
+    },
+    {
+      "id": "emotional_exhaustion_and_miscommunication_person_b_feeling_unappreciated",
+      "name": "林小雨",
+      "gender": "女",
+      "age": 26,
+      "personality_type": "neuroticism_high, openness_moderate",
+      "relationship_belief": "growth_belief_moderate",
+      "communication_type": "direct_opposition",
+      "attachment_style": "anxious",
+      "background": "经济独立，与伴侣共同规划未来（如讨论封阳台）",
+      "trigger_topics": [
+        "被吼叫",
+        "被忽视",
+        "伴侣情绪不稳定",
+        "经济控制话题"
+      ],
+      "coping_mechanisms": [
+        "提出分手威胁",
+        "列举具体事件",
+        "要求对方反思"
+      ],
+      "suggested_primary_appraisal": {
+        "relevance": "威胁到感情安全感和自我价值感",
+        "nature": "评估为持续的情感损失（'喜欢被消磨掉'），潜在情绪为愤怒和失望"
+      },
+      "suggested_secondary_appraisal": {
+        "attribution": "主要责怪对方（'你逼走我'），部分归因于双方脾气差异",
+        "coping_ability": "初期尝试沟通但最终感到无力（'消耗完耐心'）",
+        "coping_strategy": "先尝试直接沟通，后转为争执与威胁分手"
+      },
+      "suggested_emotions": [
+        "愤怒",
+        "委屈",
+        "疲惫",
+        "不被珍惜",
+        "失望"
+      ]
+    },
+    {
+      "id": "emotional_exhaustion_and_miscommunication_person_a_struggling_with_self_worth",
+      "name": "陈默",
+      "gender": "男",
+      "age": 28,
+      "personality_type": "neuroticism_high, conscientiousness_low",
+      "relationship_belief": "destiny_belief_high",
+      "communication_type": "indirect_opposition",
+      "attachment_style": "avoidant",
+      "background": "经济独立受挫，与父母存在控制关系历史",
+      "trigger_topics": [
+        "父母控制",
+        "经济压力",
+        "被否定",
+        "分手威胁"
+      ],
+      "coping_mechanisms": [
+        "回避深层沟通",
+        "转移话题（如家务分工）",
+        "自我反思但缺乏行动"
+      ],
+      "suggested_primary_appraisal": {
+        "relevance": "威胁到自主权和自我效能感",
+        "nature": "评估为双重挑战（关系危机+经济压力），潜在情绪为恐惧和自责"
+      },
+      "suggested_secondary_appraisal": {
+        "attribution": "混合归因（自责意志力不稳，也责怪对方'不接住自己'）",
+        "coping_ability": "明显无力感（'心力变弱'）",
+        "coping_strategy": "交替使用自我暴露（'害怕控制'）和防御性反驳"
+      },
+      "suggested_emotions": [
+        "焦虑",
+        "恐惧",
+        "自责",
+        "防御",
+        "渴望被理解"
+      ]
+    },
+    {
+      "id": "future_goal_mismatch_male_non_committal_dink",
+      "name": "未知",
+      "gender": "男",
+      "age": 25,
+      "personality_type": "openness_high",
+      "relationship_belief": "growth_belief_moderate",
+      "communication_type": "direct_cooperation",
+      "attachment_style": "anxious",
+      "background": "国内生活压力大，对小孩有PTSD，成长环境规训带来的认知",
+      "trigger_topics": [
+        "丁克",
+        "未来规划"
+      ],
+      "coping_mechanisms": [
+        "推心置腹的交流",
+        "和平分手",
+        "学好日语",
+        "拿证"
+      ],
+      "suggested_primary_appraisal": {
+        "relevance": "威胁到感情安全感，影响未来生活规划",
+        "nature": "挑战，潜在情绪反应为焦虑和悲伤"
+      },
+      "suggested_secondary_appraisal": {
+        "attribution": "归因于环境或偶然",
+        "coping_ability": "感到无力",
+        "coping_strategy": "直接沟通，寻求理解"
+      },
+      "suggested_emotions": [
+        "焦虑",
+        "悲伤",
+        "渴望被理解",
+        "心碎"
+      ]
+    },
+    {
+      "id": "future_goal_mismatch_female_firm_dink_demand",
+      "name": "未知",
+      "gender": "女",
+      "age": 24,
+      "personality_type": "neuroticism_high",
+      "relationship_belief": "destiny_belief_high",
+      "communication_type": "direct_cooperation",
+      "attachment_style": "avoidant",
+      "background": "准备赴日留学考试，压力较大",
+      "trigger_topics": [
+        "丁克",
+        "未来规划"
+      ],
+      "coping_mechanisms": [
+        "明确表达立场",
+        "和平分手"
+      ],
+      "suggested_primary_appraisal": {
+        "relevance": "威胁到个人未来规划和价值观",
+        "nature": "威胁，潜在情绪反应为愤怒和失望"
+      },
+      "suggested_secondary_appraisal": {
+        "attribution": "责怪他人",
+        "coping_ability": "有信心",
+        "coping_strategy": "直接沟通，情绪表达"
+      },
+      "suggested_emotions": [
+        "愤怒",
+        "失望",
+        "压力"
+      ]
+    },
+    {
+      "id": "unexpected_pregnancy_anxiety_girlfriend_anxiety",
+      "name": "未知",
+      "gender": "女",
+      "age": 20,
+      "personality_type": "neuroticism_high",
+      "relationship_belief": "未知",
+      "communication_type": "未知",
+      "attachment_style": "anxious",
+      "background": "大学生",
+      "trigger_topics": [
+        "意外怀孕",
+        "室友知道",
+        "男友不负责"
+      ],
+      "coping_mechanisms": [
+        "焦虑不安",
+        "提心吊胆"
+      ],
+      "suggested_primary_appraisal": {
+        "relevance": "威胁到感情安全感和学业生活平衡",
+        "nature": "评估为威胁，潜在情绪反应为恐惧和焦虑"
+      },
+      "suggested_secondary_appraisal": {
+        "attribution": "未知",
+        "coping_ability": "感到无力",
+        "coping_strategy": "情绪表达"
+      },
+      "suggested_emotions": [
+        "焦虑",
+        "恐惧",
+        "不安"
+      ]
+    },
+    {
+      "id": "unexpected_pregnancy_anxiety_boyfriend_helplessness",
+      "name": "未知",
+      "gender": "男",
+      "age": 21,
+      "personality_type": "未知",
+      "relationship_belief": "未知",
+      "communication_type": "direct_cooperation",
+      "attachment_style": "未知",
+      "background": "大学生",
+      "trigger_topics": [
+        "女友焦虑",
+        "意外怀孕"
+      ],
+      "coping_mechanisms": [
+        "查资料",
+        "想出钱带她去打掉"
+      ],
+      "suggested_primary_appraisal": {
+        "relevance": "威胁到感情安全感和未来计划",
+        "nature": "评估为挑战，潜在情绪反应为担忧和无助"
+      },
+      "suggested_secondary_appraisal": {
+        "attribution": "归因于环境或偶然",
+        "coping_ability": "有信心",
+        "coping_strategy": "直接沟通和寻求解决方案"
+      },
+      "suggested_emotions": [
+        "担忧",
+        "无助",
+        "关心"
+      ]
+    },
+    {
+      "id": "conditional_care_and_communication_barrier_feeling_conditional_care",
+      "name": "未知",
+      "gender": "男",
+      "age": 25,
+      "personality_type": "neuroticism_high",
+      "relationship_belief": "destiny_belief_high",
+      "communication_type": "indirect_opposition",
+      "attachment_style": "anxious",
+      "background": "未知",
+      "trigger_topics": [
+        "被拒绝",
+        "矛盾"
+      ],
+      "coping_mechanisms": [
+        "否认前一段时间的自己",
+        "改变行为"
+      ],
+      "suggested_primary_appraisal": {
+        "relevance": "威胁到感情安全感",
+        "nature": "评估为威胁，潜在情绪反应为恐惧和焦虑"
+      },
+      "suggested_secondary_appraisal": {
+        "attribution": "责怪自己",
+        "coping_ability": "感到无力",
+        "coping_strategy": "改变行为和寻求理解"
+      },
+      "suggested_emotions": [
+        "焦虑",
+        "恐惧",
+        "渴望被理解"
+      ]
+    },
+    {
+      "id": "conditional_care_and_communication_barrier_uncomfortable_with_overcare",
+      "name": "未知",
+      "gender": "女",
+      "age": 24,
+      "personality_type": "openness_high",
+      "relationship_belief": "growth_belief_moderate",
+      "communication_type": "direct_cooperation",
+      "attachment_style": "avoidant",
+      "background": "未知",
+      "trigger_topics": [
+        "过度关心",
+        "矛盾"
+      ],
+      "coping_mechanisms": [
+        "直接拒绝",
+        "表达不适"
+      ],
+      "suggested_primary_appraisal": {
+        "relevance": "影响个人空间和自主性",
+        "nature": "评估为威胁，潜在情绪反应为愤怒和不适"
+      },
+      "suggested_secondary_appraisal": {
+        "attribution": "责怪他人",
+        "coping_ability": "有信心",
+        "coping_strategy": "直接沟通和情绪表达"
+      },
+      "suggested_emotions": [
+        "愤怒",
+        "不适",
+        "羞耻"
+      ]
+    }
+  ]
+}

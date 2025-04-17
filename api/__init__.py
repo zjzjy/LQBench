@@ -1,9 +1,8 @@
 """
-API模块，包含LLM接口和数据定义
+API module for LQBench.
+This module provides the API client for interacting with various LLM services.
 """
 
-# 导出LLM客户端
-from LQBench.api.llm import LLMClient
+from .llm import LLMClient
 
-# 导出数据包
-from LQBench.api import data 
+__all__ = ['LLMClient'] 
