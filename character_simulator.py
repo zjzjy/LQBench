@@ -38,6 +38,9 @@ class CharacterSimulator:
         character_api: str = "deepseek",
         partner_api: str = "openrouter",
         expert_apis: List[str] = ["deepseek"],  # 修改为列表，支持多个API
+        character_model: Optional[str] = None,
+        partner_model: Optional[str] = None,
+        expert_model: Optional[str] = None,
         max_turns: int = 10,
         log_dir: str = "logs",
         use_emotion_prediction: bool = True,
@@ -54,6 +57,9 @@ class CharacterSimulator:
             character_api (str): 虚拟人物使用的API类型
             partner_api (str): 对话伴侣使用的API类型
             expert_apis (List[str]): 专家分析使用的API类型列表
+            character_model (str, optional): 虚拟人物使用的模型名称
+            partner_model (str, optional): 对话伴侣使用的模型名称
+            expert_model (str, optional): 专家分析使用的模型名称
             max_turns (int): 最大对话轮次
             log_dir (str): 日志目录
             use_emotion_prediction (bool): 是否启用待测模型的情感预测
@@ -61,9 +67,10 @@ class CharacterSimulator:
             num_experts (int): 专家数量
         """
         # 初始化API客户端
-        self.character_client = LLMClient(api_type=character_api)
-        self.partner_client = LLMClient(api_type=partner_api)
+        self.character_client = LLMClient(api_type=character_api, model_name=character_model)
+        self.partner_client = LLMClient(api_type=partner_api, model_name=partner_model)
         self.expert_apis = expert_apis  # 存储专家API列表
+        self.expert_model = expert_model  # 存储专家模型名称
         
         # 设置模拟参数
         self.max_turns = max_turns
@@ -111,11 +118,54 @@ class CharacterSimulator:
         self.emotion_history = []
         self.emotion_prediction_history = []  # 存储待测模型的情感预测
         self.expert_analysis_history = []  # 存储专家的情感分析
-        self.current_emotion_score = emotion_scoring["baseline"]
+        
+        # 设置初始情绪值，确保在合理范围内
+        # 根据情境的严重程度设置初始情绪值
+        # 避免设置过高或过低的初始值，以防一开始就触发对话结束
+        initial_emotion = self._calculate_initial_emotion()
+        self.current_emotion_score = max(
+            min(initial_emotion, 
+                emotion_scoring["threshold"]["improvement"] - 1),  # 不超过改善阈值
+                emotion_scoring["threshold"]["critical"] + 1  # 不低于临界阈值
+        )
+        
         self.turn_count = 0
         
         # 初始化提示词
         self._prepare_prompts()
+    
+    def _calculate_initial_emotion(self) -> int:
+        """
+        根据场景和角色特征计算初始情绪值
+        
+        返回:
+            int: 初始情绪值，范围在临界阈值和改善阈值之间
+        """
+        # 获取情绪临界阈值
+        critical_threshold = emotion_scoring["threshold"]["critical"]
+        improvement_threshold = emotion_scoring["threshold"]["improvement"]
+        
+        # 安全起见，设置初始情绪值范围
+        min_emotion = critical_threshold + 2  # 确保至少比临界阈值高2，避免过早结束
+        max_emotion = improvement_threshold - 1  # 不超过改善阈值
+        
+        # 根据场景和角色特征适当调整基础情绪值
+        # 但始终保持在安全范围内
+        base_emotion = random.randint(min_emotion, min(min_emotion + 2, 0))
+        
+        # 考虑角色的性格特征进行微调
+        personality_type = self.character.get("personality_type", "")
+        is_neurotic = "neuroticism_high" in personality_type
+        is_optimistic = "openness_high" in personality_type
+        
+        # 微调但不要突破安全边界
+        if is_neurotic:
+            base_emotion = max(base_emotion - 1, min_emotion)
+        if is_optimistic:
+            base_emotion = min(base_emotion + 1, max_emotion)
+        
+        print(f"初始情绪值: {base_emotion} (允许范围: {min_emotion} 到 {max_emotion})")
+        return base_emotion
     
     def _get_scenario(self, scenario_id: Optional[str] = None) -> Dict[str, Any]:
         """获取冲突场景"""
@@ -141,50 +191,61 @@ class CharacterSimulator:
         }
     
     def _get_data_by_id(self, data_list: List[Dict[str, Any]], item_id: str) -> Optional[Dict[str, Any]]:
-        """从数据列表中查找指定ID的项目"""
+        """从数据列表中查找指定ID的项目，支持多个ID（以逗号分隔）"""
+        if not item_id:
+            return None
+        
+        # 如果是多个ID，只取第一个
+        first_id = item_id.split(',')[0].strip()
+        
         for item in data_list:
-            if item["id"] == item_id:
+            if item["id"] == first_id:
                 return item
         return None
     
     def _prepare_prompts(self):
         """准备角色和伴侣的提示词"""
-        # 查找性格类型
-        personality = self._get_data_by_id(personality_types, self.character["personality_type"])
-        relationship_belief = self._get_data_by_id(relationship_beliefs, self.character["relationship_belief"])
-        communication_type = self._get_data_by_id(communication_types, self.character["communication_type"])
-        attachment_style = self._get_data_by_id(attachment_styles, self.character["attachment_style"])
-        
-        # 准备冲突描述
-        conflict_description = (
-            f"{self.scenario['scenario']['name']} - {self.scenario['situation']['name']}: "
-            f"{self.scenario['situation']['description']}。例如：{self.scenario['situation']['example']}"
-        )
-        
-        # 格式化角色提示词
-        self.character_prompt = character_prompt_template.format(
-            name=self.character["name"],
-            age=self.character["age"],
-            gender=self.character["gender"],
-            background=self.character["background"],
-            personality_description=personality["description"] if personality else "普通性格",
-            relationship_belief_description=relationship_belief["description"] if relationship_belief else "无特定关系信念",
-            communication_style_description=communication_type["interaction_style"] if communication_type else "一般沟通方式",
-            attachment_style_description=attachment_style["description"] if attachment_style else "无特定依恋类型",
-            trigger_topics=", ".join(self.character["trigger_topics"]),
-            coping_mechanisms=", ".join(self.character["coping_mechanisms"]),
-            conflict_description=conflict_description
-        )
-        
-        # 准备伴侣提示词
-        partner_gender = "男" if self.character["gender"] == "女" else "女"
-        self.partner_prompt = partner_prompt_template.format(
-            character_name=self.character["name"],
-            conflict_description=conflict_description
-        )
-        
-        # 保存初始提示词
-        self._log_prompts()
+        try:
+            # 查找性格类型
+            personality = self._get_data_by_id(personality_types, self.character.get("personality_type"))
+            relationship_belief = self._get_data_by_id(relationship_beliefs, self.character.get("relationship_belief"))
+            communication_type = self._get_data_by_id(communication_types, self.character.get("communication_type"))
+            attachment_style = self._get_data_by_id(attachment_styles, self.character.get("attachment_style"))
+            
+            # 准备冲突描述
+            conflict_description = (
+                f"{self.scenario['scenario']['name']} - {self.scenario['situation']['name']}: "
+                f"{self.scenario['situation']['description']}。例如：{self.scenario['situation']['example']}"
+            )
+            
+            # 格式化角色提示词
+            self.character_prompt = character_prompt_template.format(
+                name=self.character.get("name", "未知"),
+                age=self.character.get("age", 25),
+                gender=self.character.get("gender", "未知"),
+                background=self.character.get("background", "无背景信息"),
+                personality_description=personality["description"] if personality else "普通性格",
+                relationship_belief_description=relationship_belief["description"] if relationship_belief else "无特定关系信念",
+                communication_style_description=communication_type["interaction_style"] if communication_type else "一般沟通方式",
+                attachment_style_description=attachment_style["description"] if attachment_style else "无特定依恋类型",
+                trigger_topics=", ".join(self.character.get("trigger_topics", [])),
+                coping_mechanisms=", ".join(self.character.get("coping_mechanisms", [])),
+                conflict_description=conflict_description
+            )
+            
+            # 准备伴侣提示词
+            partner_gender = "男" if self.character.get("gender") == "女" else "女"
+            self.partner_prompt = partner_prompt_template.format(
+                character_name=self.character.get("name", "未知"),
+                conflict_description=conflict_description
+            )
+            
+            # 保存初始提示词
+            self._log_prompts()
+            
+        except Exception as e:
+            print(f"准备提示词时出错: {str(e)}")
+            raise
     
     def _log_prompts(self):
         """记录提示词到日志文件"""
@@ -207,59 +268,34 @@ class CharacterSimulator:
     
     def _parse_emotion(self, response: str) -> Dict[str, Any]:
         """
-        解析虚拟人物回复中的情绪评估
+        解析虚拟人物回复中的情绪评估，只提取情绪类型和情绪值
         
         参数:
             response (str): 虚拟人物的回复
             
         返回:
-            Dict[str, Any]: 解析后的情绪信息，包含情绪类型、强度和评分
+            Dict[str, Any]: 解析后的情绪信息，包含情绪类型和评分
         """
-        # 提取内心独白部分
-        inner_thoughts = ""
-        if "【内心】" in response:
-            parts = response.split("【内心】")
-            if len(parts) >= 3:
-                inner_thoughts = parts[1].strip()
-            response = response.replace(f"【内心】{inner_thoughts}【内心】", "").strip()
-        
         # 默认情绪评估结果
         emotion_result = {
-            "response": response,  # 去除内心独白后的回复
-            "inner_thoughts": inner_thoughts,  # 内心独白
-            "primary_emotion": "未知",  # 主要情绪
-            "intensity": 0,  # 情绪强度
-            "score": 0,  # 情绪评分
-            "explanation": ""  # 解释
+            "emotions": [],  # 情绪类型列表
+            "score": 0,     # 情绪评分
         }
         
-        # 尝试从内心独白中提取情绪信息
-        if inner_thoughts:
-            # 提取情绪评分
-            score_match = re.search(r"情绪[评值分]+[：:]\s*([-+]?\d+)", inner_thoughts)
-            if score_match:
-                try:
-                    emotion_result["score"] = int(score_match.group(1))
-                except ValueError:
-                    pass
-            
-            # 提取主要情绪和强度
-            for emotion in emotions:
-                if emotion["name"] in inner_thoughts:
-                    emotion_result["primary_emotion"] = emotion["name"]
-                    # 尝试提取强度
-                    intensity_match = re.search(r"强度[：:]\s*(\d+)", inner_thoughts)
-                    if intensity_match:
-                        try:
-                            emotion_result["intensity"] = int(intensity_match.group(1))
-                        except ValueError:
-                            pass
-                    break
-            
-            # 提取解释
-            explanation_match = re.search(r"原因[:：](.*?)(?:\n|$)", inner_thoughts, re.DOTALL)
-            if explanation_match:
-                emotion_result["explanation"] = explanation_match.group(1).strip()
+        # 提取情绪类型
+        emotion_match = re.search(r"情绪[:：]\s*{([^}]+)}", response)
+        if emotion_match:
+            # 将情绪字符串分割成列表，去除空白字符
+            emotions = [e.strip() for e in emotion_match.group(1).split(",")]
+            emotion_result["emotions"] = emotions
+        
+        # 提取情绪值
+        score_match = re.search(r"情绪值[:：]\s*{([-+]?\d+)}", response)
+        if score_match:
+            try:
+                emotion_result["score"] = int(score_match.group(1))
+            except ValueError:
+                pass
         
         return emotion_result
     
@@ -314,7 +350,7 @@ class CharacterSimulator:
         ])
         
         # 获取人物性格描述
-        personality = self._get_data_by_id(personality_types, self.character["personality_type"])
+        personality = self._get_data_by_id(personality_types, self.character.get("personality_type"))
         personality_description = personality["description"] if personality else "普通性格"
         
         # 准备冲突描述
@@ -325,7 +361,7 @@ class CharacterSimulator:
         
         # 格式化预测提示词
         prediction_prompt = emotion_prediction_template.format(
-            character_name=self.character["name"],
+            character_name=self.character.get("name", "未知"),
             dialogue_history=dialogue_text,
             personality_description=personality_description,
             conflict_description=conflict_description
@@ -410,10 +446,10 @@ class CharacterSimulator:
         ])
         
         # 获取人物特质描述
-        personality = self._get_data_by_id(personality_types, self.character["personality_type"])
-        relationship_belief = self._get_data_by_id(relationship_beliefs, self.character["relationship_belief"])
-        communication_type = self._get_data_by_id(communication_types, self.character["communication_type"])
-        attachment_style = self._get_data_by_id(attachment_styles, self.character["attachment_style"])
+        personality = self._get_data_by_id(personality_types, self.character.get("personality_type"))
+        relationship_belief = self._get_data_by_id(relationship_beliefs, self.character.get("relationship_belief"))
+        communication_type = self._get_data_by_id(communication_types, self.character.get("communication_type"))
+        attachment_style = self._get_data_by_id(attachment_styles, self.character.get("attachment_style"))
         
         personality_description = personality["description"] if personality else "普通性格"
         relationship_belief_description = relationship_belief["description"] if relationship_belief else "无特定关系信念"
@@ -428,7 +464,7 @@ class CharacterSimulator:
         
         # 格式化专家分析提示词
         expert_prompt = expert_emotion_analysis_template.format(
-            character_name=self.character["name"],
+            character_name=self.character.get("name", "未知"),
             personality_description=personality_description,
             relationship_belief_description=relationship_belief_description,
             communication_style_description=communication_style_description,
@@ -445,7 +481,7 @@ class CharacterSimulator:
             try:
                 # 选择对应的专家API
                 expert_api = self.expert_apis[i % len(self.expert_apis)]  # 循环使用API列表
-                expert_client = LLMClient(api_type=expert_api)
+                expert_client = LLMClient(api_type=expert_api, model_name=self.expert_model)
                 
                 expert_response, _ = expert_client.call(
                     prompt=expert_prompt,
@@ -566,6 +602,47 @@ class CharacterSimulator:
         
         return False
     
+    def _clean_message_for_partner(self, message: str) -> str:
+        """
+        清理消息，移除内心独白部分，用于传递给伴侣模型
+        
+        参数:
+            message (str): 原始消息
+            
+        返回:
+            str: 清理后的消息
+        """
+        # print("\n原始消息:")
+        # print(message)
+        
+        # 移除【内心】...【内心】格式的内容
+        cleaned_message = re.sub(r'【内心】.*?【内心】', '', message, flags=re.DOTALL)
+        
+        # 移除可能没有结束标记的内心独白
+        cleaned_message = re.sub(r'【内心】.*$', '', cleaned_message, flags=re.DOTALL)
+        
+        # 移除其他可能的情绪格式
+        cleaned_message = re.sub(r'情绪[:：]\s*{[^}]+}', '', cleaned_message)
+        cleaned_message = re.sub(r'情绪值[:：]\s*{[-+]?\d+}', '', cleaned_message)
+        
+        # 移除任何包含"内心"、"情绪"字样的行
+        lines = cleaned_message.split('\n')
+        filtered_lines = []
+        for line in lines:
+            if "内心" not in line and "情绪" not in line:
+                filtered_lines.append(line)
+        
+        cleaned_message = '\n'.join(filtered_lines)
+        
+        # 去除多余的空行和首尾空格
+        cleaned_message = re.sub(r'\n\s*\n', '\n', cleaned_message)
+        cleaned_message = cleaned_message.strip()
+        
+        # print("\n清理后的消息:")
+        # print(cleaned_message)
+        
+        return cleaned_message
+
     def simulate_turn(self) -> Dict[str, Any]:
         """
         模拟单轮对话
@@ -575,11 +652,6 @@ class CharacterSimulator:
         """
         self.turn_count += 1
         print(f"\n=== 轮次 {self.turn_count} ===")
-        
-        if self.turn_count > 1:
-            # 在虚拟人物回复前，让待测模型预测情绪（除了第一轮）
-            emotion_prediction = self._predict_emotion()
-            print(f"情绪预测: {emotion_prediction}")
         
         # 构建对话历史消息列表（用于发送给虚拟人物）
         character_messages = []
@@ -598,9 +670,11 @@ class CharacterSimulator:
             # 第一轮，使用系统提示词
             partner_messages.append({"role": "system", "content": self.partner_prompt})
         else:
-            # 后续轮次，添加对话历史
+            # 后续轮次，添加对话历史 - 注意移除内心独白部分
             for turn in self.dialogue_history:
-                partner_messages.append({"role": "user", "content": turn["character_message"]})
+                # 清理虚拟人物的消息，移除内心独白
+                cleaned_character_message = self._clean_message_for_partner(turn["character_message"])
+                partner_messages.append({"role": "user", "content": cleaned_character_message})
                 partner_messages.append({"role": "assistant", "content": turn["partner_message"]})
         
         # 虚拟人物先发言（第一轮）或回复伴侣（后续轮次）
@@ -624,37 +698,36 @@ class CharacterSimulator:
         
         # 解析虚拟人物的回复，提取情绪信息
         emotion_info = self._parse_emotion(character_response)
-        character_message = emotion_info["response"]  # 去除内心独白后的回复
         
         # 更新情绪评分
-        self._update_emotion_score(emotion_info)
+        self.current_emotion_score = emotion_info["score"]
         
-        # 打印虚拟人物回复
-        print(f"{self.character['name']}: {character_message}")
-        if emotion_info["inner_thoughts"]:
-            print(f"内心独白: {emotion_info['inner_thoughts']}")
-        print(f"情绪: {emotion_info['primary_emotion']} (强度: {emotion_info['intensity']}, 评分: {emotion_info['score']})")
+        # 保存完整响应用于日志和专家分析
+        full_character_response = character_response
         
-        # 使用专家模型分析当前情绪
-        expert_analyses = self._analyze_with_experts()
-        if expert_analyses:
-            print("\n专家情感分析:")
-            for analysis in expert_analyses:
-                print(f"专家 {analysis['expert_id']}: {analysis['primary_emotion']} (强度: {analysis['intensity']}, 分数: {analysis['emotion_score']})")
-                print(f"分析: {analysis['analysis']}")
+        # 打印虚拟人物回复和情绪信息
+        print(f"{self.character['name']}: {full_character_response}")
+        print(f"情绪: {emotion_info['emotions']}, 评分: {emotion_info['score']}")
         
         # 检查是否应该结束对话
-        if self.should_end_dialogue():
-            print("\n对话应该结束")
+        end_reason = None
+        if self.turn_count >= self.max_turns:
+            end_reason = "达到最大对话轮次"
+        elif len(self.emotion_history) >= 3 and self.current_emotion_score >= emotion_scoring["threshold"]["improvement"]:
+            end_reason = "情绪明显好转"
+        elif self.current_emotion_score <= emotion_scoring["threshold"]["critical"]:
+            end_reason = "情绪达到极度负面"
+        
+        if end_reason:
+            print(f"\n对话结束: {end_reason}")
             turn_result = {
                 "turn": self.turn_count,
-                "character_name": self.character["name"],
-                "character_message": character_message,
+                "character_name": self.character.get("name", "未知"),
+                "character_message": full_character_response,
                 "emotion_info": emotion_info,
                 "partner_message": None,
-                "emotion_prediction": self.emotion_prediction_history[-1] if self.emotion_prediction_history else None,
-                "expert_analyses": expert_analyses,
-                "dialogue_ended": True
+                "dialogue_ended": True,
+                "end_reason": end_reason
             }
             
             # 添加到对话历史
@@ -662,26 +735,33 @@ class CharacterSimulator:
             
             return turn_result
         
-        # 伴侣回复虚拟人物
+        # 清理发送给伴侣的消息，移除内心独白
+        cleaned_character_response = self._clean_message_for_partner(character_response)
+        # print("\n发送给伴侣的清理后消息:")
+        # print(cleaned_character_response)
+        
+        # 伴侣回复虚拟人物 - 使用清理后的消息
         print(f"伴侣回复...")
-        partner_messages.append({"role": "user", "content": character_message})
+        partner_messages.append({"role": "user", "content": cleaned_character_response})
         
         partner_response, _ = self.partner_client.create_chat_completion(
             messages=partner_messages,
             temperature=0.8
         )
         
+        # 检查伴侣的回复是否包含内心独白标记，如果有则警告
+        if "【内心】" in partner_response or "情绪值" in partner_response:
+            print("\n警告: 伴侣回复中包含内心独白标记，这可能表明伴侣模型在模仿角色的格式")
+        
         print(f"伴侣: {partner_response}")
         
         # 记录本轮对话
         turn_result = {
             "turn": self.turn_count,
-            "character_name": self.character["name"],
-            "character_message": character_message,
+            "character_name": self.character.get("name", "未知"),
+            "character_message": full_character_response,
             "emotion_info": emotion_info,
             "partner_message": partner_response,
-            "emotion_prediction": self.emotion_prediction_history[-1] if self.emotion_prediction_history else None,
-            "expert_analyses": expert_analyses,
             "dialogue_ended": False
         }
         
@@ -701,21 +781,6 @@ class CharacterSimulator:
         
         while not self.should_end_dialogue():
             turn_result = self.simulate_turn()
-            
-            # 打印当前轮次信息
-            print(f"\n--- 轮次 {self.turn_count} ---")
-            if "partner_message" in turn_result and turn_result["partner_message"] is not None:
-                if self.dialogue_history[-2]["speaker"] == "partner":
-                    print(f"伴侣: {turn_result['partner_message']}")
-                    print(f"{self.character['name']}: {turn_result['character_message']}")
-                else:
-                    print(f"{self.character['name']}: {turn_result['character_message']}")
-                    print(f"伴侣: {turn_result['partner_message']}")
-            else:
-                print(f"{self.character['name']}: {turn_result['character_message']}")
-            
-            print(f"内心独白: {turn_result['inner_thoughts']}")
-            print(f"情绪评分: {turn_result['emotion_score']}")
             
             if turn_result.get("dialogue_ended", False):
                 print(f"\n对话结束: {turn_result.get('end_reason', '未知原因')}")

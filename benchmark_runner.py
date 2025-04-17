@@ -29,6 +29,9 @@ class BenchmarkRunner:
         character_api: str = "deepseek",
         partner_api: str = "openrouter",
         expert_apis: Optional[List[str]] = None,
+        character_model: Optional[str] = None,
+        partner_model: Optional[str] = None,
+        expert_model: Optional[str] = None,
         use_emotion_prediction: bool = True,
         use_expert_analysis: bool = True,
         num_experts: int = 3,
@@ -44,6 +47,9 @@ class BenchmarkRunner:
             character_api (str): 虚拟人物使用的API类型
             partner_api (str): 对话伴侣使用的API类型
             expert_apis (List[str], optional): 专家分析使用的API类型列表
+            character_model (str, optional): 虚拟人物使用的模型名称
+            partner_model (str, optional): 对话伴侣使用的模型名称
+            expert_model (str, optional): 专家分析使用的模型名称
             use_emotion_prediction (bool): 是否启用待测模型的情感预测
             use_expert_analysis (bool): 是否启用专家的情感分析
             num_experts (int): 专家数量
@@ -55,6 +61,9 @@ class BenchmarkRunner:
         self.character_api = character_api
         self.partner_api = partner_api
         self.expert_apis = expert_apis
+        self.character_model = character_model
+        self.partner_model = partner_model
+        self.expert_model = expert_model
         self.use_emotion_prediction = use_emotion_prediction
         self.use_expert_analysis = use_expert_analysis
         self.num_experts = num_experts
@@ -100,15 +109,15 @@ class BenchmarkRunner:
                 print(f"警告: 未找到场景 {scenario_id}")
                 continue
             
-            print(f"处理场景: {scenario_id}")
-            print(f"场景情境: {[s['id'] for s in scenario['situations']]}")
+            #print(f"处理场景: {scenario_id}")
+            #print(f"场景情境: {[s['id'] for s in scenario['situations']]}")
             
             # 遍历场景中的每个情境
             for situation in scenario["situations"]:
                 # 获取对应的角色配置
                 character = get_character_by_scenario(scenario_id, situation["id"])
                 if character:
-                    print(f"找到角色配置: {character['name']} ({character['id']})")
+                    #print(f"找到角色配置: {character['name']} ({character['id']})")
                     test_cases.append({
                         "character": character,
                         "scenario_id": scenario_id,
@@ -139,6 +148,9 @@ class BenchmarkRunner:
             character_api=self.character_api,
             partner_api=self.partner_api,
             expert_apis=self.expert_apis,
+            character_model=self.character_model,
+            partner_model=self.partner_model,
+            expert_model=self.expert_model,
             max_turns=self.max_turns,
             log_dir=self.log_dir,
             use_emotion_prediction=self.use_emotion_prediction,
@@ -546,6 +558,9 @@ def main():
     parser.add_argument('--character-api', type=str, default='deepseek', help='虚拟人物使用的API类型')
     parser.add_argument('--partner-api', type=str, default='openrouter', help='对话伴侣使用的API类型')
     parser.add_argument('--expert-apis', type=str, nargs='+', default=['deepseek'], help='专家分析使用的API类型列表')
+    parser.add_argument('--character-model', type=str, default=None, help='虚拟人物使用的模型名称')
+    parser.add_argument('--partner-model', type=str, default=None, help='对话伴侣使用的模型名称')
+    parser.add_argument('--expert-model', type=str, default=None, help='专家分析使用的模型名称')
     parser.add_argument('--num-characters', type=int, default=3, help='随机生成的虚拟人物数量')
     parser.add_argument('--scenario-ids', type=str, nargs='+', help='要测试的场景ID列表')
     parser.add_argument('--parallel', action='store_true', help='是否并行运行测试')
@@ -564,6 +579,9 @@ def main():
         character_api=args.character_api,
         partner_api=args.partner_api,
         expert_apis=args.expert_apis,
+        character_model=args.character_model,
+        partner_model=args.partner_model,
+        expert_model=args.expert_model,
         use_emotion_prediction=args.use_emotion_prediction,
         use_expert_analysis=args.use_expert_analysis,
         num_experts=args.num_experts

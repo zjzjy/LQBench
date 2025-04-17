@@ -7,10 +7,12 @@ import json
 import time
 import requests
 from typing import Dict, List, Any, Optional, Union, Tuple
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 # 配置常量
 DEEPSEEK_API_BASE = "https://api.deepseek.com"
-OPENROUTER_API_BASE = "https://openrouter.ai/api/v1"
+OPENROUTER_API_BASE = "https://api.openrouter.ai/api/v1"
 
 # 可用模型配置
 MODELS = {
@@ -22,21 +24,51 @@ MODELS = {
         "default": "openai/gpt-3.5-turbo-0125:free",
         "available": [
             "openai/gpt-3.5-turbo-0125:free",
+            "openai/gpt-4-turbo-preview:free",
+            "openai/gpt-4.1",
+            "openai/gpt-4",
+            "anthropic/claude-3-opus:free",
+            "anthropic/claude-3-sonnet:free",
+            "anthropic/claude-3-haiku:free",
+            "anthropic/claude-instant-1.2:free",
             "google/gemini-pro:free",
-            "anthropic/claude-instant-1.2:free"
+            "google/gemini-1.5-pro:free",
+            "meta-llama/llama-3-70b-instruct:free",
+            "meta-llama/llama-3-8b-instruct:free",
+            "mistralai/mistral-7b-instruct:free",
+            "mistralai/mistral-large:free",
+            "01-ai/yi-34b:free",
+            "cohere/command-r:free",
+            "cohere/command-r-plus:free"
         ]
     }
 }
 
+def create_session_with_retries(retries=3, backoff_factor=0.3, status_forcelist=(500, 502, 504)):
+    """创建带有重试机制的会话"""
+    session = requests.Session()
+    retry = Retry(
+        total=retries,
+        read=retries,
+        connect=retries,
+        backoff_factor=backoff_factor,
+        status_forcelist=status_forcelist,
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    return session
+
 class LLMClient:
     """大模型API客户端类"""
     
-    def __init__(self, api_type: str = "deepseek"):
+    def __init__(self, api_type: str = "deepseek", model_name: Optional[str] = None):
         """
         初始化LLM客户端
         
         参数:
             api_type (str): API类型，支持 "deepseek" 或 "openrouter"
+            model_name (str, optional): 指定使用的模型名称，如果不指定则使用默认模型
         """
         self.api_type = api_type
         
@@ -46,10 +78,10 @@ class LLMClient:
         # 选择API基础URL
         if api_type == "deepseek":
             self.api_base = DEEPSEEK_API_BASE
-            self.default_model = MODELS["deepseek"]["default"]
+            self.default_model = model_name or MODELS["deepseek"]["default"]
         elif api_type == "openrouter":
             self.api_base = OPENROUTER_API_BASE
-            self.default_model = MODELS["openrouter"]["default"]
+            self.default_model = model_name or MODELS["openrouter"]["default"]
         else:
             raise ValueError(f"不支持的API类型: {api_type}，支持的类型有: deepseek, openrouter")
             
@@ -66,8 +98,6 @@ class LLMClient:
         keys["deepseek"] = os.environ.get("DEEPSEEK_API_KEY", "")
         keys["openrouter"] = os.environ.get("OPENROUTER_API_KEY", "")
         
-        print(f"从环境变量读取API密钥结果: DeepSeek={bool(keys['deepseek'])}, OpenRouter={bool(keys['openrouter'])}")
-        
         # 如果环境变量中没有，尝试从配置文件读取
         if not keys["deepseek"] or not keys["openrouter"]:
             # 尝试多个可能的配置文件路径
@@ -81,26 +111,16 @@ class LLMClient:
                 os.path.abspath("LQBench/config.json"),  # 绝对路径的LQBench目录
             ]
             
-            print(f"搜索配置文件的路径列表: {possible_paths}")
-            
             for config_path in possible_paths:
-                print(f"尝试读取配置文件: {config_path}")
                 try:
                     with open(config_path, "r") as f:
                         config = json.load(f)
-                        print(f"成功读取配置文件: {config_path}")
-                        print(f"配置文件包含的键: {list(config.keys())}")
-                        
                         keys["deepseek"] = config.get("DEEPSEEK_API_KEY", "")
                         keys["openrouter"] = config.get("OPENROUTER_API_KEY", "")
                         
-                        print(f"从配置文件读取API密钥结果: DeepSeek={bool(keys['deepseek'])}, OpenRouter={bool(keys['openrouter'])}")
-                        
                         if keys["deepseek"] or keys["openrouter"]:
-                            print(f"已从配置文件 {config_path} 加载API密钥")
                             break
                 except FileNotFoundError:
-                    print(f"未找到配置文件: {config_path}")
                     continue
                 except json.JSONDecodeError as e:
                     print(f"配置文件格式错误: {config_path}, 错误: {str(e)}")
@@ -115,16 +135,13 @@ class LLMClient:
             # 从LQBench/config.json中直接获取密钥
             try:
                 hardcoded_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "config.json")
-                print(f"尝试直接读取hardcoded路径: {hardcoded_path}")
                 with open(hardcoded_path, "r") as f:
                     config = json.load(f)
                     keys["deepseek"] = config.get("DEEPSEEK_API_KEY", "")
                     keys["openrouter"] = config.get("OPENROUTER_API_KEY", "")
-                    print(f"从hardcoded路径读取API密钥结果: DeepSeek={bool(keys['deepseek'])}, OpenRouter={bool(keys['openrouter'])}")
             except Exception as e:
                 print(f"硬编码路径读取失败: {str(e)}")
             
-        print(f"最终API密钥状态: DeepSeek={bool(keys['deepseek'])}, OpenRouter={bool(keys['openrouter'])}")
         return keys
     
     def call(
@@ -193,10 +210,12 @@ class LLMClient:
         
         # 发送请求
         try:
-            response = requests.post(
+            session = create_session_with_retries()
+            response = session.post(
                 f"{self.api_base}/v1/chat/completions",
                 headers=headers,
-                json=data
+                json=data,
+                timeout=60  # 设置60秒超时
             )
             response.raise_for_status()
             result = response.json()
@@ -228,7 +247,6 @@ class LLMClient:
             "Authorization": f"Bearer {self.api_keys['openrouter']}",
             "HTTP-Referer": "https://lqbench.example.com",  # 必须提供一个引用网址
             "X-Title": "LQBench",  # 应用程序标题
-            "User-Agent": "LQBench/0.1.0"  # 用户代理
         }
         
         # 准备消息体
@@ -243,46 +261,77 @@ class LLMClient:
             "model": model or self.default_model,
             "messages": messages,
             "temperature": temperature,
-            "max_tokens": max_tokens
+            "max_tokens": max_tokens,
+            "stream": False
         }
         
         # 发送请求
         try:
+            print(f"正在调用OpenRouter API，使用模型: {model or self.default_model}")
+            
+            # 使用普通的requests而不是带重试的会话，以避免可能的问题
             response = requests.post(
                 f"{self.api_base}/chat/completions",
                 headers=headers,
-                json=data
+                json=data,
+                timeout=30  # 减少超时时间以避免长时间挂起
             )
-            response.raise_for_status()
+            
+            # 检查响应状态码
+            if response.status_code != 200:
+                print(f"OpenRouter API返回错误状态码: {response.status_code}")
+                print(f"响应内容: {response.text}")
+                raise ValueError(f"OpenRouter API返回错误状态码: {response.status_code}")
+                
             result = response.json()
             
             # 提取生成的内容
             content = result["choices"][0]["message"]["content"]
+            print(f"模型 {model or self.default_model} 响应成功")
             return content, result
-        except Exception as e:
-            print(f"调用OpenRouter API出错: {str(e)}")
+        except requests.exceptions.RequestException as e:
+            print(f"OpenRouter API请求异常: {str(e)}")
             # 尝试回退到DeepSeek
-            try:
-                print("尝试回退到DeepSeek API...")
-                # 临时保存当前API类型
-                original_api_type = self.api_type
-                # 切换到DeepSeek
-                self.api_type = "deepseek"
-                self.api_base = DEEPSEEK_API_BASE
-                self.default_model = MODELS["deepseek"]["default"]
-                
-                result = self._call_deepseek(prompt, None, temperature, max_tokens, system_prompt, messages)
-                
-                # 恢复原始API类型
-                self.api_type = original_api_type
-                self.api_base = OPENROUTER_API_BASE if original_api_type == "openrouter" else DEEPSEEK_API_BASE
-                self.default_model = MODELS[original_api_type]["default"]
-                
-                return result
-            except Exception as fallback_error:
-                fallback_info = {"error": str(e), "fallback_error": str(fallback_error), "fallback": False}
-                return f"API调用失败，回退也失败: {str(e)}, {str(fallback_error)}", fallback_info
-                
+            print("回退到DeepSeek API...")
+            return self._fallback_to_deepseek(prompt, temperature, max_tokens, system_prompt, messages)
+        except Exception as e:
+            print(f"调用OpenRouter API时出现其他错误: {str(e)}")
+            # 尝试回退到DeepSeek
+            return self._fallback_to_deepseek(prompt, temperature, max_tokens, system_prompt, messages)
+    
+    def _fallback_to_deepseek(
+        self, 
+        prompt: str, 
+        temperature: float,
+        max_tokens: int,
+        system_prompt: Optional[str],
+        messages: Optional[List[Dict[str, str]]]
+    ) -> Tuple[str, Dict[str, Any]]:
+        """回退到DeepSeek API"""
+        try:
+            print("尝试回退到DeepSeek API...")
+            # 临时保存当前API类型
+            original_api_type = self.api_type
+            original_default_model = self.default_model
+            
+            # 切换到DeepSeek
+            self.api_type = "deepseek"
+            self.api_base = DEEPSEEK_API_BASE
+            self.default_model = MODELS["deepseek"]["default"]
+            
+            result = self._call_deepseek(prompt, None, temperature, max_tokens, system_prompt, messages)
+            
+            # 恢复原始API类型
+            self.api_type = original_api_type
+            self.api_base = OPENROUTER_API_BASE if original_api_type == "openrouter" else DEEPSEEK_API_BASE
+            self.default_model = original_default_model
+            
+            return result
+        except Exception as fallback_error:
+            print(f"回退到DeepSeek API也失败: {str(fallback_error)}")
+            fallback_info = {"error": "API调用失败，回退也失败", "fallback": False}
+            return f"API调用失败，回退也失败", fallback_info
+    
     def create_chat_completion(
         self,
         messages: List[Dict[str, str]],

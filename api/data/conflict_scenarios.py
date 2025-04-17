@@ -54,14 +54,14 @@ def load_conflict_scenarios() -> List[Dict[str, Any]]:
         data = json.load(f)
         scenarios = data.get("conflict_scenarios", [])
         print(f"加载到 {len(scenarios)} 个场景")
-        for scenario in scenarios:
-            print(f"场景: {scenario['id']}")
+        # for scenario in scenarios:
+        #     print(f"场景: {scenario['id']}")
         return scenarios
 
 def get_scenario_by_id(scenario_id: str) -> Optional[Dict[str, Any]]:
     """根据ID获取场景"""
-    print(f"查找场景: {scenario_id}")
-    print(f"可用场景: {[s['id'] for s in conflict_scenarios]}")
+    #print(f"查找场景: {scenario_id}")
+    #print(f"可用场景: {[s['id'] for s in conflict_scenarios]}")
     for scenario in conflict_scenarios:
         if scenario["id"] == scenario_id:
             return scenario
