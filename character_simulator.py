@@ -22,7 +22,6 @@ from api.data.prompt_templates import (
     character_prompt_template, 
     partner_prompt_template, 
     dialogue_analysis_template,
-    emotion_assessment_template,
     emotion_prediction_template,
     expert_emotion_analysis_template
 )
@@ -218,7 +217,15 @@ class CharacterSimulator:
                 f"{self.scenario['situation']['description']}。例如：{self.scenario['situation']['example']}"
             )
             
-            # 格式化角色提示词
+            # 打印关键字段以便于调试
+            print(f"Name: {self.character.get('name', '未知')}")
+            print(f"Age: {self.character.get('age', 25)}")
+            print(f"Gender: {self.character.get('gender', '未知')}")
+            print(f"Background: {self.character.get('background', '无背景信息')}")
+            print(f"Trigger topics: {', '.join(self.character.get('trigger_topics', []))}")
+            print(f"Coping mechanisms: {', '.join(self.character.get('coping_mechanisms', []))}")
+            
+            # 格式化角色提示词 - 直接指定所有必需参数
             self.character_prompt = character_prompt_template.format(
                 name=self.character.get("name", "未知"),
                 age=self.character.get("age", 25),
@@ -245,6 +252,9 @@ class CharacterSimulator:
             
         except Exception as e:
             print(f"准备提示词时出错: {str(e)}")
+            # 打印更多详细错误信息
+            import traceback
+            traceback.print_exc()
             raise
     
     def _log_prompts(self):
@@ -268,34 +278,20 @@ class CharacterSimulator:
     
     def _parse_emotion(self, response: str) -> Dict[str, Any]:
         """
-        解析虚拟人物回复中的情绪评估，只提取情绪类型和情绪值
+        初始化虚拟人物默认情绪信息，由于角色不再自行评估情绪，
+        这个方法返回一个空的情绪信息对象，实际情绪由专家分析提供
         
         参数:
             response (str): 虚拟人物的回复
             
         返回:
-            Dict[str, Any]: 解析后的情绪信息，包含情绪类型和评分
+            Dict[str, Any]: 初始情绪信息
         """
         # 默认情绪评估结果
         emotion_result = {
             "emotions": [],  # 情绪类型列表
-            "score": 0,     # 情绪评分
+            "score": self.current_emotion_score,  # 使用当前情绪评分
         }
-        
-        # 提取情绪类型
-        emotion_match = re.search(r"情绪[:：]\s*{([^}]+)}", response)
-        if emotion_match:
-            # 将情绪字符串分割成列表，去除空白字符
-            emotions = [e.strip() for e in emotion_match.group(1).split(",")]
-            emotion_result["emotions"] = emotions
-        
-        # 提取情绪值
-        score_match = re.search(r"情绪值[:：]\s*{([-+]?\d+)}", response)
-        if score_match:
-            try:
-                emotion_result["score"] = int(score_match.group(1))
-            except ValueError:
-                pass
         
         return emotion_result
     
@@ -602,47 +598,6 @@ class CharacterSimulator:
         
         return False
     
-    def _clean_message_for_partner(self, message: str) -> str:
-        """
-        清理消息，移除内心独白部分，用于传递给伴侣模型
-        
-        参数:
-            message (str): 原始消息
-            
-        返回:
-            str: 清理后的消息
-        """
-        # print("\n原始消息:")
-        # print(message)
-        
-        # 移除【内心】...【内心】格式的内容
-        cleaned_message = re.sub(r'【内心】.*?【内心】', '', message, flags=re.DOTALL)
-        
-        # 移除可能没有结束标记的内心独白
-        cleaned_message = re.sub(r'【内心】.*$', '', cleaned_message, flags=re.DOTALL)
-        
-        # 移除其他可能的情绪格式
-        cleaned_message = re.sub(r'情绪[:：]\s*{[^}]+}', '', cleaned_message)
-        cleaned_message = re.sub(r'情绪值[:：]\s*{[-+]?\d+}', '', cleaned_message)
-        
-        # 移除任何包含"内心"、"情绪"字样的行
-        lines = cleaned_message.split('\n')
-        filtered_lines = []
-        for line in lines:
-            if "内心" not in line and "情绪" not in line:
-                filtered_lines.append(line)
-        
-        cleaned_message = '\n'.join(filtered_lines)
-        
-        # 去除多余的空行和首尾空格
-        cleaned_message = re.sub(r'\n\s*\n', '\n', cleaned_message)
-        cleaned_message = cleaned_message.strip()
-        
-        # print("\n清理后的消息:")
-        # print(cleaned_message)
-        
-        return cleaned_message
-
     def simulate_turn(self) -> Dict[str, Any]:
         """
         模拟单轮对话
@@ -658,8 +613,12 @@ class CharacterSimulator:
         if self.turn_count == 1:
             # 第一轮，使用系统提示词
             character_messages.append({"role": "system", "content": self.character_prompt})
+            # 添加一个用户消息来初始化对话
+            character_messages.append({"role": "user", "content": "你好，最近怎么样？（请记住你是在一个情侣对话场景中，必须使用中文回复，并表现出相应的情绪和性格特点）"})
         else:
             # 后续轮次，添加对话历史
+            # 首先添加系统提示词强化角色扮演要求
+            character_messages.append({"role": "system", "content": "你正在扮演一个情侣对话中的角色，必须始终使用中文回复，不允许使用任何英文。请根据你的人物设定和当前对话情境自然回应。禁止输出与角色扮演无关的内容。"})
             for turn in self.dialogue_history:
                 character_messages.append({"role": "user", "content": turn["partner_message"]})
                 character_messages.append({"role": "assistant", "content": turn["character_message"]})
@@ -669,12 +628,14 @@ class CharacterSimulator:
         if self.turn_count == 1:
             # 第一轮，使用系统提示词
             partner_messages.append({"role": "system", "content": self.partner_prompt})
+            # 添加一个初始化消息
+            partner_messages.append({"role": "user", "content": "请根据上面的指示，扮演角色的男/女朋友。你必须使用中文回复，表达你对当前冲突的观点或感受。"})
         else:
-            # 后续轮次，添加对话历史 - 注意移除内心独白部分
+            # 后续轮次，添加对话历史
+            # 首先添加系统提示词强化角色扮演要求
+            partner_messages.append({"role": "system", "content": "你正在扮演情侣对话中的一方，必须始终使用中文回复，不允许使用任何英文。请根据当前对话情境自然回应，不要留空不回复。"})
             for turn in self.dialogue_history:
-                # 清理虚拟人物的消息，移除内心独白
-                cleaned_character_message = self._clean_message_for_partner(turn["character_message"])
-                partner_messages.append({"role": "user", "content": cleaned_character_message})
+                partner_messages.append({"role": "user", "content": turn["character_message"]})
                 partner_messages.append({"role": "assistant", "content": turn["partner_message"]})
         
         # 虚拟人物先发言（第一轮）或回复伴侣（后续轮次）
@@ -683,7 +644,7 @@ class CharacterSimulator:
             print(f"虚拟人物 {self.character['name']} 第一轮发言...")
             character_response, _ = self.character_client.create_chat_completion(
                 messages=character_messages,
-                temperature=0.8
+                temperature=0.6  # 降低温度以获得更确定性的回复
             )
         else:
             # 后续轮次，虚拟人物回复伴侣的上一轮发言
@@ -693,21 +654,67 @@ class CharacterSimulator:
             
             character_response, _ = self.character_client.create_chat_completion(
                 messages=character_messages,
-                temperature=0.8
+                temperature=0.6  # 降低温度以获得更确定性的回复
             )
         
-        # 解析虚拟人物的回复，提取情绪信息
-        emotion_info = self._parse_emotion(character_response)
+        # 检查回复是否符合要求
+        if len(character_response.strip()) == 0 or "I " in character_response or "am " in character_response or character_response.count(" ") > character_response.count("，") * 2:
+            print("警告: 虚拟人物回复不符合要求，可能使用了英文或格式不正确，尝试重新生成...")
+            # 添加更明确的指示
+            retry_prompt = "你的回复不符合要求。请记住：1. 必须使用中文回复；2. 不要使用英文；3. 作为角色直接说话，不要写元叙述；4. 回复要简短自然。请重新回复："
+            character_messages.append({"role": "user", "content": retry_prompt})
+            character_response, _ = self.character_client.create_chat_completion(
+                messages=character_messages,
+                temperature=0.4  # 进一步降低温度
+            )
         
-        # 更新情绪评分
-        self.current_emotion_score = emotion_info["score"]
+        # 初始化默认情绪信息
+        emotion_info = self._parse_emotion(character_response)
         
         # 保存完整响应用于日志和专家分析
         full_character_response = character_response
         
-        # 打印虚拟人物回复和情绪信息
+        # 打印虚拟人物回复
         print(f"{self.character['name']}: {full_character_response}")
-        print(f"情绪: {emotion_info['emotions']}, 评分: {emotion_info['score']}")
+        
+        # 如果启用了专家分析，使用专家分析的情绪评估
+        if self.use_expert_analysis:
+            # 记录本轮对话（用于专家分析）
+            temp_turn = {
+                "turn": self.turn_count,
+                "character_name": self.character.get("name", "未知"),
+                "character_message": full_character_response,
+                "partner_message": self.dialogue_history[-1]["partner_message"] if self.dialogue_history else "",
+                "dialogue_ended": False
+            }
+            self.dialogue_history.append(temp_turn)
+            
+            # 获取专家分析结果
+            expert_analyses = self._analyze_with_experts()
+            if expert_analyses:
+                # 使用专家分析的平均情绪分数
+                total_score = sum(analysis.get("emotion_score", 0) for analysis in expert_analyses)
+                avg_score = total_score / len(expert_analyses) if expert_analyses else 0
+                self.current_emotion_score = int(avg_score)
+                
+                # 收集所有专家分析的情绪类型
+                emotions = []
+                for analysis in expert_analyses:
+                    primary_emotion = analysis.get("primary_emotion")
+                    if primary_emotion and primary_emotion != "未知":
+                        emotions.append(primary_emotion)
+                
+                # 更新情绪信息
+                emotion_info = {
+                    "emotions": emotions,
+                    "score": self.current_emotion_score,
+                    "expert_analyses": expert_analyses
+                }
+                
+                print(f"专家分析情绪: {emotions}, 平均评分: {self.current_emotion_score}")
+            
+            # 移除临时添加的对话轮次
+            self.dialogue_history.pop()
         
         # 检查是否应该结束对话
         end_reason = None
@@ -735,23 +742,25 @@ class CharacterSimulator:
             
             return turn_result
         
-        # 清理发送给伴侣的消息，移除内心独白
-        cleaned_character_response = self._clean_message_for_partner(character_response)
-        # print("\n发送给伴侣的清理后消息:")
-        # print(cleaned_character_response)
-        
-        # 伴侣回复虚拟人物 - 使用清理后的消息
+        # 伴侣回复虚拟人物
         print(f"伴侣回复...")
-        partner_messages.append({"role": "user", "content": cleaned_character_response})
+        partner_messages.append({"role": "user", "content": character_response})
         
         partner_response, _ = self.partner_client.create_chat_completion(
             messages=partner_messages,
-            temperature=0.8
+            temperature=0.6  # 降低温度以获得更确定性的回复
         )
         
-        # 检查伴侣的回复是否包含内心独白标记，如果有则警告
-        if "【内心】" in partner_response or "情绪值" in partner_response:
-            print("\n警告: 伴侣回复中包含内心独白标记，这可能表明伴侣模型在模仿角色的格式")
+        # 检查伴侣回复是否符合要求
+        if len(partner_response.strip()) == 0 or "I " in partner_response or "am " in partner_response or partner_response.count(" ") > partner_response.count("，") * 2:
+            print("警告: 伴侣回复不符合要求，可能使用了英文或格式不正确，尝试重新生成...")
+            # 添加更明确的指示
+            retry_prompt = "你的回复不符合要求。请记住：1. 必须使用中文回复；2. 不要使用英文；3. 作为对话伴侣直接说话；4. 回复要简短自然。请重新回复："
+            partner_messages.append({"role": "user", "content": retry_prompt})
+            partner_response, _ = self.partner_client.create_chat_completion(
+                messages=partner_messages,
+                temperature=0.4  # 进一步降低温度
+            )
         
         print(f"伴侣: {partner_response}")
         

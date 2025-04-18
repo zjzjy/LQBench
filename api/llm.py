@@ -12,7 +12,7 @@ from urllib3.util.retry import Retry
 
 # 配置常量
 DEEPSEEK_API_BASE = "https://api.deepseek.com"
-OPENROUTER_API_BASE = "https://api.openrouter.ai/api/v1"
+OPENROUTER_API_BASE = "https://openrouter.ai/api/v1"
 
 # 可用模型配置
 MODELS = {
