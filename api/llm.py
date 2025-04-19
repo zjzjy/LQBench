@@ -13,6 +13,14 @@ from urllib3.util.retry import Retry
 # 配置常量
 DEEPSEEK_API_BASE = "https://api.deepseek.com"
 OPENROUTER_API_BASE = "https://openrouter.ai/api/v1"
+<<<<<<< Updated upstream
+=======
+
+import os
+
+os.environ['http_proxy'] = 'http://127.0.0.1:7890'
+os.environ['https_proxy'] = 'http://127.0.0.1:7890'
+>>>>>>> Stashed changes
 
 # 可用模型配置
 MODELS = {
