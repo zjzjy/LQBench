@@ -1,0 +1,31 @@
+2025-04-21 13:53:12,713 - LOVE - INFO - 使用默认配置
+2025-04-21 13:53:12,717 - LOVE - INFO - 使用指定的角色和场景: char_001, scenario_005
+2025-04-21 13:53:12,717 - src.utils.data_loader - INFO - 加载角色文件: D:\Code\NLP_CUHK\LOVE\LOVE\data\characters\templates\char_001.json
+2025-04-21 13:53:12,718 - src.utils.data_loader - INFO - 加载场景文件: D:\Code\NLP_CUHK\LOVE\LOVE\data\scenarios\templates\scenario_005.json
+2025-04-21 13:53:12,719 - src.agents.character_agent - INFO - 成功加载角色: 张明
+2025-04-21 13:53:12,720 - src.agents.character_agent - INFO - 为角色 char_001 设置场景 scenario_005
+2025-04-21 13:53:12,720 - src.agents.partner_agent - INFO - 为伴侣Agent设置交互角色 张明
+2025-04-21 13:53:12,721 - src.agents.partner_agent - INFO - 为伴侣Agent设置场景 scenario_005
+2025-04-21 13:53:12,723 - src.agents.emotion_agent - INFO - 已加载情绪阈值：积极=85，消极=15
+2025-04-21 13:53:12,724 - src.agents.emotion_agent - INFO - 为情绪监测Agent设置角色 张明
+2025-04-21 13:53:12,724 - src.agents.memory_agent - INFO - 为记忆Agent设置角色 张明
+2025-04-21 13:53:12,724 - src.agents.memory_agent - INFO - 为记忆Agent设置场景 scenario_005
+2025-04-21 13:53:12,725 - LOVE - INFO - 开始对话: 角色 张明 - 场景 未回复的消息
+2025-04-21 13:53:12,725 - src.dialogue.dialogue_manager - INFO - 开始对话 dialogue_287d0c9b
+2025-04-21 13:53:12,725 - src.agents.memory_agent - INFO - 为记忆Agent设置角色 张明
+2025-04-21 13:53:12,725 - src.agents.memory_agent - INFO - 为记忆Agent设置场景 scenario_005
+2025-04-21 13:53:12,726 - src.dialogue.dialogue_manager - INFO - 角色: 终于回复我了？我还以为你把我忘了呢。
+2025-04-21 13:53:12,726 - LOVE - INFO - 进行第 1 轮对话
+2025-04-21 13:53:12,726 - src.dialogue.dialogue_manager - INFO - 开始第 1 轮对话
+2025-04-21 13:53:12,726 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=18
+2025-04-21 13:53:18,251 - src.dialogue.dialogue_manager - INFO - 伙伴: 对不起，我今天一整天都在开会，手机调成静音模式了，没看到你的消息。不是故意忽视你，我很想和你聊天。刚才看到你的消息时，我也有点担心你是不是有什么事。
+2025-04-21 13:53:18,253 - LOVE - INFO - 进行第 2 轮对话
+2025-04-21 13:53:18,253 - src.dialogue.dialogue_manager - INFO - 开始第 2 轮对话
+2025-04-21 13:53:22,036 - src.agents.memory_agent - ERROR - 解析记忆数据失败: Expecting value: line 1 column 1 (char 0)
+2025-04-21 13:53:26,036 - src.dialogue.dialogue_manager - INFO - 角色: "想和我聊天"？那为什么要我等这么久？你总是这样，工作忙就把我晾在一边。难道我不是你生活的一部分吗？"担心我"？如果真的担心，怎么不及时回复呢？"没关系"……明显在敷衍。
+2025-04-21 13:53:26,037 - LOVE - INFO - 进行第 3 轮对话
+2025-04-21 13:53:26,037 - src.dialogue.dialogue_manager - INFO - 开始第 3 轮对话
+2025-04-21 13:53:26,037 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=85
+2025-04-21 13:53:31,710 - src.dialogue.dialogue_manager - INFO - 伙伴: 我理解你的感受，我不是故意要让你等，我真的不知道你会这么担心。我今天的会议临时安排的，没办法提前告诉你。我不是在敷衍你，我真的很抱歉没能及时回复你，让你感到被忽视了。
+2025-04-21 13:53:31,711 - LOVE - INFO - 进行第 4 轮对话
+2025-04-21 13:53:31,711 - src.dialogue.dialogue_manager - INFO - 开始第 4 轮对话

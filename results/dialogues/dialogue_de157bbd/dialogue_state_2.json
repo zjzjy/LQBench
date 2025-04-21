@@ -1,0 +1,50 @@
+{
+  "dialogue_id": "dialogue_de157bbd",
+  "current_turn": 2,
+  "start_time": "20250421161405",
+  "dialogue_history": [
+    {
+      "id": "msg_1",
+      "timestamp": "20250421161405",
+      "sender": "character",
+      "content": "终于回复我了？我还以为你把我忘了呢。",
+      "emotions": {
+        "primary_emotion": "sad",
+        "emotion_intensity": 42.0,
+        "explanation": "角色表现出中等的悲伤情绪，流露出失落和悲伤的情绪。",
+        "confidence": 0.5,
+        "sentiment_scores": {
+          "positive": 0.12168847656324105,
+          "negative": 0.37831152343675895,
+          "neutral": 1.0,
+          "compound": -0.2566230468735179
+        },
+        "emotion_keywords": {
+          "angry": 0,
+          "sad": 0,
+          "afraid": 0,
+          "happy": 0,
+          "surprised": 0,
+          "disgusted": 0,
+          "neutral": 0
+        },
+        "context_factors": {},
+        "turn": 1
+      }
+    },
+    {
+      "id": "msg_2",
+      "timestamp": "20250421161409",
+      "sender": "partner",
+      "content": "对不起，我不是故意忽视你，我今天临时有一个全天的重要会议，手机调成静音模式了，一整天都没机会看手机。刚才会议刚结束，我就给你回消息了。你是不是误会什么了？",
+      "emotions": {}
+    },
+    {
+      "id": "msg_3",
+      "timestamp": "20250421161412",
+      "sender": "character",
+      "content": "\"误会\"? 刚好一整天没空回我一条消息？ 我发那么多条你就随便说个\"对不起\"就了事？ 不用解释了。",
+      "emotions": {}
+    }
+  ]
+}

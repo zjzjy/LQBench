@@ -1,0 +1,7 @@
+2025-04-21 11:34:02,188 - LOVE - INFO - 使用默认配置
+2025-04-21 11:34:02,190 - LOVE - INFO - 随机选择角色和场景
+2025-04-21 11:34:02,191 - src.utils.data_loader - ERROR - 场景文件不存在: scenario_012
+2025-04-21 11:34:02,192 - src.utils.data_loader - WARNING - 角色指定的场景不存在: scenario_012，将随机选择场景
+2025-04-21 11:34:02,193 - src.agents.character_agent - INFO - 成功加载角色: 张明
+2025-04-21 11:34:02,193 - src.agents.character_agent - INFO - 为角色 char_001 设置场景 scenario_005
+2025-04-21 11:34:02,195 - src.agents.emotion_agent - INFO - 已加载情绪阈值：积极=85，消极=15

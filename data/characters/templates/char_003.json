@@ -1,0 +1,52 @@
+{
+  "id": "char_003",
+  "name": "王强",
+  "gender": "male",
+  "age": 32,
+  "personality": {
+    "openness": 45,
+    "conscientiousness": 65,
+    "extraversion": 70,
+    "agreeableness": 40,
+    "neuroticism": 75
+  },
+  "attachment_style": "anxious",
+  "communication_style": "aggressive",
+  "background": {
+    "childhood": "父母离异，在单亲家庭中成长，经历过家庭暴力",
+    "education": "本科学历，商业管理专业",
+    "career": "销售经理",
+    "hobbies": ["健身", "赛车游戏", "看体育比赛", "社交聚会"]
+  },
+  "values": ["成功", "面子", "控制", "效率"],
+  "speech_patterns": {
+    "common_phrases": ["你必须...", "我不能接受...", "这不可能...", "立刻解决"],
+    "communication_examples": [
+      "在争论中会提高声音：'我已经说了好几次了！'",
+      "经常使用绝对化词语：'你总是这样'，'你从来不听我说'",
+      "情绪激动时会打断对方：'够了，我不想再听了'"
+    ]
+  },
+  "conflict_scenarios": ["scenario_002", "scenario_006", "scenario_012"],
+  "relationship_status": {
+    "length": "8个月",
+    "commitment_level": "希望稳定但关系紧张",
+    "past_conflicts": ["对方独立性问题", "控制欲导致的争吵", "社交活动分歧"]
+  },
+  "emotional_triggers": {
+    "positive": ["被肯定", "伴侣排除万难陪伴", "获得成就", "被尊重"],
+    "negative": ["被忽视", "感到不被重视", "伴侣与异性互动", "计划被打乱"]
+  },
+  "coping_mechanisms": [
+    "言语攻击",
+    "控制行为",
+    "冷战",
+    "威胁分手"
+  ],
+  "growth_potential": {
+    "awareness": 30,
+    "willingness": 45,
+    "learning_style": "需要强烈的后果才能引发改变"
+  },
+  "backstory": "王强在充满冲突的家庭环境中长大，目睹父亲对母亲的言语和肢体暴力，这深刻影响了他处理关系的方式。虽然在职场上表现出色，但亲密关系中常常感到不安全，害怕被抛弃。他倾向于通过控制来减轻自己的焦虑，但这种方式往往导致关系恶化。他渴望稳定的关系，但不知道如何以健康的方式维系。在过去的几段恋情中，都因为他的控制欲和情绪爆发而告终。尽管有心理治疗的经历，但由于缺乏持续性，收效有限。他对自己的行为模式认知有限，需要大量外部引导才能看到自己的问题。"
+} 

@@ -1,0 +1,50 @@
+{
+  "openrouter": {
+    "api_key": "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",
+    "base_url": "https://openrouter.ai/api/v1",
+    "timeout": 60,
+    "retry_attempts": 3,
+    "retry_delay": 2
+  },
+  "models": {
+    "character": {
+      "default": "shisa-ai/shisa-v2-llama3.3-70b:free",
+      "alternatives": [
+        "anthropic/claude-3-opus",
+        "google/gemini-pro",
+        "openai/gpt-4o"
+      ]
+    },
+    "partner": {
+      "default": "meta-llama/llama-4-maverick:free",
+      "alternatives": [
+        "anthropic/claude-3-opus",
+        "google/gemini-pro",
+        "openai/gpt-4o",
+        "mistral/mistral-large",
+        "meta-llama/llama-3-70b-instruct"
+      ]
+    },
+    "emotion": {
+      "default": "meta-llama/llama-4-maverick:free",
+      "alternatives": [
+        "openai/gpt-4o-mini",
+        "google/gemini-flash"
+      ]
+    },
+    "memory": {
+      "default": "meta-llama/llama-4-maverick:free",
+      "alternatives": [
+        "openai/gpt-4o-mini",
+        "mistral/mistral-medium"
+      ]
+    },
+    "expert": {
+      "default": "deepseek/deepseek-r1-distill-qwen-32b:free",
+      "alternatives": [
+        "openai/gpt-4o",
+        "anthropic/claude-3-opus"
+      ]
+    }
+  }
+} 

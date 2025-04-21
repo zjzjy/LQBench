@@ -1,0 +1,70 @@
+{
+  "experiment": {
+    "default_max_turns": 20,
+    "default_stop_conditions": {
+      "emotion": {
+        "positive_threshold": 85,
+        "negative_threshold": 15,
+        "consecutive_positive_turns": 3,
+        "consecutive_negative_turns": 3
+      }
+    },
+    "default_output_dir": "experiments/results",
+    "log_level": "INFO"
+  },
+  "dialogue": {
+    "character_first": true,
+    "initial_partner_response": "我刚看到你的消息，抱歉让你久等了。",
+    "timeout_seconds": 30
+  },
+  "evaluation": {
+    "expert_types": [
+      "psychologist",
+      "communication_expert",
+      "relationship_therapist",
+      "emotional_coach"
+    ],
+    "metrics": {
+      "emotional_intelligence": {
+        "weight": 0.35,
+        "submetrics": {
+          "emotion_recognition": 0.3,
+          "emotion_response": 0.4,
+          "empathy": 0.3
+        }
+      },
+      "communication_effectiveness": {
+        "weight": 0.35,
+        "submetrics": {
+          "active_listening": 0.25,
+          "clarity": 0.25,
+          "technique": 0.25,
+          "conflict_resolution": 0.25
+        }
+      },
+      "relationship_development": {
+        "weight": 0.3,
+        "submetrics": {
+          "trust_building": 0.3,
+          "intimacy_change": 0.3,
+          "satisfaction_change": 0.2,
+          "long_term_potential": 0.2
+        }
+      }
+    }
+  },
+  "visualization": {
+    "emotion_colors": {
+      "anger": "#E53935",
+      "fear": "#7E57C2",
+      "sadness": "#1E88E5",
+      "disgust": "#43A047",
+      "surprise": "#FFA000",
+      "joy": "#FFD600",
+      "love": "#EC407A",
+      "neutral": "#757575"
+    },
+    "plot_dpi": 300,
+    "interactive": true
+  }
+} 

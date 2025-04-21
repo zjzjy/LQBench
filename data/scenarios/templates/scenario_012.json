@@ -1,0 +1,104 @@
+{
+  "id": "scenario_012",
+  "name": "隐私边界争议",
+  "description": "关于检查手机、社交媒体等个人隐私空间引发的冲突",
+  "emotional_dynamics": {
+    "initial_state": {
+      "tension": 70,
+      "hurt": 65,
+      "trust_issues": 80,
+      "defensive": 75
+    },
+    "escalation_patterns": [
+      "指责对方隐瞒秘密",
+      "引用过去的不信任事件",
+      "将边界需求误解为不忠的信号"
+    ],
+    "de-escalation_opportunities": [
+      "讨论各自对隐私的理解",
+      "设定明确且双方都能接受的边界",
+      "增强关系透明度而不侵犯隐私"
+    ]
+  },
+  "trigger_events": [
+    "一方偷看另一方的手机信息",
+    "要求分享社交媒体密码",
+    "未经允许查看个人对话或邮件"
+  ],
+  "character_perspectives": {
+    "requestor": {
+      "underlying_needs": ["安全感", "确认忠诚", "减轻不确定性"],
+      "fears": ["被欺骗", "被排除在伴侣生活之外", "伴侣有秘密"],
+      "justifications": ["爱一个人就不应该有秘密", "过去的伤害导致我需要确认"]
+    },
+    "boundary_setter": {
+      "underlying_needs": ["自主权", "被尊重", "维持个人空间"],
+      "fears": ["失去控制", "关系变成监视", "个人界限被侵犯"],
+      "justifications": ["信任不需要监视", "健康关系需要保持个体性"]
+    }
+  },
+  "communication_challenges": {
+    "misinterpretations": [
+      "将隐私需求误解为不忠的证据",
+      "将透明度要求误解为控制行为"
+    ],
+    "unproductive_patterns": [
+      "绝对化语言：'你从来不信任我'",
+      "指责而非表达感受：'你就是在隐瞒'而非'我感到不安'"
+    ],
+    "difficulty_areas": [
+      "区分健康隐私与有害秘密",
+      "在不侵犯对方的情况下表达不安全感"
+    ]
+  },
+  "resolution_paths": [
+    {
+      "approach": "建立透明度与隐私的平衡",
+      "steps": [
+        "双方分享对隐私和透明度的理解和期望",
+        "讨论引发不信任的根本原因",
+        "制定明确且双方同意的隐私边界规则",
+        "建立增强信任的替代行为"
+      ],
+      "potential_outcomes": {
+        "positive": "建立既尊重个人空间又能满足安全需求的关系模式",
+        "negative": "一方妥协但内心积累不满，导致长期问题"
+      }
+    },
+    {
+      "approach": "探索不安全感的根源",
+      "steps": [
+        "分析过去经历如何影响当前信任问题",
+        "明确区分当前伴侣与过去伤害者",
+        "练习自我安抚不安全感的技巧",
+        "寻求专业帮助处理深层创伤"
+      ],
+      "potential_outcomes": {
+        "positive": "减少不安全感驱动的控制行为，增强相互信任",
+        "negative": "若一方不愿面对内在问题，可能持续重复冲突模式"
+      }
+    }
+  ],
+  "learning_opportunities": {
+    "relationship_skills": [
+      "区分健康隐私与不健康秘密的能力",
+      "在感到不安时直接沟通而非控制",
+      "理解并尊重彼此不同的边界需求"
+    ],
+    "personal_growth": [
+      "提高情绪调节能力，特别是处理不安全感",
+      "增强自我价值感，减少对外部确认的需求",
+      "发展信任能力，接受未知和不确定性"
+    ]
+  },
+  "complexity_factors": {
+    "past_betrayals": "过去关系中的背叛经历会加剧当前冲突",
+    "cultural_differences": "不同文化对隐私和透明度的期望可能存在差异",
+    "technology_impact": "社交媒体和智能设备使隐私界限变得更加复杂"
+  },
+  "expert_insights": [
+    "健康的亲密关系平衡了透明度和尊重个人边界",
+    "过度监控往往反映了监控者的内在不安全感，而非被监控者的问题",
+    "建立信任需要时间和一致性，而非通过侵犯隐私获得"
+  ]
+} 

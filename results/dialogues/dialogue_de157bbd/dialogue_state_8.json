@@ -1,0 +1,158 @@
+{
+  "dialogue_id": "dialogue_de157bbd",
+  "current_turn": 8,
+  "start_time": "20250421161405",
+  "dialogue_history": [
+    {
+      "id": "msg_1",
+      "timestamp": "20250421161405",
+      "sender": "character",
+      "content": "终于回复我了？我还以为你把我忘了呢。",
+      "emotions": {
+        "primary_emotion": "sad",
+        "emotion_intensity": 42.0,
+        "explanation": "角色表现出中等的悲伤情绪，流露出失落和悲伤的情绪。",
+        "confidence": 0.5,
+        "sentiment_scores": {
+          "positive": 0.12168847656324105,
+          "negative": 0.37831152343675895,
+          "neutral": 1.0,
+          "compound": -0.2566230468735179
+        },
+        "emotion_keywords": {
+          "angry": 0,
+          "sad": 0,
+          "afraid": 0,
+          "happy": 0,
+          "surprised": 0,
+          "disgusted": 0,
+          "neutral": 0
+        },
+        "context_factors": {},
+        "turn": 1
+      }
+    },
+    {
+      "id": "msg_2",
+      "timestamp": "20250421161409",
+      "sender": "partner",
+      "content": "对不起，我不是故意忽视你，我今天临时有一个全天的重要会议，手机调成静音模式了，一整天都没机会看手机。刚才会议刚结束，我就给你回消息了。你是不是误会什么了？",
+      "emotions": {}
+    },
+    {
+      "id": "msg_3",
+      "timestamp": "20250421161412",
+      "sender": "character",
+      "content": "\"误会\"? 刚好一整天没空回我一条消息？ 我发那么多条你就随便说个\"对不起\"就了事？ 不用解释了。",
+      "emotions": {
+        "primary_emotion": "neutral",
+        "emotion_intensity": 62.5,
+        "explanation": "角色表现出强烈的中性情绪，情绪比较平和，没有明显波动。",
+        "confidence": 0.6521739130434783,
+        "sentiment_scores": {
+          "positive": 0.3461579338887521,
+          "negative": 0.1538420661112479,
+          "neutral": 1.0,
+          "compound": 0.1923158677775042
+        },
+        "emotion_keywords": {
+          "angry": 0,
+          "sad": 0,
+          "afraid": 0,
+          "happy": 0,
+          "surprised": 0,
+          "disgusted": 0,
+          "neutral": 0
+        },
+        "context_factors": {},
+        "turn": 2
+      }
+    },
+    {
+      "id": "msg_4",
+      "timestamp": "20250421161414",
+      "sender": "partner",
+      "content": "我理解你会觉得不舒服，我不是故意冷落你，只是真的有急事脱不开身。我当时确实不知道你会这么担心，如果我知道，我一定会找机会给你个消息的。别生气了，好吗？",
+      "emotions": {}
+    },
+    {
+      "id": "msg_5",
+      "timestamp": "20250421161417",
+      "sender": "character",
+      "content": "\"好吗？\" 你想我说\"好\"是吧？ 我的消息完全被你无视了一整天，这已经是第二次了。到底就不能抽5分钟给我？ 我不重要是吧？算了，反正我也没什么可说的。",
+      "emotions": {
+        "primary_emotion": "sad",
+        "emotion_intensity": 30.0,
+        "explanation": "角色表现出轻微的悲伤情绪，流露出失落和悲伤的情绪。",
+        "confidence": 0.5,
+        "sentiment_scores": {
+          "positive": 0.0012637955349319996,
+          "negative": 0.498736204465068,
+          "neutral": 1.0,
+          "compound": -0.497472408930136
+        },
+        "emotion_keywords": {
+          "angry": 0,
+          "sad": 0,
+          "afraid": 0,
+          "happy": 0,
+          "surprised": 0,
+          "disgusted": 0,
+          "neutral": 0
+        },
+        "context_factors": {},
+        "turn": 3
+      }
+    },
+    {
+      "id": "msg_6",
+      "timestamp": "20250421161420",
+      "sender": "partner",
+      "content": "我真的很抱歉，我知道我没及时回你的消息让你感到被忽视，这不是我的本意。我觉得我们之前沟通挺好的，我没想到会这样。你能不能听我解释一下当时的情况？其实我手机静音了，根本没看到你的消息。",
+      "emotions": {}
+    },
+    {
+      "id": "msg_7",
+      "timestamp": "20250421161424",
+      "sender": "character",
+      "content": "\"解释\"? 解释能解决问题？ 我的感受呢？ 我发那么多条消息你全无视，连个\"知道了\"都没有，这叫\"沟通挺好\"? 我们的关系是不是也像你的回复一样—只是我在发力？ 念咱们都忘了什么叫\"互相\"?",
+      "emotions": {
+        "primary_emotion": "neutral",
+        "emotion_intensity": 76.5,
+        "explanation": "角色表现出强烈的中性情绪，情绪比较平和，没有明显波动。",
+        "confidence": 0.6521739130434783,
+        "sentiment_scores": {
+          "positive": 0.38646784050807614,
+          "negative": 0.11353215949192386,
+          "neutral": 1.0,
+          "compound": 0.2729356810161523
+        },
+        "emotion_keywords": {
+          "angry": 0,
+          "sad": 0,
+          "afraid": 0,
+          "happy": 0,
+          "surprised": 0,
+          "disgusted": 0,
+          "neutral": 0
+        },
+        "context_factors": {},
+        "turn": 4
+      }
+    },
+    {
+      "id": "msg_8",
+      "timestamp": "20250421161426",
+      "sender": "partner",
+      "content": "我理解你现在的感受，我真的很抱歉没能及时回应你。我知道我没做到我应该做的，让你觉得我在忽视你。我承认，我确实没能很好地平衡工作和我们之间的沟通，我会努力改进的。别说没互相，我们可以重新调整一下我们的沟通方式。",
+      "emotions": {}
+    },
+    {
+      "id": "msg_9",
+      "timestamp": "20250421161429",
+      "sender": "character",
+      "content": "\"重新调整\"? 就是说我一直在单方面努力？ 我说\"没关系\"的时候明显意味着我在意，但你却只看到了\"没关系\"三个字。工作忙就忙吧，起码有个\"稍后回你\"这种基本礼貌。\"重新调整\"? 算了...我都累了。",
+      "emotions": {}
+    }
+  ]
+}

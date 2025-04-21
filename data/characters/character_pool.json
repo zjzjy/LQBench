@@ -1,0 +1,61 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2023-11-15",
+  "characters": [
+    {
+      "id": "char_001",
+      "name": "张明",
+      "gender": "male",
+      "brief": "焦虑型依恋，被动攻击型沟通，IT程序员",
+      "difficulty": "medium"
+    },
+    {
+      "id": "char_002",
+      "name": "李华",
+      "gender": "female",
+      "brief": "安全型依恋，自信型沟通，市场营销专员",
+      "difficulty": "easy"
+    },
+    {
+      "id": "char_003",
+      "name": "王芳",
+      "gender": "female",
+      "brief": "回避型依恋，被动型沟通，大学讲师",
+      "difficulty": "hard"
+    },
+    {
+      "id": "char_004",
+      "name": "陈强",
+      "gender": "male", 
+      "brief": "恐惧型依恋，攻击型沟通，金融分析师",
+      "difficulty": "very_hard"
+    },
+    {
+      "id": "char_005",
+      "name": "赵敏",
+      "gender": "female",
+      "brief": "焦虑型依恋，自信型沟通，医生",
+      "difficulty": "medium"
+    }
+  ],
+  "template_path": "data/characters/templates/",
+  "statistics": {
+    "total": 5,
+    "by_gender": {
+      "male": 2,
+      "female": 3
+    },
+    "by_difficulty": {
+      "easy": 1,
+      "medium": 2,
+      "hard": 1,
+      "very_hard": 1
+    },
+    "by_attachment": {
+      "secure": 1,
+      "anxious": 2,
+      "avoidant": 1,
+      "fearful": 1
+    }
+  }
+} 

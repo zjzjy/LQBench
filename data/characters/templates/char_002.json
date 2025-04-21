@@ -1,0 +1,52 @@
+{
+  "id": "char_002",
+  "name": "李华",
+  "gender": "female",
+  "age": 26,
+  "personality": {
+    "openness": 75,
+    "conscientiousness": 85,
+    "extraversion": 60,
+    "agreeableness": 80,
+    "neuroticism": 55
+  },
+  "attachment_style": "secure",
+  "communication_style": "direct",
+  "background": {
+    "childhood": "在和睦的家庭中长大，父母关系融洽，给予足够关爱",
+    "education": "研究生学历，心理学专业",
+    "career": "小学教师",
+    "hobbies": ["阅读", "烹饪", "瑜伽", "户外徒步"]
+  },
+  "values": ["家庭", "诚实", "成长", "稳定"],
+  "speech_patterns": {
+    "common_phrases": ["我感觉...", "我希望...", "我们可以...", "你觉得怎么样？"],
+    "communication_examples": [
+      "我会直接表达我的需求：'我需要一些独处的时间'",
+      "我习惯用'我'陈述句来表达感受，避免指责",
+      "困惑时会明确提问：'我不太明白你的意思，能解释一下吗？'"
+    ]
+  },
+  "conflict_scenarios": ["scenario_001", "scenario_008", "scenario_015"],
+  "relationship_status": {
+    "length": "1年2个月",
+    "commitment_level": "稳定交往，考虑未来",
+    "past_conflicts": ["工作与个人时间平衡", "与原生家庭的边界", "生活习惯差异"]
+  },
+  "emotional_triggers": {
+    "positive": ["诚实的沟通", "被尊重", "共同规划", "共度高质量时光"],
+    "negative": ["被回避", "不被倾听", "言行不一", "不尊重边界"]
+  },
+  "coping_mechanisms": [
+    "寻求直接对话",
+    "给自己冷静的时间",
+    "寻求朋友建议",
+    "阅读相关书籍寻找解决方案"
+  ],
+  "growth_potential": {
+    "awareness": 85,
+    "willingness": 90,
+    "learning_style": "通过讨论和反思学习"
+  },
+  "backstory": "李华来自一个教育背景的家庭，父母都是大学教授，从小培养了她良好的沟通习惯和学习能力。大学期间学习心理学，让她对人际关系有深入理解。在感情中，她重视坦诚和相互尊重，相信沟通是解决问题的关键。作为一名小学教师，她把对孩子的耐心和理解也带入了自己的感情关系中。虽然她通常能直接表达自己的想法和感受，但在面对强烈冲突时，有时会需要时间整理思路，寻求平衡。她相信健康的关系需要双方共同努力和成长。"
+} 

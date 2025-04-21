@@ -1,0 +1,35 @@
+2025-04-21 12:43:25,496 - LOVE - INFO - 使用默认配置
+2025-04-21 12:43:25,499 - LOVE - INFO - 使用指定的角色和场景: char_001, scenario_005
+2025-04-21 12:43:25,499 - src.utils.data_loader - INFO - 加载角色文件: D:\Code\NLP_CUHK\LOVE\LOVE\data\characters\templates\char_001.json
+2025-04-21 12:43:25,501 - src.utils.data_loader - INFO - 加载场景文件: D:\Code\NLP_CUHK\LOVE\LOVE\data\scenarios\templates\scenario_005.json
+2025-04-21 12:43:25,503 - src.agents.character_agent - INFO - 成功加载角色: 张明
+2025-04-21 12:43:25,504 - src.agents.character_agent - INFO - 为角色 char_001 设置场景 scenario_005
+2025-04-21 12:43:25,506 - src.agents.partner_agent - INFO - 为伴侣Agent设置交互角色 张明
+2025-04-21 12:43:25,509 - src.agents.partner_agent - INFO - 为伴侣Agent设置场景 scenario_005
+2025-04-21 12:43:25,511 - src.agents.emotion_agent - INFO - 已加载情绪阈值：积极=85，消极=15
+2025-04-21 12:43:25,512 - src.agents.emotion_agent - INFO - 为情绪监测Agent设置角色 张明
+2025-04-21 12:43:25,512 - src.agents.memory_agent - INFO - 为记忆Agent设置角色 张明
+2025-04-21 12:43:25,512 - src.agents.memory_agent - INFO - 为记忆Agent设置场景 scenario_005
+2025-04-21 12:43:25,513 - LOVE - INFO - 开始对话: 角色 张明 - 场景 未回复的消息
+2025-04-21 12:43:25,514 - src.dialogue.dialogue_manager - INFO - 开始对话 dialogue_7f76ec4d
+2025-04-21 12:43:25,514 - src.agents.memory_agent - INFO - 为记忆Agent设置角色 张明
+2025-04-21 12:43:25,514 - src.agents.memory_agent - INFO - 为记忆Agent设置场景 scenario_005
+2025-04-21 12:43:25,514 - src.dialogue.dialogue_manager - INFO - 角色: 终于回复我了？我还以为你把我忘了呢。
+2025-04-21 12:43:25,514 - LOVE - INFO - 进行第 1 轮对话
+2025-04-21 12:43:25,515 - src.dialogue.dialogue_manager - INFO - 开始第 1 轮对话
+2025-04-21 12:43:25,515 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=18
+2025-04-21 12:43:31,150 - src.dialogue.dialogue_manager - INFO - 伙伴: 对不起，我真的不是故意不回你的消息，我今天一整天都被一个重要的会议占满了，手机也调成了静音模式，根本没注意到你给我发了消息。你是不是误会什么了？
+2025-04-21 12:43:31,151 - LOVE - INFO - 进行第 2 轮对话
+2025-04-21 12:43:31,152 - src.dialogue.dialogue_manager - INFO - 开始第 2 轮对话
+2025-04-21 12:43:34,948 - src.agents.memory_agent - ERROR - 解析记忆数据失败: Expecting value: line 1 column 1 (char 0)
+2025-04-21 12:43:38,860 - src.dialogue.dialogue_manager - INFO - 角色: "误会"？你叫一整天没回消息是"误会"？难道我哪天长了透明的？看不见我在等你吗？冷静点？更让我觉得我不重要。  
+
+（冷幽默）"重要的会议"是吧？那我就是不重要的事务咯？没关系。（意味着：不没关系）
+2025-04-21 12:43:38,861 - LOVE - INFO - 进行第 3 轮对话
+2025-04-21 12:43:38,861 - src.dialogue.dialogue_manager - INFO - 开始第 3 轮对话
+2025-04-21 12:43:38,861 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=99
+2025-04-21 12:43:41,881 - src.agents.emotion_agent - ERROR - 解析情绪分析结果失败: Expecting value: line 1 column 1 (char 0)
+2025-04-21 12:43:41,882 - src.agents.emotion_agent - ERROR - 情绪分析失败: JSON解析失败: Expecting value: line 1 column 1 (char 0)
+2025-04-21 12:43:44,719 - src.dialogue.dialogue_manager - INFO - 伙伴: 我理解你为什么会有这种感觉，我不是故意要让你觉得自己不重要。我的确有一个很重要的会议，没想到会占用我一整天，我不是在故意忽视你。你这么一说我才意识到，我应该早点告诉你我今天的安排的。
+2025-04-21 12:43:44,720 - LOVE - INFO - 进行第 4 轮对话
+2025-04-21 12:43:44,720 - src.dialogue.dialogue_manager - INFO - 开始第 4 轮对话

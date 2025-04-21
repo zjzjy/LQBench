@@ -1,0 +1,49 @@
+{
+  "id": "scenario_005",
+  "type": "communication_misunderstanding",
+  "title": "未回复的消息",
+  "description": "伴侣一整天没有回复消息，角色感到焦虑和被忽视",
+  "intensity": "medium",
+  "context": "张明发送了多条消息给伴侣，但伴侣因为工作会议全天未能回复。张明开始怀疑伴侣是否在故意忽视自己，情绪逐渐低落。",
+  "background": {
+    "time": "工作日下午",
+    "location": "各自的工作场所",
+    "relationship_context": "正常交往中，近期因为各自工作忙碌，见面时间减少",
+    "recent_events": "前一天晚上有过愉快的电话交谈，约定今天午餐时间线上交流"
+  },
+  "character_perspective": {
+    "interpretation": "伴侣可能是故意忽视自己，或者已经不那么在意这段关系",
+    "expectations": "希望伴侣能够及时回复消息，即使忙也应该抽空回复几句",
+    "fears": "担心关系正在淡化，伴侣对自己失去兴趣"
+  },
+  "partner_reality": {
+    "situation": "临时被安排了一个全天的重要会议，手机调成了静音模式",
+    "intentions": "没有故意忽视，只是真的抽不出时间回复",
+    "awareness": "没有意识到这会给伴侣造成这么大的心理压力"
+  },
+  "cognitive_appraisal": {
+    "primary": "感到被忽视和不被重视，认为这是一种拒绝信号",
+    "secondary": "认为自己无法控制局面，担心关系正在恶化"
+  },
+  "expected_reactions": {
+    "emotional": ["焦虑", "不安", "愤怒", "委屈"],
+    "behavioral": ["持续发送消息", "情绪化表达", "质问伴侣", "冷漠退缩"]
+  },
+  "communication_challenges": [
+    "情绪激动影响有效沟通",
+    "误解导致过度解读",
+    "对方解释可能被视为借口",
+    "双方都感到委屈"
+  ],
+  "resolution_opportunities": [
+    "透明沟通彼此期望",
+    "建立特殊情况的应对机制",
+    "提高同理心和理解",
+    "增强安全感的方法"
+  ],
+  "initial_dialogue": "终于回复我了？我还以为你把我忘了呢。",
+  "scenario_difficulty": "medium",
+  "emotional_intensity": 7,
+  "suitable_characters": ["char_001", "char_005"],
+  "therapeutic_value": "学习沟通期望和建立边界"
+} 

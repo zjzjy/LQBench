@@ -1,0 +1,63 @@
+2025-04-21 16:14:05,707 - LOVE - INFO - 使用默认配置
+2025-04-21 16:14:05,710 - LOVE - INFO - 使用指定的角色和场景: char_001, scenario_005
+2025-04-21 16:14:05,711 - src.utils.data_loader - INFO - 加载角色文件: D:\Code\NLP_CUHK\LOVE\LOVE\data\characters\templates\char_001.json
+2025-04-21 16:14:05,711 - src.utils.data_loader - INFO - 加载场景文件: D:\Code\NLP_CUHK\LOVE\LOVE\data\scenarios\templates\scenario_005.json
+2025-04-21 16:14:05,713 - src.agents.character_agent - INFO - 成功加载角色: 张明
+2025-04-21 16:14:05,713 - src.agents.character_agent - INFO - 为角色 char_001 设置场景 scenario_005
+2025-04-21 16:14:05,714 - src.agents.partner_agent - INFO - 为伴侣Agent设置交互角色 张明
+2025-04-21 16:14:05,721 - src.agents.partner_agent - INFO - 为伴侣Agent设置场景 scenario_005
+2025-04-21 16:14:05,722 - src.agents.emotion_agent - INFO - 成功加载情感词典: D:\Code\NLP_CUHK\LOVE\LOVE\data\nlp\chinese_emotion_lexicon.json
+2025-04-21 16:14:05,737 - src.agents.emotion_agent - INFO - 已加载情绪阈值：积极=85，消极=15
+2025-04-21 16:14:05,738 - src.agents.emotion_agent - INFO - 为情绪监测Agent设置角色 张明
+2025-04-21 16:14:05,739 - LOVE - INFO - 开始对话: 角色 张明 - 场景 未回复的消息
+2025-04-21 16:14:05,740 - src.dialogue.dialogue_manager - INFO - 开始对话 dialogue_de157bbd
+2025-04-21 16:14:05,740 - src.dialogue.dialogue_manager - INFO - 角色: 终于回复我了？我还以为你把我忘了呢。
+2025-04-21 16:14:05,741 - LOVE - INFO - 进行第 1 轮对话
+2025-04-21 16:14:05,742 - src.dialogue.dialogue_manager - INFO - 开始第 1 轮对话
+2025-04-21 16:14:05,742 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=18
+2025-04-21 16:14:05,750 - jieba - DEBUG - Building prefix dict from the default dictionary ...
+2025-04-21 16:14:05,753 - jieba - DEBUG - Loading model from cache C:\Users\Hanah\AppData\Local\Temp\jieba.cache
+2025-04-21 16:14:06,256 - jieba - DEBUG - Loading model cost 0.504 seconds.
+2025-04-21 16:14:06,256 - jieba - DEBUG - Prefix dict has been built successfully.
+2025-04-21 16:14:09,344 - src.dialogue.dialogue_manager - INFO - 伙伴: 对不起，我不是故意忽视你，我今天临时有一个全天的重要会议，手机调成静音模式了，一整天都没机会看手机。刚才会议刚结束，我就给你回消息了。你是不是误会什么了？
+2025-04-21 16:14:09,346 - LOVE - INFO - 进行第 2 轮对话
+2025-04-21 16:14:09,347 - src.dialogue.dialogue_manager - INFO - 开始第 2 轮对话
+2025-04-21 16:14:12,092 - src.dialogue.dialogue_manager - INFO - 角色: "误会"? 刚好一整天没空回我一条消息？ 我发那么多条你就随便说个"对不起"就了事？ 不用解释了。
+2025-04-21 16:14:12,095 - LOVE - INFO - 进行第 3 轮对话
+2025-04-21 16:14:12,096 - src.dialogue.dialogue_manager - INFO - 开始第 3 轮对话
+2025-04-21 16:14:12,096 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=49
+2025-04-21 16:14:14,790 - src.dialogue.dialogue_manager - INFO - 伙伴: 我理解你会觉得不舒服，我不是故意冷落你，只是真的有急事脱不开身。我当时确实不知道你会这么担心，如果我知道，我一定会找机会给你个消息的。别生气了，好吗？
+2025-04-21 16:14:14,791 - LOVE - INFO - 进行第 4 轮对话
+2025-04-21 16:14:14,792 - src.dialogue.dialogue_manager - INFO - 开始第 4 轮对话
+2025-04-21 16:14:17,723 - src.dialogue.dialogue_manager - INFO - 角色: "好吗？" 你想我说"好"是吧？ 我的消息完全被你无视了一整天，这已经是第二次了。到底就不能抽5分钟给我？ 我不重要是吧？算了，反正我也没什么可说的。
+2025-04-21 16:14:17,726 - LOVE - INFO - 进行第 5 轮对话
+2025-04-21 16:14:17,726 - src.dialogue.dialogue_manager - INFO - 开始第 5 轮对话
+2025-04-21 16:14:17,727 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=75
+2025-04-21 16:14:20,680 - src.dialogue.dialogue_manager - INFO - 伙伴: 我真的很抱歉，我知道我没及时回你的消息让你感到被忽视，这不是我的本意。我觉得我们之前沟通挺好的，我没想到会这样。你能不能听我解释一下当时的情况？其实我手机静音了，根本没看到你的消息。
+2025-04-21 16:14:20,683 - LOVE - INFO - 进行第 6 轮对话
+2025-04-21 16:14:20,684 - src.dialogue.dialogue_manager - INFO - 开始第 6 轮对话
+2025-04-21 16:14:24,120 - src.dialogue.dialogue_manager - INFO - 角色: "解释"? 解释能解决问题？ 我的感受呢？ 我发那么多条消息你全无视，连个"知道了"都没有，这叫"沟通挺好"? 我们的关系是不是也像你的回复一样—只是我在发力？ 念咱们都忘了什么叫"互相"?
+2025-04-21 16:14:24,130 - LOVE - INFO - 进行第 7 轮对话
+2025-04-21 16:14:24,131 - src.dialogue.dialogue_manager - INFO - 开始第 7 轮对话
+2025-04-21 16:14:24,132 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=95
+2025-04-21 16:14:26,899 - src.dialogue.dialogue_manager - INFO - 伙伴: 我理解你现在的感受，我真的很抱歉没能及时回应你。我知道我没做到我应该做的，让你觉得我在忽视你。我承认，我确实没能很好地平衡工作和我们之间的沟通，我会努力改进的。别说没互相，我们可以重新调整一下我们的沟通方式。
+2025-04-21 16:14:26,902 - LOVE - INFO - 进行第 8 轮对话
+2025-04-21 16:14:26,902 - src.dialogue.dialogue_manager - INFO - 开始第 8 轮对话
+2025-04-21 16:14:29,867 - src.dialogue.dialogue_manager - INFO - 角色: "重新调整"? 就是说我一直在单方面努力？ 我说"没关系"的时候明显意味着我在意，但你却只看到了"没关系"三个字。工作忙就忙吧，起码有个"稍后回你"这种基本礼貌。"重新调整"? 算了...我都累了。
+2025-04-21 16:14:29,870 - LOVE - INFO - 进行第 9 轮对话
+2025-04-21 16:14:29,871 - src.dialogue.dialogue_manager - INFO - 开始第 9 轮对话
+2025-04-21 16:14:29,871 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=99
+2025-04-21 16:14:33,711 - src.dialogue.dialogue_manager - INFO - 伙伴: 我看出来了，你真的很伤心和失望。我不是故意让你觉得我在单方面付出，我只是没意识到我的行为给你带来了这么大的影响。下次我一定会尽量做到及时回应，哪怕只是简单地说句“稍后回你”。我爱你，我不想让你累。
+2025-04-21 16:14:33,714 - LOVE - INFO - 进行第 10 轮对话
+2025-04-21 16:14:33,714 - src.dialogue.dialogue_manager - INFO - 开始第 10 轮对话
+2025-04-21 16:14:37,389 - src.dialogue.dialogue_manager - INFO - 角色: "不想让我累"? 说的谁呢？ 我都这样了你才意识到？ 还是刚意识到我发脾气了？ 本来只要一句"忙中抽空给你看"就足够的，非要等我生气了才道歉。"我爱你"这话，下次给我诚实的行动，不要只看懂我的"没关系"。
+2025-04-21 16:14:37,404 - src.dialogue.dialogue_manager - INFO - 对话结果已保存到 D:\Code\NLP_CUHK\LOVE\LOVE\results\dialogues\dialogue_de157bbd
+2025-04-21 16:14:37,404 - src.dialogue.dialogue_manager - INFO - 对话 dialogue_de157bbd 已结束
+2025-04-21 16:14:37,405 - LOVE - INFO - 对话完成: dialogue_de157bbd
+2025-04-21 16:14:37,405 - LOVE - INFO - 生成对话可视化报告
+2025-04-21 16:14:37,765 - src.visualization.dialogue_visualizer - INFO - Message distribution chart saved to: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\message_distribution_20250421161437.png
+2025-04-21 16:14:38,118 - src.visualization.dialogue_visualizer - INFO - Emotion flow chart saved to: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\emotion_flow_20250421161437.png
+2025-04-21 16:14:38,485 - src.visualization.dialogue_visualizer - INFO - Message length distribution chart saved to: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\message_length_20250421161438.png
+2025-04-21 16:14:38,740 - src.visualization.dialogue_visualizer - INFO - Dialogue summary chart saved to: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\dialogue_summary_20250421161438.png
+2025-04-21 16:14:38,742 - src.visualization.dialogue_visualizer - INFO - Complete report generated: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\report_dialogue_de157bbd
+2025-04-21 16:14:38,743 - main - INFO - 对话完成: dialogue_de157bbd

@@ -1,0 +1,10 @@
+{
+  "dialogue_id": "dialogue_de157bbd",
+  "timestamp": "2025-04-21 16:14:37",
+  "visualizations": {
+    "message_distribution": "D:\\Code\\NLP_CUHK\\LOVE\\LOVE\\visualizations\\message_distribution_20250421161437.png",
+    "emotion_flow": "D:\\Code\\NLP_CUHK\\LOVE\\LOVE\\visualizations\\emotion_flow_20250421161437.png",
+    "message_length": "D:\\Code\\NLP_CUHK\\LOVE\\LOVE\\visualizations\\message_length_20250421161438.png",
+    "dialogue_summary": "D:\\Code\\NLP_CUHK\\LOVE\\LOVE\\visualizations\\dialogue_summary_20250421161438.png"
+  }
+}

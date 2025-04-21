@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2023-11-15",
+  "scenarios": [
+    {
+      "id": "scenario_001",
+      "title": "迟到的约会",
+      "brief": "伴侣迟到了重要约会，引发矛盾",
+      "type": "daily_routine",
+      "intensity": "low"
+    },
+    {
+      "id": "scenario_005",
+      "title": "未回复的消息",
+      "brief": "伴侣一整天没有回复消息，角色感到焦虑和被忽视",
+      "type": "communication_misunderstanding",
+      "intensity": "medium"
+    },
+    {
+      "id": "scenario_012",
+      "title": "突然取消计划",
+      "brief": "伴侣在最后一刻取消了共同的周末计划",
+      "type": "commitment_issue",
+      "intensity": "medium"
+    },
+    {
+      "id": "scenario_018",
+      "title": "财务分歧",
+      "brief": "对共同消费和储蓄的观念不同，引发争执",
+      "type": "value_conflict",
+      "intensity": "high"
+    },
+    {
+      "id": "scenario_023",
+      "title": "亲友关系",
+      "brief": "伴侣与角色的朋友相处不融洽，导致关系紧张",
+      "type": "social_network",
+      "intensity": "high"
+    },
+    {
+      "id": "scenario_031",
+      "title": "工作与爱情平衡",
+      "brief": "工作压力导致忽视伴侣情感需求，引发不满",
+      "type": "life_balance",
+      "intensity": "medium"
+    }
+  ],
+  "template_path": "data/scenarios/templates/",
+  "statistics": {
+    "total": 6,
+    "by_type": {
+      "daily_routine": 1,
+      "communication_misunderstanding": 1,
+      "commitment_issue": 1,
+      "value_conflict": 1,
+      "social_network": 1,
+      "life_balance": 1
+    },
+    "by_intensity": {
+      "low": 1,
+      "medium": 3,
+      "high": 2
+    }
+  }
+} 

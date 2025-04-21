@@ -1,0 +1,63 @@
+2025-04-21 15:43:00,588 - LOVE - INFO - 使用默认配置
+2025-04-21 15:43:00,593 - LOVE - INFO - 使用指定的角色和场景: char_001, scenario_005
+2025-04-21 15:43:00,594 - src.utils.data_loader - INFO - 加载角色文件: D:\Code\NLP_CUHK\LOVE\LOVE\data\characters\templates\char_001.json
+2025-04-21 15:43:00,596 - src.utils.data_loader - INFO - 加载场景文件: D:\Code\NLP_CUHK\LOVE\LOVE\data\scenarios\templates\scenario_005.json
+2025-04-21 15:43:00,599 - src.agents.character_agent - INFO - 成功加载角色: 张明
+2025-04-21 15:43:00,599 - src.agents.character_agent - INFO - 为角色 char_001 设置场景 scenario_005
+2025-04-21 15:43:00,600 - src.agents.partner_agent - INFO - 为伴侣Agent设置交互角色 张明
+2025-04-21 15:43:00,607 - src.agents.partner_agent - INFO - 为伴侣Agent设置场景 scenario_005
+2025-04-21 15:43:00,609 - src.agents.emotion_agent - INFO - 成功加载情感词典: D:\Code\NLP_CUHK\LOVE\LOVE\data\nlp\chinese_emotion_lexicon.json
+2025-04-21 15:43:00,627 - src.agents.emotion_agent - INFO - 已加载情绪阈值：积极=85，消极=15
+2025-04-21 15:43:00,628 - src.agents.emotion_agent - INFO - 为情绪监测Agent设置角色 张明
+2025-04-21 15:43:00,631 - LOVE - INFO - 开始对话: 角色 张明 - 场景 未回复的消息
+2025-04-21 15:43:00,631 - src.dialogue.dialogue_manager - INFO - 开始对话 dialogue_33e06fe3
+2025-04-21 15:43:00,632 - src.dialogue.dialogue_manager - INFO - 角色: 终于回复我了？我还以为你把我忘了呢。
+2025-04-21 15:43:00,632 - LOVE - INFO - 进行第 1 轮对话
+2025-04-21 15:43:00,632 - src.dialogue.dialogue_manager - INFO - 开始第 1 轮对话
+2025-04-21 15:43:00,633 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=18
+2025-04-21 15:43:00,641 - jieba - DEBUG - Building prefix dict from the default dictionary ...
+2025-04-21 15:43:00,644 - jieba - DEBUG - Loading model from cache C:\Users\Hanah\AppData\Local\Temp\jieba.cache
+2025-04-21 15:43:01,167 - jieba - DEBUG - Loading model cost 0.526 seconds.
+2025-04-21 15:43:01,168 - jieba - DEBUG - Prefix dict has been built successfully.
+2025-04-21 15:43:03,818 - src.dialogue.dialogue_manager - INFO - 伙伴: 对不起，我不是故意忽视你的，我今天临时有一个全天的重要会议，手机调成静音了，一整天都没机会看手机。刚一结束会议就给你回消息了，你别多想。
+2025-04-21 15:43:03,820 - LOVE - INFO - 进行第 2 轮对话
+2025-04-21 15:43:03,821 - src.dialogue.dialogue_manager - INFO - 开始第 2 轮对话
+2025-04-21 15:43:06,794 - src.dialogue.dialogue_manager - INFO - 角色: "别多想"？我还能怎么想？你一整天不回消息，正常人都会多想啊。自由了？我这心里是打翻了五味瓶呢。工作忙就忙，起码发个表情包安个心呗。"忙"这东西，分重点的。
+2025-04-21 15:43:06,796 - LOVE - INFO - 进行第 3 轮对话
+2025-04-21 15:43:06,797 - src.dialogue.dialogue_manager - INFO - 开始第 3 轮对话
+2025-04-21 15:43:06,797 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=78
+2025-04-21 15:43:09,161 - src.dialogue.dialogue_manager - INFO - 伙伴: 我理解你的感受，我不是故意冷落你，只是真的太忙了，没想到会让你这么担心。下次我尽量找机会给你发个消息，哪怕是个表情包，也好让你放心。以后我会注意的。
+2025-04-21 15:43:09,164 - LOVE - INFO - 进行第 4 轮对话
+2025-04-21 15:43:09,164 - src.dialogue.dialogue_manager - INFO - 开始第 4 轮对话
+2025-04-21 15:43:13,493 - src.dialogue.dialogue_manager - INFO - 角色: “尽量”？那得看你“尽”什么程度吧。说实话，我挺想你的，但你不给我任何反馈的时候，我会怀疑自己在你心目中到底几斤几两。下次忙到连个表情包都发不出来时，直接发个“被 kidnap 了”好了。省我俩时间。
+2025-04-21 15:43:13,503 - LOVE - INFO - 进行第 5 轮对话
+2025-04-21 15:43:13,504 - src.dialogue.dialogue_manager - INFO - 开始第 5 轮对话
+2025-04-21 15:43:13,505 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=100
+2025-04-21 15:43:16,877 - src.dialogue.dialogue_manager - INFO - 伙伴: 我知道你担心我在想什么，我确实很想你，只是没机会回复。我不是不重视你，相反，你对我很重要。以后如果实在太忙，我会找机会告诉你我在哪，或者发个简单的消息让你放心，不会让你再这么担心。
+2025-04-21 15:43:16,880 - LOVE - INFO - 进行第 6 轮对话
+2025-04-21 15:43:16,880 - src.dialogue.dialogue_manager - INFO - 开始第 6 轮对话
+2025-04-21 15:43:20,859 - src.dialogue.dialogue_manager - INFO - 角色: "重要"？那当时我在你心中榜上的排名是多少？我总得知道自己在你 systems 里的优先级吧。在单身时我倒是自由了，如今...我更希望知道自己是否被重视。工作重要，这话我懂，但我也需要存在感。"没关系"——可我其实在乎。
+2025-04-21 15:43:20,869 - LOVE - INFO - 进行第 7 轮对话
+2025-04-21 15:43:20,870 - src.dialogue.dialogue_manager - INFO - 开始第 7 轮对话
+2025-04-21 15:43:20,870 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=110
+2025-04-21 15:43:23,460 - src.dialogue.dialogue_manager - INFO - 伙伴: 你对我来说很重要，不是在工作之后才想到你，而是你一直都在我心里。你说的存在感，我理解，我会努力让你感觉到这一点。下次我会更注意，给你更多的确认和回应。
+2025-04-21 15:43:23,462 - LOVE - INFO - 进行第 8 轮对话
+2025-04-21 15:43:23,463 - src.dialogue.dialogue_manager - INFO - 开始第 8 轮对话
+2025-04-21 15:43:27,850 - src.dialogue.dialogue_manager - INFO - 角色: “努力”听起来很有形，但当你一天不发消息时，我的心情就像被放进了 bug 栈一样——全是未知的 panic。直接说你的确在想我就行了，何必卖关子。"自由"意味着放心，而我这几小时完全谈不上自由。下次直接发个“活着”就好。
+2025-04-21 15:43:27,859 - LOVE - INFO - 进行第 9 轮对话
+2025-04-21 15:43:27,860 - src.dialogue.dialogue_manager - INFO - 开始第 9 轮对话
+2025-04-21 15:43:27,861 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=110
+2025-04-21 15:43:30,762 - src.dialogue.dialogue_manager - INFO - 伙伴: 我当时确实一直在想你，只是没办法及时告诉你。我现在告诉你，我想你了，也很高兴你能感受到我的关心。下次如果太忙，我会简单说句“我在”，让你放心。
+2025-04-21 15:43:30,764 - LOVE - INFO - 进行第 10 轮对话
+2025-04-21 15:43:30,764 - src.dialogue.dialogue_manager - INFO - 开始第 10 轮对话
+2025-04-21 15:43:34,460 - src.dialogue.dialogue_manager - INFO - 角色: "我在"？那是系统通知的语气吧。算了，"没关系"——我其实又在乎了。反正我需要的不是"在"，而是"在心上"。先发个猫咪表情包算是弥补吧。"忙"字诀：猫咪 > 工作 > 我。
+2025-04-21 15:43:34,464 - src.dialogue.dialogue_manager - INFO - 对话结果已保存到 D:\Code\NLP_CUHK\LOVE\LOVE\results\dialogues\dialogue_33e06fe3
+2025-04-21 15:43:34,464 - src.dialogue.dialogue_manager - INFO - 对话 dialogue_33e06fe3 已结束
+2025-04-21 15:43:34,465 - LOVE - INFO - 对话完成: dialogue_33e06fe3
+2025-04-21 15:43:34,465 - LOVE - INFO - 生成对话可视化报告
+2025-04-21 15:43:34,856 - src.visualization.dialogue_visualizer - INFO - Message distribution chart saved to: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\message_distribution_20250421154334.png
+2025-04-21 15:43:35,233 - src.visualization.dialogue_visualizer - INFO - Emotion flow chart saved to: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\emotion_flow_20250421154334.png
+2025-04-21 15:43:35,658 - src.visualization.dialogue_visualizer - INFO - Message length distribution chart saved to: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\message_length_20250421154335.png
+2025-04-21 15:43:35,945 - src.visualization.dialogue_visualizer - INFO - Dialogue summary chart saved to: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\dialogue_summary_20250421154335.png
+2025-04-21 15:43:35,947 - src.visualization.dialogue_visualizer - INFO - Complete report generated: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\report_dialogue_33e06fe3
+2025-04-21 15:43:35,947 - main - INFO - 对话完成: dialogue_33e06fe3

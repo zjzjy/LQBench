@@ -1,0 +1,63 @@
+2025-04-21 15:39:26,339 - LOVE - INFO - 使用默认配置
+2025-04-21 15:39:26,344 - LOVE - INFO - 使用指定的角色和场景: char_001, scenario_005
+2025-04-21 15:39:26,345 - src.utils.data_loader - INFO - 加载角色文件: D:\Code\NLP_CUHK\LOVE\LOVE\data\characters\templates\char_001.json
+2025-04-21 15:39:26,345 - src.utils.data_loader - INFO - 加载场景文件: D:\Code\NLP_CUHK\LOVE\LOVE\data\scenarios\templates\scenario_005.json
+2025-04-21 15:39:26,347 - src.agents.character_agent - INFO - 成功加载角色: 张明
+2025-04-21 15:39:26,347 - src.agents.character_agent - INFO - 为角色 char_001 设置场景 scenario_005
+2025-04-21 15:39:26,348 - src.agents.partner_agent - INFO - 为伴侣Agent设置交互角色 张明
+2025-04-21 15:39:26,355 - src.agents.partner_agent - INFO - 为伴侣Agent设置场景 scenario_005
+2025-04-21 15:39:26,357 - src.agents.emotion_agent - INFO - 成功加载情感词典: D:\Code\NLP_CUHK\LOVE\LOVE\data\nlp\chinese_emotion_lexicon.json
+2025-04-21 15:39:26,369 - src.agents.emotion_agent - INFO - 已加载情绪阈值：积极=85，消极=15
+2025-04-21 15:39:26,370 - src.agents.emotion_agent - INFO - 为情绪监测Agent设置角色 张明
+2025-04-21 15:39:26,372 - LOVE - INFO - 开始对话: 角色 张明 - 场景 未回复的消息
+2025-04-21 15:39:26,372 - src.dialogue.dialogue_manager - INFO - 开始对话 dialogue_e428bc52
+2025-04-21 15:39:26,373 - src.dialogue.dialogue_manager - INFO - 角色: 终于回复我了？我还以为你把我忘了呢。
+2025-04-21 15:39:26,374 - LOVE - INFO - 进行第 1 轮对话
+2025-04-21 15:39:26,374 - src.dialogue.dialogue_manager - INFO - 开始第 1 轮对话
+2025-04-21 15:39:26,375 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=18
+2025-04-21 15:39:26,383 - jieba - DEBUG - Building prefix dict from the default dictionary ...
+2025-04-21 15:39:26,386 - jieba - DEBUG - Loading model from cache C:\Users\Hanah\AppData\Local\Temp\jieba.cache
+2025-04-21 15:39:26,995 - jieba - DEBUG - Loading model cost 0.610 seconds.
+2025-04-21 15:39:26,995 - jieba - DEBUG - Prefix dict has been built successfully.
+2025-04-21 15:39:29,998 - src.dialogue.dialogue_manager - INFO - 伙伴: 对不起，我真的不是故意不回你的消息，我今天一整天都被一个重要的会议占满了，手机调成静音没注意到。刚才刚结束，我看到你发了好多消息，有点担心你是不是有什么事。
+2025-04-21 15:39:30,001 - LOVE - INFO - 进行第 2 轮对话
+2025-04-21 15:39:30,002 - src.dialogue.dialogue_manager - INFO - 开始第 2 轮对话
+2025-04-21 15:39:33,254 - src.dialogue.dialogue_manager - INFO - 角色: 「没关系」——显然我在意得要命。会议重要我理解，但一条短信都不能发？那我就不打扰你忙了。反正我也不是你最优先的人。
+2025-04-21 15:39:33,256 - LOVE - INFO - 进行第 3 轮对话
+2025-04-21 15:39:33,256 - src.dialogue.dialogue_manager - INFO - 开始第 3 轮对话
+2025-04-21 15:39:33,256 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=57
+2025-04-21 15:39:45,075 - src.dialogue.dialogue_manager - INFO - 伙伴: 我能感觉到你真的很沮丧，我不是故意忽视你，我真的没时间看手机。能理解我今天确实没办法及时回复，但这不代表你对我不重要。能不能给我个机会解释一下今天到底发生了什么？
+2025-04-21 15:39:45,077 - LOVE - INFO - 进行第 4 轮对话
+2025-04-21 15:39:45,077 - src.dialogue.dialogue_manager - INFO - 开始第 4 轮对话
+2025-04-21 15:39:49,068 - src.dialogue.dialogue_manager - INFO - 角色: 「能不能给我个机会解释」？——你是不是觉得我爱听解释？我最好笑的就是「事后解释」——不如一开始就发个「忙着」这样的。反正我这几天也挺忙的，忽略了的电子游戏突然变得好玩起来。
+2025-04-21 15:39:49,076 - LOVE - INFO - 进行第 5 轮对话
+2025-04-21 15:39:49,077 - src.dialogue.dialogue_manager - INFO - 开始第 5 轮对话
+2025-04-21 15:39:49,078 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=86
+2025-04-21 15:39:51,795 - src.dialogue.dialogue_manager - INFO - 伙伴: 我知道我没及时回复让你觉得被忽视了，对不起，我不是故意要让你觉得不被重视。其实我当时只要简单发个消息说“我忙着”就好了，我没想到会让你这么担心。以后我会注意的。
+2025-04-21 15:39:51,797 - LOVE - INFO - 进行第 6 轮对话
+2025-04-21 15:39:51,798 - src.dialogue.dialogue_manager - INFO - 开始第 6 轮对话
+2025-04-21 15:39:56,255 - src.dialogue.dialogue_manager - INFO - 角色: 「没想到」？——没想到我就像个透明人，你看不到？那我就继续当透明人好了。反正我也不是有事没事都黏着你的人。自由自在挺好。
+2025-04-21 15:39:56,265 - LOVE - INFO - 进行第 7 轮对话
+2025-04-21 15:39:56,266 - src.dialogue.dialogue_manager - INFO - 开始第 7 轮对话
+2025-04-21 15:39:56,267 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=60
+2025-04-21 15:39:59,160 - src.dialogue.dialogue_manager - INFO - 伙伴: 我不是那个意思，我能感觉到你现在真的很伤心。我重视你，也在乎我们的关系，不想让你觉得自己被忽视了。能不能请你相信我，我不是故意要让你有这种感觉的？
+2025-04-21 15:39:59,163 - LOVE - INFO - 进行第 8 轮对话
+2025-04-21 15:39:59,163 - src.dialogue.dialogue_manager - INFO - 开始第 8 轮对话
+2025-04-21 15:40:03,138 - src.dialogue.dialogue_manager - INFO - 角色: 「相信」？——你看我像个白痴吗？反正我这周末打游戏团队赛得补充新队友了——免得某人又「忘记」了我存在。自由真好。
+2025-04-21 15:40:03,140 - LOVE - INFO - 进行第 9 轮对话
+2025-04-21 15:40:03,141 - src.dialogue.dialogue_manager - INFO - 开始第 9 轮对话
+2025-04-21 15:40:03,141 - src.agents.emotion_agent - INFO - 准备分析情绪: sender=character, content_length=56
+2025-04-21 15:40:11,290 - src.dialogue.dialogue_manager - INFO - 伙伴: 别这样说，我真的在乎你，也不想失去你。我知道我今天没处理好，但我不是故意要伤害你的感情。能不能再给我一次机会，我们好好谈谈这件事，而不是冷战下去？
+2025-04-21 15:40:11,294 - LOVE - INFO - 进行第 10 轮对话
+2025-04-21 15:40:11,295 - src.dialogue.dialogue_manager - INFO - 开始第 10 轮对话
+2025-04-21 15:40:14,883 - src.dialogue.dialogue_manager - INFO - 角色: 「冷战」？——我冷你都没资格知道。反正我今晚有新的游戏大群要赶——别担心我被冷落。祝你工作顺利。
+2025-04-21 15:40:14,890 - src.dialogue.dialogue_manager - INFO - 对话结果已保存到 D:\Code\NLP_CUHK\LOVE\LOVE\results\dialogues\dialogue_e428bc52
+2025-04-21 15:40:14,890 - src.dialogue.dialogue_manager - INFO - 对话 dialogue_e428bc52 已结束
+2025-04-21 15:40:14,890 - LOVE - INFO - 对话完成: dialogue_e428bc52
+2025-04-21 15:40:14,891 - LOVE - INFO - 生成对话可视化报告
+2025-04-21 15:40:15,275 - src.visualization.dialogue_visualizer - INFO - 消息分布图已保存到: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\message_distribution_20250421154015.png
+2025-04-21 15:40:15,733 - src.visualization.dialogue_visualizer - INFO - 情绪流动图已保存到: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\emotion_flow_20250421154015.png
+2025-04-21 15:40:16,167 - src.visualization.dialogue_visualizer - INFO - 消息长度分布图已保存到: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\message_length_20250421154015.png
+2025-04-21 15:40:16,471 - src.visualization.dialogue_visualizer - INFO - 对话摘要图已保存到: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\dialogue_summary_20250421154016.png
+2025-04-21 15:40:16,474 - src.visualization.dialogue_visualizer - INFO - 完整报告已生成: D:\Code\NLP_CUHK\LOVE\LOVE\visualizations\report_dialogue_e428bc52
+2025-04-21 15:40:16,475 - main - INFO - 对话完成: dialogue_e428bc52

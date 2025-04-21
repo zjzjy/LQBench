@@ -1,0 +1,27 @@
+{
+  "dialogue_id": "dialogue_de157bbd",
+  "start_time": "20250421161405",
+  "end_time": "20250421161437",
+  "total_turns": 10,
+  "summary": {
+    "total_messages": 11,
+    "character_messages": 6,
+    "partner_messages": 5,
+    "first_message": "终于回复我了？我还以为你把我忘了呢。",
+    "last_message": "\"不想让我累\"? 说的谁呢？ 我都这样了你才意识到？ 还是刚意识到我发脾气了？ 本来只要一句\"忙中抽空给你看\"就足够的，非要等我生气了才道歉。\"我爱你\"这话，下次给我诚实的行动，不要只看懂我的\"没关系\"。"
+  },
+  "evaluation": {
+    "overall_score": 0,
+    "emotion_changes": [],
+    "key_points": [],
+    "initial_emotion": "sad",
+    "initial_intensity": 42.0,
+    "final_emotion": "afraid",
+    "final_intensity": 46.0,
+    "emotion_trend": "stable",
+    "intensity_change": 4.0,
+    "dominant_emotion": "sad",
+    "character_messages": 6,
+    "summary": "对话过程中情绪情绪基本稳定，强度变化4.0点，主要表现为悲伤情绪"
+  }
+}
