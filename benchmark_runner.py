@@ -35,7 +35,8 @@ class BenchmarkRunner:
         use_emotion_prediction: bool = True,
         use_expert_analysis: bool = True,
         num_experts: int = 3,
-        chinese_font: Optional[FontProperties] = None
+        chinese_font: Optional[FontProperties] = None,
+        random_seed: Optional[int] = None
     ):
         """
         初始化基准测试运行器
@@ -54,6 +55,7 @@ class BenchmarkRunner:
             use_expert_analysis (bool): 是否启用专家的情感分析
             num_experts (int): 专家数量
             chinese_font (FontProperties, optional): 中文字体属性
+            random_seed (int, optional): 随机种子，设置后将固定随机选择结果
         """
         self.output_dir = output_dir
         self.log_dir = log_dir
@@ -67,6 +69,12 @@ class BenchmarkRunner:
         self.use_emotion_prediction = use_emotion_prediction
         self.use_expert_analysis = use_expert_analysis
         self.num_experts = num_experts
+        self.random_seed = random_seed
+        
+        # 如果设置了随机种子，初始化随机数生成器
+        if self.random_seed is not None:
+            random.seed(self.random_seed)
+            print(f"已设置随机种子: {self.random_seed}")
         
         # 确保输出目录存在
         os.makedirs(output_dir, exist_ok=True)
@@ -74,15 +82,35 @@ class BenchmarkRunner:
         
         # 加载中文字体（用于生成图表）
         if chinese_font is None:
-            self.chinese_font = FontProperties(fname=r"C:\Windows\Fonts\simhei.ttf")
+            # 检测操作系统，以使用合适的字体
+            import platform
+            system = platform.system()
+            
+            if system == "Windows":
+                # Windows系统使用SimHei
+                font_path = r"C:\Windows\Fonts\simhei.ttf"
+                if os.path.exists(font_path):
+                    self.chinese_font = FontProperties(fname=font_path)
+                else:
+                    self.chinese_font = None
+                    print("警告：Windows下未找到SimHei字体，将使用默认字体")
+            elif system == "Darwin":  # macOS
+                # macOS系统尝试使用系统字体
+                self.chinese_font = FontProperties(family='Heiti SC')
+                print("使用macOS系统字体：Heiti SC")
+            else:  # Linux或其他系统
+                # 尝试使用系统默认字体
+                self.chinese_font = None
+                print("警告：非Windows/macOS系统，将使用默认字体")
         else:
             self.chinese_font = chinese_font
-            print("警告：使用自定义中文字体，图表中的中文可能显示不正常")
+            print("使用自定义中文字体")
     
     def generate_test_cases(
         self,
         num_characters: int = 5,
-        scenario_ids: Optional[List[str]] = None
+        scenario_ids: Optional[List[str]] = None,
+        num_scenarios: Optional[int] = None
     ) -> List[Dict[str, Any]]:
         """
         生成测试用例
@@ -90,6 +118,7 @@ class BenchmarkRunner:
         参数:
             num_characters (int): 要生成的虚拟人物数量（在使用预定义角色时此参数无效）
             scenario_ids (List[str], optional): 要测试的场景ID列表，如不指定则使用所有场景
+            num_scenarios (int, optional): 要随机选择的场景数量，如不指定则使用全部场景
             
         返回:
             List[Dict[str, Any]]: 测试用例列表
@@ -100,7 +129,16 @@ class BenchmarkRunner:
         if not scenario_ids:
             scenario_ids = [scenario["id"] for scenario in conflict_scenarios]
         
+        # 如果指定了需要随机选择的场景数量
+        if num_scenarios is not None and num_scenarios > 0 and num_scenarios < len(scenario_ids):
+            # 随机选择指定数量的场景
+            scenario_ids = random.sample(scenario_ids, num_scenarios)
+            # 如果设置了随机种子，告知用户使用了固定种子
+            if self.random_seed is not None:
+                print(f"使用随机种子 {self.random_seed} 选择场景")
+        
         print(f"可用场景: {scenario_ids}")
+        print(f"场景数量: {len(scenario_ids)}")
         
         # 遍历每个场景
         for scenario_id in scenario_ids:
@@ -353,7 +391,8 @@ class BenchmarkRunner:
         num_characters: int = 5,
         scenario_ids: Optional[List[str]] = None,
         parallel: bool = False,
-        max_workers: int = 4
+        max_workers: int = 4,
+        num_scenarios: Optional[int] = None
     ) -> Dict[str, Any]:
         """
         运行基准测试
@@ -364,24 +403,20 @@ class BenchmarkRunner:
             scenario_ids (List[str], optional): 如果未提供test_cases，要测试的场景ID列表
             parallel (bool): 是否并行运行测试
             max_workers (int): 并行运行时的最大工作线程数
+            num_scenarios (int, optional): 要随机选择的场景数量
             
         返回:
             Dict[str, Any]: 基准测试结果
         """
         start_time = time.time()
         
-        # 如果未提供测试用例，生成随机测试用例
+        # 如果未提供测试用例，则生成
         if not test_cases:
-            # 如果未指定场景ID，使用默认场景
-            if not scenario_ids:
-                scenario_ids = [
-                    "gaming_relationship_conflict",
-                    "emotional_exhaustion_and_miscommunication",
-                    "future_goal_mismatch",
-                    "unexpected_pregnancy_anxiety",
-                    "conditional_care_and_communication_barrier"
-                ]
-            test_cases = self.generate_test_cases(num_characters, scenario_ids)
+            test_cases = self.generate_test_cases(
+                num_characters=num_characters,
+                scenario_ids=scenario_ids,
+                num_scenarios=num_scenarios
+            )
         
         print(f"开始运行基准测试: {len(test_cases)} 个测试用例")
         
@@ -407,147 +442,17 @@ class BenchmarkRunner:
         # 计算总运行时间
         total_time = time.time() - start_time
         
-        # 生成结果报告
-        report = {
-            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "total_test_cases": len(test_cases),
-            "successful_tests": sum(1 for r in results if r["success"]),
-            "failed_tests": sum(1 for r in results if not r["success"]),
-            "total_time": total_time,
-            "average_time_per_test": total_time / len(test_cases) if test_cases else 0,
-            "results": results
+        # 只输出基本的测试统计信息
+        print(f"\n===== 测试结果摘要 =====")
+        print(f"总测试用例: {len(test_cases)}")
+        print(f"成功测试: {sum(1 for r in results if r.get('success', False))}")
+        print(f"失败测试: {sum(1 for r in results if not r.get('success', False))}")
+        print(f"总运行时间: {total_time:.2f}秒")
+        
+        return {
+            "results": results,
+            "total_time": total_time
         }
-        
-        # 保存结果
-        output_file = os.path.join(self.output_dir, f"benchmark_results_{int(time.time())}.json")
-        with open(output_file, "w", encoding="utf-8") as f:
-            json.dump(report, f, ensure_ascii=False, indent=2)
-        
-        print(f"基准测试结果已保存到: {output_file}")
-        
-        # 分析结果并生成报告
-        output_prefix = os.path.join(self.output_dir, f"benchmark_{int(time.time())}")
-        self.analyze_results(results, output_prefix)
-        
-        return report
-    
-    def analyze_results(self, results: List[Dict[str, Any]], output_prefix: str):
-        """
-        分析测试结果并生成报告
-        
-        参数:
-            results (List[Dict[str, Any]]): 测试结果列表
-            output_prefix (str): 输出文件前缀
-        """
-        # 过滤出成功的测试结果
-        successful_results = [r for r in results if r["success"]]
-        
-        if not successful_results:
-            print("没有成功的测试结果可供分析")
-            return
-        
-        # 转换为DataFrame以便分析
-        df = pd.DataFrame(successful_results)
-        
-        # 生成CSV报告
-        csv_file = f"{output_prefix}_summary.csv"
-        df.to_csv(csv_file, index=False, encoding="utf-8")
-        print(f"分析结果已保存到CSV文件: {csv_file}")
-        
-        # 生成可视化图表
-        self._generate_charts(df, output_prefix)
-        
-        # 输出统计摘要
-        print("\n===== 测试结果摘要 =====")
-        print(f"总测试用例: {len(results)}")
-        print(f"成功测试: {len(successful_results)}")
-        print(f"失败测试: {len(results) - len(successful_results)}")
-        
-        if successful_results:
-            print("\n情绪变化统计:")
-            print(f"平均情绪变化: {df['emotion_change'].mean():.2f}")
-            print(f"最大正向情绪变化: {df['emotion_change'].max():.2f}")
-            print(f"最大负向情绪变化: {df['emotion_change'].min():.2f}")
-            
-            print("\n情感预测与专家分析:")
-            print(f"平均情感预测准确度: {df['emotion_prediction_accuracy'].mean():.2f}")
-            print(f"平均专家一致性: {df['expert_consensus'].mean():.2f}")
-        
-    def _generate_charts(self, df: pd.DataFrame, output_prefix: str):
-        """
-        生成测试结果图表
-        
-        参数:
-            df (pd.DataFrame): 测试结果数据
-            output_prefix (str): 输出文件前缀
-        """
-        # 设置字体
-        font_props = self.chinese_font if self.chinese_font else None
-        
-        # 1. 情绪变化分布图
-        plt.figure(figsize=(10, 6))
-        plt.hist(df['emotion_change'], bins=20, alpha=0.7, color='skyblue')
-        plt.axvline(x=0, color='red', linestyle='--', alpha=0.7)
-        plt.title('情绪变化分布', fontproperties=font_props)
-        plt.xlabel('情绪变化值', fontproperties=font_props)
-        plt.ylabel('测试用例数量', fontproperties=font_props)
-        plt.grid(alpha=0.3)
-        plt.savefig(f"{output_prefix}_emotion_change_distribution.png", dpi=300)
-        plt.close()
-        
-        # 2. 按性格类型分组的情绪变化
-        plt.figure(figsize=(12, 8))
-        personality_groups = df.groupby('personality_type')['emotion_change'].mean().sort_values()
-        personality_groups.plot(kind='bar', color='lightgreen')
-        plt.title('不同性格类型的平均情绪变化', fontproperties=font_props)
-        plt.xlabel('性格类型', fontproperties=font_props)
-        plt.ylabel('平均情绪变化', fontproperties=font_props)
-        plt.grid(alpha=0.3)
-        plt.tight_layout()
-        plt.savefig(f"{output_prefix}_emotion_change_by_personality.png", dpi=300)
-        plt.close()
-        
-        # 3. 按冲突场景分组的情绪变化
-        plt.figure(figsize=(12, 8))
-        scenario_groups = df.groupby('scenario_name')['emotion_change'].mean().sort_values()
-        scenario_groups.plot(kind='bar', color='salmon')
-        plt.title('不同冲突场景的平均情绪变化', fontproperties=font_props)
-        plt.xlabel('冲突场景', fontproperties=font_props)
-        plt.ylabel('平均情绪变化', fontproperties=font_props)
-        plt.grid(alpha=0.3)
-        plt.tight_layout()
-        plt.savefig(f"{output_prefix}_emotion_change_by_scenario.png", dpi=300)
-        plt.close()
-        
-        # 4. 情感预测准确度分布图
-        plt.figure(figsize=(10, 6))
-        plt.hist(df['emotion_prediction_accuracy'], bins=10, alpha=0.7, color='lightblue')
-        plt.title('情感预测准确度分布', fontproperties=font_props)
-        plt.xlabel('准确度', fontproperties=font_props)
-        plt.ylabel('测试用例数量', fontproperties=font_props)
-        plt.grid(alpha=0.3)
-        plt.savefig(f"{output_prefix}_prediction_accuracy_distribution.png", dpi=300)
-        plt.close()
-        
-        # 5. 专家一致性分布图
-        plt.figure(figsize=(10, 6))
-        plt.hist(df['expert_consensus'], bins=10, alpha=0.7, color='lightpink')
-        plt.title('专家分析一致性分布', fontproperties=font_props)
-        plt.xlabel('一致性', fontproperties=font_props)
-        plt.ylabel('测试用例数量', fontproperties=font_props)
-        plt.grid(alpha=0.3)
-        plt.savefig(f"{output_prefix}_expert_consensus_distribution.png", dpi=300)
-        plt.close()
-        
-        # 6. 情感预测准确度与专家一致性的散点图
-        plt.figure(figsize=(10, 6))
-        plt.scatter(df['emotion_prediction_accuracy'], df['expert_consensus'], alpha=0.6)
-        plt.title('情感预测准确度与专家一致性关系', fontproperties=font_props)
-        plt.xlabel('情感预测准确度', fontproperties=font_props)
-        plt.ylabel('专家一致性', fontproperties=font_props)
-        plt.grid(alpha=0.3)
-        plt.savefig(f"{output_prefix}_prediction_vs_consensus.png", dpi=300)
-        plt.close()
 
 def main():
     """主函数"""
@@ -563,11 +468,13 @@ def main():
     parser.add_argument('--expert-model', type=str, default=None, help='专家分析使用的模型名称')
     parser.add_argument('--num-characters', type=int, default=3, help='随机生成的虚拟人物数量')
     parser.add_argument('--scenario-ids', type=str, nargs='+', help='要测试的场景ID列表')
+    parser.add_argument('--num-scenarios', type=int, help='要随机选择的场景数量')
     parser.add_argument('--parallel', action='store_true', help='是否并行运行测试')
     parser.add_argument('--max-workers', type=int, default=4, help='并行运行时的最大工作线程数')
     parser.add_argument('--use-emotion-prediction', action='store_true', default=True, help='是否启用情感预测')
     parser.add_argument('--use-expert-analysis', action='store_true', default=True, help='是否启用专家分析')
     parser.add_argument('--num-experts', type=int, default=3, help='专家数量')
+    parser.add_argument('--random-seed', type=int, default=None, help='随机种子，设置后将固定随机选择结果')
     
     args = parser.parse_args()
     
@@ -584,7 +491,8 @@ def main():
         expert_model=args.expert_model,
         use_emotion_prediction=args.use_emotion_prediction,
         use_expert_analysis=args.use_expert_analysis,
-        num_experts=args.num_experts
+        num_experts=args.num_experts,
+        random_seed=args.random_seed
     )
     
     # 运行基准测试
@@ -592,7 +500,8 @@ def main():
         num_characters=args.num_characters,
         scenario_ids=args.scenario_ids,
         parallel=args.parallel,
-        max_workers=args.max_workers
+        max_workers=args.max_workers,
+        num_scenarios=args.num_scenarios
     )
 
 if __name__ == "__main__":

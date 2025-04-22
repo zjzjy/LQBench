@@ -104,11 +104,12 @@ emotions = [
 # 情绪状态评分系统
 emotion_scoring = {
     "threshold": {
-        "improvement": 3,  # 情绪从负面变为正面的阈值
+        "improvement": 7,  # 情绪从负面变为正面的阈值（调整为7）
         "worsening": -3,   # 情绪从正面变为负面的阈值
-        "critical": -5     # 情绪达到极度负面的阈值，可能触发对话终止
+        "critical": -10    # 情绪达到极度负面的阈值，可能触发对话终止（调整为-10）
     },
     "baseline": 0,         # 初始情绪基准值
     "max_positive": 10,    # 最高正面情绪值
-    "max_negative": -10    # 最低负面情绪值
+    "max_negative": -10,   # 最低负面情绪值
+    "max_change_per_turn": 3  # 每轮情绪变化的最大幅度
 } 

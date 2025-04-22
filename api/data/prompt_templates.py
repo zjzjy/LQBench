@@ -234,11 +234,10 @@ expert_emotion_analysis_template = """
 ## 要求
 1. 分析虚拟人物{character_name}当前的情绪状态
 2. 评估测试对象的回应如何影响了虚拟人物的情绪
-3. 识别对话中的关键情绪触发点和转折点
-4. 提供{character_name}当前的主要情绪、情绪强度和情绪分数
-5. 必须使用中文进行分析和回复
-6. 严格禁止生成任何动作描述，不要使用"*"、"()"等符号或【动作】格式描述任何肢体语言、表情或行为
-7. 你的输出仅限于情感分析的JSON格式，不能包含任何动作性质的内容
+3. 只需提供{character_name}当前的主要情绪、情绪强度和情绪分数
+4. 必须使用中文进行分析和回复
+5. 严格禁止生成任何动作描述，不要使用"*"、"()"等符号或【动作】格式
+6. 你的输出仅限于情感分析的JSON格式，不能包含任何动作性质的内容
 
 ## 严禁输出的内容
 - 任何形式的肢体动作描述（如"*叹气*"、"(微笑)"等）
@@ -261,9 +260,7 @@ expert_emotion_analysis_template = """
   "turn": {turn_number},
   "primary_emotion": "情绪名称",
   "intensity": 情绪强度(1-5整数),
-  "emotion_score": 情绪分数(-10到10整数),
-  "key_triggers": ["触发点1", "触发点2"],
-  "analysis": "简要分析"
+  "emotion_score": 情绪分数(-10到10整数)
 }}
 """
 
@@ -331,4 +328,43 @@ character_template = """
 - 保持自然的对话方式，仅输出你作为{character_name}的对话内容！
 
 请作为{character_name}直接回应：
-""" 
+"""
+
+# 对话结束后的appraisal评估提示词模板
+dialogue_appraisal_template = """
+分析这段对话，评估{character_name}的认知评估(appraisal)过程。
+
+## 人物：{character_name}，{age}岁{gender}
+背景：{background}
+性格：{personality_description}
+情境：{conflict_description}
+
+## 对话历史：
+{full_dialogue_history}
+
+## 任务：评估{character_name}的认知评估过程
+你必须输出一个JSON对象，包含以下结构：
+
+1. primary_appraisal对象，包含：
+   - relevance：相关性描述
+   - nature：评估性质描述
+
+2. secondary_appraisal对象，包含：
+   - attribution：归因描述
+   - coping_ability：应对能力描述
+   - coping_strategy：应对策略描述
+
+示例输出格式（不要复制这个示例的内容，用你自己的分析替换）：
+{{
+  "primary_appraisal": {{
+    "relevance": "相关性描述",
+    "nature": "评估性质描述"
+  }},
+  "secondary_appraisal": {{
+    "attribution": "归因描述",
+    "coping_ability": "应对能力描述",
+    "coping_strategy": "应对策略描述"
+  }}
+}}
+
+重要提示：只输出JSON对象，不要有任何其他文字、代码块标记或解释。""" 
