@@ -1,0 +1,413 @@
+{
+  "character": {
+    "id": "emotional_needs_mismatch_high_emotional_needs",
+    "name": "未知",
+    "gender": "男",
+    "age": 25,
+    "personality_type": "neuroticism_high",
+    "relationship_belief": "destiny_belief_high",
+    "communication_type": "direct_cooperation",
+    "attachment_style": "anxious",
+    "background": "大学时期开始恋爱，目前工作朝九晚五，偶尔需要出差外勤",
+    "trigger_topics": [
+      "减少周末往来",
+      "不打电话"
+    ],
+    "coping_mechanisms": [
+      "期待每周见面",
+      "挂电话确保安全"
+    ],
+    "suggested_primary_appraisal": {
+      "relevance": "威胁到感情安全感",
+      "nature": "评估为威胁，潜在情绪反应为焦虑和恐惧"
+    },
+    "suggested_secondary_appraisal": {
+      "attribution": "责怪他人",
+      "coping_ability": "感到无力",
+      "coping_strategy": "直接沟通和情绪表达"
+    },
+    "suggested_emotions": [
+      "焦虑",
+      "恐惧",
+      "渴望被理解"
+    ]
+  },
+  "scenario": {
+    "scenario": {
+      "id": "emotional_needs_mismatch",
+      "name": "情感需求不匹配",
+      "description": "情侣双方在情感需求上存在显著差异，一方需要更多的情感互动和关注，而另一方则倾向于更独立和低情感需求的生活方式。这种差异在异地和工作压力下被放大，导致双方都感到疲惫和不满。",
+      "situations": [
+        {
+          "id": "high_emotional_needs",
+          "name": "高情感需求方",
+          "description": "这一方在关系中需要更多的情感互动和关注，倾向于通过频繁的见面和沟通来维持关系。异地和工作压力让他们感到情感需求得不到满足，同时也会因为对方的冷淡或疏远而感到受伤。",
+          "example": "男朋友是高情感需求人，期待每周见面，即使工作很累也坚持周末互相去对方的城市。他认为减少见面或电话是不负责任的行为。",
+          "typical_triggers": [
+            "异地关系",
+            "工作压力",
+            "情感互动减少",
+            "对方的冷淡态度"
+          ]
+        },
+        {
+          "id": "low_emotional_needs",
+          "name": "低情感需求方",
+          "description": "这一方在关系中需要较少的互动和关注，倾向于独立和自由的生活方式。异地和工作压力让他们更倾向于减少互动以节省精力，但对方的高需求让他们感到压力和内疚。",
+          "example": "我是低情感需求人，提出可以减少周末往来和电话，认为不想来可以不来，不想打电话可以不打。但对方认为这种态度不负责任。",
+          "typical_triggers": [
+            "工作压力",
+            "异地关系",
+            "对方的高情感需求",
+            "互动带来的疲惫感"
+          ]
+        }
+      ]
+    },
+    "situation": {
+      "id": "high_emotional_needs",
+      "name": "高情感需求方",
+      "description": "这一方在关系中需要更多的情感互动和关注，倾向于通过频繁的见面和沟通来维持关系。异地和工作压力让他们感到情感需求得不到满足，同时也会因为对方的冷淡或疏远而感到受伤。",
+      "example": "男朋友是高情感需求人，期待每周见面，即使工作很累也坚持周末互相去对方的城市。他认为减少见面或电话是不负责任的行为。",
+      "typical_triggers": [
+        "异地关系",
+        "工作压力",
+        "情感互动减少",
+        "对方的冷淡态度"
+      ]
+    }
+  },
+  "dialogue_history": [
+    {
+      "turn": 1,
+      "character_name": "未知",
+      "character_message": "这周你都没主动给我打电话，我感觉很难过",
+      "emotion_info": {
+        "emotions": [
+          "悲伤"
+        ],
+        "score": -6,
+        "previous_score": -4,
+        "change": -2,
+        "expert_analyses": [
+          {
+            "turn": 1,
+            "primary_emotion": "悲伤",
+            "intensity": 4,
+            "emotion_score": -6,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:34:39"
+          }
+        ]
+      },
+      "partner_message": "工作太忙了，真的抽不出时间",
+      "dialogue_ended": false
+    },
+    {
+      "turn": 2,
+      "character_name": "未知",
+      "character_message": "我知道你忙，但能不能每天至少发个消息",
+      "emotion_info": {
+        "emotions": [
+          "沮丧"
+        ],
+        "score": -6,
+        "previous_score": -6,
+        "change": 0,
+        "expert_analyses": [
+          {
+            "turn": 2,
+            "primary_emotion": "沮丧",
+            "intensity": 4,
+            "emotion_score": -6,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:35:41"
+          }
+        ]
+      },
+      "partner_message": "对不起 我以后一定记得每天发消息",
+      "dialogue_ended": false
+    },
+    {
+      "turn": 3,
+      "character_name": "未知",
+      "character_message": "我知道你工作很辛苦\n但每天一条消息真的很难做到吗",
+      "emotion_info": {
+        "emotions": [
+          "沮丧"
+        ],
+        "score": -6,
+        "previous_score": -6,
+        "change": 0,
+        "expert_analyses": [
+          {
+            "turn": 3,
+            "primary_emotion": "沮丧",
+            "intensity": 4,
+            "emotion_score": -6,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:37:19"
+          }
+        ]
+      },
+      "partner_message": "是我不好 以后每天都会记得联系你",
+      "dialogue_ended": false
+    },
+    {
+      "turn": 4,
+      "character_name": "未知",
+      "character_message": "你每次都这样说",
+      "emotion_info": {
+        "emotions": [
+          "失望"
+        ],
+        "score": -6,
+        "previous_score": -6,
+        "change": 0,
+        "expert_analyses": [
+          {
+            "turn": 4,
+            "primary_emotion": "失望",
+            "intensity": 4,
+            "emotion_score": -6,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:39:01"
+          }
+        ]
+      },
+      "partner_message": "这次是真的 我保证 要不我们定个闹钟提醒",
+      "dialogue_ended": false
+    },
+    {
+      "turn": 5,
+      "character_name": "未知",
+      "character_message": "闹钟有什么用\n你心里没我才会忘记",
+      "emotion_info": {
+        "emotions": [
+          "失望"
+        ],
+        "score": -6,
+        "previous_score": -6,
+        "change": 0,
+        "expert_analyses": [
+          {
+            "turn": 5,
+            "primary_emotion": "失望",
+            "intensity": 4,
+            "emotion_score": -6,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:40:16"
+          }
+        ]
+      },
+      "partner_message": null,
+      "dialogue_ended": true,
+      "end_reason": "达到最大对话轮次"
+    }
+  ],
+  "emotion_history": [
+    {
+      "turn": 1,
+      "emotion_info": {
+        "emotions": [
+          "悲伤"
+        ],
+        "score": -6,
+        "previous_score": -4,
+        "change": -2,
+        "expert_analyses": [
+          {
+            "turn": 1,
+            "primary_emotion": "悲伤",
+            "intensity": 4,
+            "emotion_score": -6,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:34:39"
+          }
+        ]
+      },
+      "score": -6,
+      "previous_score": -4,
+      "change": -2
+    },
+    {
+      "turn": 2,
+      "emotion_info": {
+        "emotions": [
+          "沮丧"
+        ],
+        "score": -6,
+        "previous_score": -6,
+        "change": 0,
+        "expert_analyses": [
+          {
+            "turn": 2,
+            "primary_emotion": "沮丧",
+            "intensity": 4,
+            "emotion_score": -6,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:35:41"
+          }
+        ]
+      },
+      "score": -6,
+      "previous_score": -6,
+      "change": 0
+    },
+    {
+      "turn": 3,
+      "emotion_info": {
+        "emotions": [
+          "沮丧"
+        ],
+        "score": -6,
+        "previous_score": -6,
+        "change": 0,
+        "expert_analyses": [
+          {
+            "turn": 3,
+            "primary_emotion": "沮丧",
+            "intensity": 4,
+            "emotion_score": -6,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:37:19"
+          }
+        ]
+      },
+      "score": -6,
+      "previous_score": -6,
+      "change": 0
+    },
+    {
+      "turn": 4,
+      "emotion_info": {
+        "emotions": [
+          "失望"
+        ],
+        "score": -6,
+        "previous_score": -6,
+        "change": 0,
+        "expert_analyses": [
+          {
+            "turn": 4,
+            "primary_emotion": "失望",
+            "intensity": 4,
+            "emotion_score": -6,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:39:01"
+          }
+        ]
+      },
+      "score": -6,
+      "previous_score": -6,
+      "change": 0
+    },
+    {
+      "turn": 5,
+      "emotion_info": {
+        "emotions": [
+          "失望"
+        ],
+        "score": -6,
+        "previous_score": -6,
+        "change": 0,
+        "expert_analyses": [
+          {
+            "turn": 5,
+            "primary_emotion": "失望",
+            "intensity": 4,
+            "emotion_score": -6,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:40:16"
+          }
+        ]
+      },
+      "score": -6,
+      "previous_score": -6,
+      "change": 0
+    }
+  ],
+  "emotion_prediction_history": [],
+  "expert_analysis_history": [
+    {
+      "turn": 1,
+      "analyses": [
+        {
+          "turn": 1,
+          "primary_emotion": "悲伤",
+          "intensity": 4,
+          "emotion_score": -6,
+          "expert_id": "expert_1",
+          "timestamp": "2025-04-22 15:34:39"
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "analyses": [
+        {
+          "turn": 2,
+          "primary_emotion": "沮丧",
+          "intensity": 4,
+          "emotion_score": -6,
+          "expert_id": "expert_1",
+          "timestamp": "2025-04-22 15:35:41"
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "analyses": [
+        {
+          "turn": 3,
+          "primary_emotion": "沮丧",
+          "intensity": 4,
+          "emotion_score": -6,
+          "expert_id": "expert_1",
+          "timestamp": "2025-04-22 15:37:19"
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "analyses": [
+        {
+          "turn": 4,
+          "primary_emotion": "失望",
+          "intensity": 4,
+          "emotion_score": -6,
+          "expert_id": "expert_1",
+          "timestamp": "2025-04-22 15:39:01"
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "analyses": [
+        {
+          "turn": 5,
+          "primary_emotion": "失望",
+          "intensity": 4,
+          "emotion_score": -6,
+          "expert_id": "expert_1",
+          "timestamp": "2025-04-22 15:40:16"
+        }
+      ]
+    }
+  ],
+  "final_emotion_score": -6,
+  "turns_completed": 5,
+  "max_turns": 5,
+  "timestamp": "2025-04-22 15:40:29",
+  "dialogue_appraisal": {
+    "primary_appraisal": {
+      "relevance": "情感互动和关注对未知来说至关重要，因为他的性格类型显示高神经质，对关系中的情感需求非常敏感",
+      "nature": "评估为负面，因为伴侣的冷淡或疏远让他感到情感需求得不到满足，导致难过和受伤"
+    },
+    "secondary_appraisal": {
+      "attribution": "未知将伴侣的冷淡归因于伴侣的忽视或缺乏关心，认为伴侣心里没有他才会忘记联系",
+      "coping_ability": "未知的应对能力较低，因为他的高神经质性格使他难以自我调节情绪，容易陷入负面情绪",
+      "coping_strategy": "未知倾向于通过直接表达不满和要求伴侣改变来应对，但缺乏有效的自我调节策略"
+    }
+  }
+}

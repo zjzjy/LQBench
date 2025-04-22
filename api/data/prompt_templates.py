@@ -264,6 +264,48 @@ expert_emotion_analysis_template = """
 }}
 """
 
+# 情感评估提示词模板
+emotion_assessment_template = """
+你是一位专业的心理分析专家，请对以下虚拟人物与测试对象之间的对话进行情感评估。
+这是系统情绪评估的重要组成部分，你的分析结果将用于评估虚拟人物的情绪状态。
+
+## 重要提示：必须始终使用中文回复！
+
+## 虚拟人物信息
+- 姓名：{character_name}
+- 性格特点：{personality_description}
+- 关系观念：{relationship_belief_description}
+- 沟通方式：{communication_style_description}
+- 依恋类型：{attachment_style_description}
+
+## 当前情境
+{conflict_description}
+
+## 对话历史
+{dialogue_history}
+
+## 要求
+1. 分析虚拟人物{character_name}当前的情绪状态
+2. 评估测试对象的回应如何影响了虚拟人物的情绪
+3. 只需提供{character_name}当前的主要情绪、情绪强度和情绪分数
+4. 必须使用中文进行分析和回复
+5. 严格禁止生成任何动作描述，不要使用"*"、"()"等符号或【动作】格式
+6. 你的输出仅限于情感分析的JSON格式，不能包含任何动作性质的内容
+
+## 严禁输出的内容
+- 任何形式的肢体动作描述或表情描述
+- 行为描述或动作描述
+- 使用动作性质的表达
+- 任何形式的情绪评估或内心独白（如"情绪：愤怒"）
+
+请以JSON格式返回你的分析结果，务必确保格式正确：
+{{
+  "primary_emotion": "情绪名称",
+  "intensity": 情绪强度(1-5整数),
+  "emotion_score": 情绪分数(-10到10整数)
+}}
+"""
+
 # 角色提示词模板
 character_template = """
 你扮演{character_name}。请根据以下角色设定模拟真实人物的回复风格。

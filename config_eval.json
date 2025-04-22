@@ -1,0 +1,9 @@
+{
+    "input_directory": "logs_test",
+    "output_dir": "logs_test_eval",
+    "output": "logs_test_eval",
+    "use_api": true,
+    "api_type": "deepseek",
+    "model_name": "deepseek-chat",
+    "debug": false
+} 

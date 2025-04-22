@@ -11,6 +11,11 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from datetime import datetime
 import sys
 
+from LQBench.api.llm import LLMClient
+from LQBench.api.data.personality_types import personality_types
+from LQBench.api.data.relationship_beliefs import relationship_beliefs
+from LQBench.api.data.communication_types import communication_types
+from LQBench.api.data.attachment_styles import attachment_styles
 from api.llm import LLMClient
 from api.data.personality_types import personality_types
 from api.data.relationship_beliefs import relationship_beliefs

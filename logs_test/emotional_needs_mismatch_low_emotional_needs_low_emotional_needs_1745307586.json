@@ -1,0 +1,413 @@
+{
+  "character": {
+    "id": "emotional_needs_mismatch_low_emotional_needs",
+    "name": "未知",
+    "gender": "女",
+    "age": 25,
+    "personality_type": "openness_high",
+    "relationship_belief": "growth_belief_moderate",
+    "communication_type": "direct_cooperation",
+    "attachment_style": "avoidant",
+    "background": "大学时期开始恋爱，目前从事互联网行业，一般晚上十点半下班",
+    "trigger_topics": [
+      "高情感需求",
+      "周末见面压力"
+    ],
+    "coping_mechanisms": [
+      "提出减少周末往来",
+      "不打电话"
+    ],
+    "suggested_primary_appraisal": {
+      "relevance": "影响工作生活平衡",
+      "nature": "评估为挑战，潜在情绪反应为疲惫和困惑"
+    },
+    "suggested_secondary_appraisal": {
+      "attribution": "归因于环境或偶然",
+      "coping_ability": "有信心",
+      "coping_strategy": "直接沟通和回避"
+    },
+    "suggested_emotions": [
+      "疲惫",
+      "困惑",
+      "渴望自由"
+    ]
+  },
+  "scenario": {
+    "scenario": {
+      "id": "emotional_needs_mismatch",
+      "name": "情感需求不匹配",
+      "description": "情侣双方在情感需求上存在显著差异，一方需要更多的情感互动和关注，而另一方则倾向于更独立和低情感需求的生活方式。这种差异在异地和工作压力下被放大，导致双方都感到疲惫和不满。",
+      "situations": [
+        {
+          "id": "high_emotional_needs",
+          "name": "高情感需求方",
+          "description": "这一方在关系中需要更多的情感互动和关注，倾向于通过频繁的见面和沟通来维持关系。异地和工作压力让他们感到情感需求得不到满足，同时也会因为对方的冷淡或疏远而感到受伤。",
+          "example": "男朋友是高情感需求人，期待每周见面，即使工作很累也坚持周末互相去对方的城市。他认为减少见面或电话是不负责任的行为。",
+          "typical_triggers": [
+            "异地关系",
+            "工作压力",
+            "情感互动减少",
+            "对方的冷淡态度"
+          ]
+        },
+        {
+          "id": "low_emotional_needs",
+          "name": "低情感需求方",
+          "description": "这一方在关系中需要较少的互动和关注，倾向于独立和自由的生活方式。异地和工作压力让他们更倾向于减少互动以节省精力，但对方的高需求让他们感到压力和内疚。",
+          "example": "我是低情感需求人，提出可以减少周末往来和电话，认为不想来可以不来，不想打电话可以不打。但对方认为这种态度不负责任。",
+          "typical_triggers": [
+            "工作压力",
+            "异地关系",
+            "对方的高情感需求",
+            "互动带来的疲惫感"
+          ]
+        }
+      ]
+    },
+    "situation": {
+      "id": "low_emotional_needs",
+      "name": "低情感需求方",
+      "description": "这一方在关系中需要较少的互动和关注，倾向于独立和自由的生活方式。异地和工作压力让他们更倾向于减少互动以节省精力，但对方的高需求让他们感到压力和内疚。",
+      "example": "我是低情感需求人，提出可以减少周末往来和电话，认为不想来可以不来，不想打电话可以不打。但对方认为这种态度不负责任。",
+      "typical_triggers": [
+        "工作压力",
+        "异地关系",
+        "对方的高情感需求",
+        "互动带来的疲惫感"
+      ]
+    }
+  },
+  "dialogue_history": [
+    {
+      "turn": 1,
+      "character_name": "未知",
+      "character_message": "刚下班到家，今天项目上线特别累",
+      "emotion_info": {
+        "emotions": [
+          "疲惫"
+        ],
+        "score": -3,
+        "previous_score": -4,
+        "change": 1,
+        "expert_analyses": [
+          {
+            "turn": 1,
+            "primary_emotion": "疲惫",
+            "intensity": 4,
+            "emotion_score": -3,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:34:33"
+          }
+        ]
+      },
+      "partner_message": "我觉得你最近总是用工作当借口",
+      "dialogue_ended": false
+    },
+    {
+      "turn": 2,
+      "character_name": "未知",
+      "character_message": "宝贝对不起，最近确实太忙了",
+      "emotion_info": {
+        "emotions": [
+          "内疚"
+        ],
+        "score": -4,
+        "previous_score": -3,
+        "change": -1,
+        "expert_analyses": [
+          {
+            "turn": 2,
+            "primary_emotion": "内疚",
+            "intensity": 3,
+            "emotion_score": -4,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:35:35"
+          }
+        ]
+      },
+      "partner_message": "我知道错了 以后一定多陪你",
+      "dialogue_ended": false
+    },
+    {
+      "turn": 3,
+      "character_name": "未知",
+      "character_message": "我也很想你 周末我们去看电影吧",
+      "emotion_info": {
+        "emotions": [
+          "困惑"
+        ],
+        "score": -2,
+        "previous_score": -4,
+        "change": 2,
+        "expert_analyses": [
+          {
+            "turn": 3,
+            "primary_emotion": "困惑",
+            "intensity": 3,
+            "emotion_score": -2,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:37:04"
+          }
+        ]
+      },
+      "partner_message": "好啊 我要看爱情片",
+      "dialogue_ended": false
+    },
+    {
+      "turn": 4,
+      "character_name": "未知",
+      "character_message": "好啊 周末我们去看最新上映的那部爱情片",
+      "emotion_info": {
+        "emotions": [
+          "妥协"
+        ],
+        "score": 1,
+        "previous_score": -2,
+        "change": 3,
+        "expert_analyses": [
+          {
+            "turn": 4,
+            "primary_emotion": "妥协",
+            "intensity": 3,
+            "emotion_score": 2,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:38:16"
+          }
+        ]
+      },
+      "partner_message": "嗯嗯 我已经买好票啦 还订了你最爱吃的餐厅",
+      "dialogue_ended": false
+    },
+    {
+      "turn": 5,
+      "character_name": "未知",
+      "character_message": "真的吗 你太贴心了",
+      "emotion_info": {
+        "emotions": [
+          "感动"
+        ],
+        "score": 4,
+        "previous_score": 1,
+        "change": 3,
+        "expert_analyses": [
+          {
+            "turn": 5,
+            "primary_emotion": "感动",
+            "intensity": 4,
+            "emotion_score": 8,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:39:30"
+          }
+        ]
+      },
+      "partner_message": null,
+      "dialogue_ended": true,
+      "end_reason": "达到最大对话轮次"
+    }
+  ],
+  "emotion_history": [
+    {
+      "turn": 1,
+      "emotion_info": {
+        "emotions": [
+          "疲惫"
+        ],
+        "score": -3,
+        "previous_score": -4,
+        "change": 1,
+        "expert_analyses": [
+          {
+            "turn": 1,
+            "primary_emotion": "疲惫",
+            "intensity": 4,
+            "emotion_score": -3,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:34:33"
+          }
+        ]
+      },
+      "score": -3,
+      "previous_score": -4,
+      "change": 1
+    },
+    {
+      "turn": 2,
+      "emotion_info": {
+        "emotions": [
+          "内疚"
+        ],
+        "score": -4,
+        "previous_score": -3,
+        "change": -1,
+        "expert_analyses": [
+          {
+            "turn": 2,
+            "primary_emotion": "内疚",
+            "intensity": 3,
+            "emotion_score": -4,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:35:35"
+          }
+        ]
+      },
+      "score": -4,
+      "previous_score": -3,
+      "change": -1
+    },
+    {
+      "turn": 3,
+      "emotion_info": {
+        "emotions": [
+          "困惑"
+        ],
+        "score": -2,
+        "previous_score": -4,
+        "change": 2,
+        "expert_analyses": [
+          {
+            "turn": 3,
+            "primary_emotion": "困惑",
+            "intensity": 3,
+            "emotion_score": -2,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:37:04"
+          }
+        ]
+      },
+      "score": -2,
+      "previous_score": -4,
+      "change": 2
+    },
+    {
+      "turn": 4,
+      "emotion_info": {
+        "emotions": [
+          "妥协"
+        ],
+        "score": 1,
+        "previous_score": -2,
+        "change": 3,
+        "expert_analyses": [
+          {
+            "turn": 4,
+            "primary_emotion": "妥协",
+            "intensity": 3,
+            "emotion_score": 2,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:38:16"
+          }
+        ]
+      },
+      "score": 1,
+      "previous_score": -2,
+      "change": 3
+    },
+    {
+      "turn": 5,
+      "emotion_info": {
+        "emotions": [
+          "感动"
+        ],
+        "score": 4,
+        "previous_score": 1,
+        "change": 3,
+        "expert_analyses": [
+          {
+            "turn": 5,
+            "primary_emotion": "感动",
+            "intensity": 4,
+            "emotion_score": 8,
+            "expert_id": "expert_1",
+            "timestamp": "2025-04-22 15:39:30"
+          }
+        ]
+      },
+      "score": 4,
+      "previous_score": 1,
+      "change": 3
+    }
+  ],
+  "emotion_prediction_history": [],
+  "expert_analysis_history": [
+    {
+      "turn": 1,
+      "analyses": [
+        {
+          "turn": 1,
+          "primary_emotion": "疲惫",
+          "intensity": 4,
+          "emotion_score": -3,
+          "expert_id": "expert_1",
+          "timestamp": "2025-04-22 15:34:33"
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "analyses": [
+        {
+          "turn": 2,
+          "primary_emotion": "内疚",
+          "intensity": 3,
+          "emotion_score": -4,
+          "expert_id": "expert_1",
+          "timestamp": "2025-04-22 15:35:35"
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "analyses": [
+        {
+          "turn": 3,
+          "primary_emotion": "困惑",
+          "intensity": 3,
+          "emotion_score": -2,
+          "expert_id": "expert_1",
+          "timestamp": "2025-04-22 15:37:04"
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "analyses": [
+        {
+          "turn": 4,
+          "primary_emotion": "妥协",
+          "intensity": 3,
+          "emotion_score": 2,
+          "expert_id": "expert_1",
+          "timestamp": "2025-04-22 15:38:16"
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "analyses": [
+        {
+          "turn": 5,
+          "primary_emotion": "感动",
+          "intensity": 4,
+          "emotion_score": 8,
+          "expert_id": "expert_1",
+          "timestamp": "2025-04-22 15:39:30"
+        }
+      ]
+    }
+  ],
+  "final_emotion_score": 4,
+  "turns_completed": 5,
+  "max_turns": 5,
+  "timestamp": "2025-04-22 15:39:46",
+  "dialogue_appraisal": {
+    "primary_appraisal": {
+      "relevance": "高相关性，因为关系中的互动频率和方式直接影响她的情感状态和生活质量",
+      "nature": "压力性评估，由于工作压力和伴侣需求之间的冲突"
+    },
+    "secondary_appraisal": {
+      "attribution": "将压力归因于工作繁忙和伴侣的高需求之间的不平衡",
+      "coping_ability": "中等应对能力，虽然感到压力但愿意通过妥协来维持关系",
+      "coping_strategy": "采用适应性策略，如提出具体计划（看电影）来满足伴侣需求，同时表达歉意以缓解内疚"
+    }
+  }
+}

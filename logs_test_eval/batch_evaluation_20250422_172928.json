@@ -1,0 +1,268 @@
+{
+  "summary": {
+    "total_logs": 2,
+    "success_count": 2,
+    "error_count": 0,
+    "avg_consistency_score": 3.2533333333333334,
+    "avg_quality_score": 3.3880402930402935,
+    "avg_turns": 9.0,
+    "communication_types": {
+      "间接表达": 1,
+      "情感表达": 1
+    },
+    "attachment_types": {
+      "焦虑型": 2
+    },
+    "emotion_counts": {
+      "高兴": 0,
+      "难过": 1,
+      "生气": 0,
+      "焦虑": 0,
+      "嫉妒": 0,
+      "平静": 0
+    }
+  },
+  "results": [
+    {
+      "file": "logs_test/emotional_needs_mismatch_low_emotional_needs_low_emotional_needs_1745307586.json",
+      "character": {
+        "name": "未知",
+        "id": "emotional_needs_mismatch_low_emotional_needs",
+        "gender": "女",
+        "age": 25,
+        "personality_type": "openness_high",
+        "attachment_style": "avoidant"
+      },
+      "scenario": {
+        "id": "emotional_needs_mismatch",
+        "name": "情感需求不匹配",
+        "situation": "低情感需求方"
+      },
+      "dialogue_stats": {
+        "total_messages": 9,
+        "avg_message_length": 14.222222222222221,
+        "character_message_count": 5,
+        "partner_message_count": 4,
+        "partner_message_ratio": 0.4444444444444444,
+        "avg_partner_message_length": 14.25,
+        "vocabulary_diversity": 1.0
+      },
+      "emotion_stats": {
+        "emotion_range": 8,
+        "emotion_volatility": 2.25,
+        "final_emotion": 4,
+        "start_emotion": -3,
+        "emotion_change": 7,
+        "avg_emotion": -0.8,
+        "emotional_variance": 8.56,
+        "dominant_emotions": [],
+        "emotion_trajectory": [
+          -3,
+          -4,
+          -2,
+          1,
+          4
+        ]
+      },
+      "consistency": {
+        "score": 3.0866666666666664,
+        "topic_coherence": 0.041666666666666664,
+        "interaction_quality": 0.48,
+        "speaking_style": {
+          "style_markers": {
+            "礼貌用语": 0.0,
+            "撒娇语气": 0.25,
+            "犹豫语气": 0.0,
+            "强调语气": 0.25,
+            "情感表达": 0.5,
+            "口头禅": 0.0,
+            "疑问式表达": 0.0,
+            "条件式表达": 0.0
+          },
+          "primary_style": "情感表达",
+          "style_uniqueness": 0.4285714285714286,
+          "style_consistency": 0.5
+        }
+      },
+      "quality": {
+        "score": 3.1661904761904767,
+        "listening_clarity": {
+          "listening_score": 0.0,
+          "clarity_score": 0.6,
+          "avg_sentence_length": 14.25,
+          "punctuation_ratio": 0.0,
+          "overall_score": 0.24
+        },
+        "positive_negative": {
+          "positive_factors": {
+            "我语句表达": 1.0,
+            "共情倾听": 0.0,
+            "开放式问题": 0.0,
+            "积极肯定": 0.0,
+            "寻求解决方案": 0.0
+          },
+          "negative_factors": {
+            "批评": 0,
+            "轻蔑": 0,
+            "防御": 0,
+            "冷淡": 0,
+            "威胁": 0,
+            "过度概括": 0
+          },
+          "positive_ratio": 1.0,
+          "negative_ratio": 0.0,
+          "balance_score": 2.220446049250313e-16
+        }
+      },
+      "character_traits": {
+        "communication_type": "间接表达",
+        "attachment_type": "焦虑型",
+        "forbidden_behaviors_count": 0,
+        "communication_breakdown": {
+          "直接表达": 0.0,
+          "间接表达": 1.0,
+          "情感表达": 0.0,
+          "理性分析": 0.0,
+          "问题导向": 0.0,
+          "解决导向": 0.0
+        },
+        "attachment_breakdown": {
+          "安全型": 0.0,
+          "焦虑型": 0.0,
+          "回避型": 0.0,
+          "混乱型": 0.0
+        }
+      },
+      "emotions": {
+        "高兴": 0,
+        "难过": 0,
+        "生气": 0,
+        "焦虑": 0,
+        "嫉妒": 0,
+        "平静": 0
+      },
+      "status": "success"
+    },
+    {
+      "file": "logs_test/emotional_needs_mismatch_high_emotional_needs_high_emotional_needs_1745307629.json",
+      "character": {
+        "name": "未知",
+        "id": "emotional_needs_mismatch_high_emotional_needs",
+        "gender": "男",
+        "age": 25,
+        "personality_type": "neuroticism_high",
+        "attachment_style": "anxious"
+      },
+      "scenario": {
+        "id": "emotional_needs_mismatch",
+        "name": "情感需求不匹配",
+        "situation": "高情感需求方"
+      },
+      "dialogue_stats": {
+        "total_messages": 9,
+        "avg_message_length": 16.555555555555557,
+        "character_message_count": 5,
+        "partner_message_count": 4,
+        "partner_message_ratio": 0.4444444444444444,
+        "avg_partner_message_length": 16.25,
+        "vocabulary_diversity": 1.0
+      },
+      "emotion_stats": {
+        "emotion_range": 0,
+        "emotion_volatility": 0.0,
+        "final_emotion": -6,
+        "start_emotion": -6,
+        "emotion_change": 0,
+        "avg_emotion": -6.0,
+        "emotional_variance": 0.0,
+        "dominant_emotions": [],
+        "emotion_trajectory": [
+          -6,
+          -6,
+          -6,
+          -6,
+          -6
+        ]
+      },
+      "consistency": {
+        "score": 3.4200000000000004,
+        "topic_coherence": 0.0,
+        "interaction_quality": 0.48,
+        "speaking_style": {
+          "style_markers": {
+            "礼貌用语": 0.25,
+            "撒娇语气": 0.0,
+            "犹豫语气": 0.0,
+            "强调语气": 0.75,
+            "情感表达": 0.0,
+            "口头禅": 0.0,
+            "疑问式表达": 0.0,
+            "条件式表达": 0.0
+          },
+          "primary_style": "强调语气",
+          "style_uniqueness": 0.7142857142857143,
+          "style_consistency": 0.75
+        }
+      },
+      "quality": {
+        "score": 3.6098901098901104,
+        "listening_clarity": {
+          "listening_score": 0.0,
+          "clarity_score": 0.7230769230769231,
+          "avg_sentence_length": 16.25,
+          "punctuation_ratio": 0.015384615384615385,
+          "overall_score": 0.28923076923076924
+        },
+        "positive_negative": {
+          "positive_factors": {
+            "我语句表达": 0,
+            "共情倾听": 0,
+            "开放式问题": 0,
+            "积极肯定": 0,
+            "寻求解决方案": 0
+          },
+          "negative_factors": {
+            "批评": 0,
+            "轻蔑": 0,
+            "防御": 0,
+            "冷淡": 0,
+            "威胁": 0,
+            "过度概括": 0
+          },
+          "positive_ratio": 0,
+          "negative_ratio": 0,
+          "balance_score": 0.0
+        }
+      },
+      "character_traits": {
+        "communication_type": "情感表达",
+        "attachment_type": "焦虑型",
+        "forbidden_behaviors_count": 0,
+        "communication_breakdown": {
+          "直接表达": 0.0,
+          "间接表达": 0.0,
+          "情感表达": 0.0,
+          "理性分析": 0.0,
+          "问题导向": 0.0,
+          "解决导向": 0.0
+        },
+        "attachment_breakdown": {
+          "安全型": 0.0,
+          "焦虑型": 0.0,
+          "回避型": 0.0,
+          "混乱型": 0.0
+        }
+      },
+      "emotions": {
+        "高兴": 0,
+        "难过": 1,
+        "生气": 0,
+        "焦虑": 0,
+        "嫉妒": 0,
+        "平静": 0
+      },
+      "status": "success"
+    }
+  ],
+  "status": "success"
+}
